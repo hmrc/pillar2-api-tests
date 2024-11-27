@@ -1,0 +1,35 @@
+package uk.gov.hmrc.api.cucumber.stepdefs
+
+import io.cucumber.scala.{EN, ScalaDsl}
+import uk.gov.hmrc.api.conf.TestEnvironment
+import java.net.URI
+import java.net.http.HttpRequest.BodyPublishers
+import java.net.http.{HttpClient, HttpRequest, HttpResponse}
+import java.nio.charset.StandardCharsets
+import uk.gov.hmrc.api.requestBody._
+
+class UktrSteps extends ScalaDsl with EN {
+  Given("""I make api call to uktr {string} for {int}""") { (stub: String, int1: Int) =>
+
+    val apiUrl = TestEnvironment.url("pillar2") + "submitUKTR/" + stub
+
+    val client = HttpClient.newHttpClient()
+    
+    val request = HttpRequest.newBuilder()
+      .uri(URI.create(apiUrl))
+      .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
+      .header("Content-Type", "application/json")
+      .header("Authorization", "Bearer valid_token")
+      .build()
+
+    val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+
+    println(s"Response Code: ${response.statusCode()}")
+    println(s"Response Body: ${response.body()}")
+
+  }
+  Then("""I verify response code is {int}""") { (int1: Int) =>
+    println(s"Response Body: ")
+  }
+
+}

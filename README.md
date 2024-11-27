@@ -2,7 +2,6 @@
 
 # pillar2-api-tests
 
-<SERVICE_NAME> API tests.
 
 ## Pre-requisites
 
@@ -24,7 +23,7 @@ sm2 --start <SERVICE_MANAGER_PROFILE>
 
 Run tests as follows:
 
-* Argument `<environment>` must be `local`, `dev`, `qa` or `staging`.
+* Argument `<local>` must be `local`, `dev`, `qa` or `staging`.
 
 ```bash
 ./run-tests.sh <environment>
