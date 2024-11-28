@@ -7,6 +7,6 @@ object Dependencies {
     "io.cucumber"   %% "cucumber-scala"  % "8.20.0",
     "io.cucumber"    % "cucumber-junit"  % "7.15.0",
     "junit"          % "junit"           % "4.13.2",
+    "org.scalatest" %% "scalatest"       % "3.2.17"
   )
-
 }

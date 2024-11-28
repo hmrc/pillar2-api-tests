@@ -9,13 +9,16 @@ import java.nio.charset.StandardCharsets
 import uk.gov.hmrc.api.requestBody._
 
 class UktrSteps extends ScalaDsl with EN {
-  Given("""I make api call to uktr {string} for {int}""") { (stub: String, int1: Int) =>
 
+  private var responseCode: Option[Int] = None
+
+  Given("""I make api call to uktr {string} for {int}""") { (stub: String, expectedResponseStatusCode: Int) =>
     val apiUrl = TestEnvironment.url("pillar2") + "submitUKTR/" + stub
 
     val client = HttpClient.newHttpClient()
-    
-    val request = HttpRequest.newBuilder()
+
+    val request = HttpRequest
+      .newBuilder()
       .uri(URI.create(apiUrl))
       .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
       .header("Content-Type", "application/json")
@@ -24,12 +27,18 @@ class UktrSteps extends ScalaDsl with EN {
 
     val response = client.send(request, HttpResponse.BodyHandlers.ofString())
 
+    responseCode = Some(response.statusCode())
+
     println(s"Response Code: ${response.statusCode()}")
     println(s"Response Body: ${response.body()}")
-
-  }
-  Then("""I verify response code is {int}""") { (int1: Int) =>
-    println(s"Response Body: ")
   }
 
+  Then("""I verify response code is {int}""") { (expectedResponseStatusCode: Int) =>
+    responseCode match {
+      case Some(code) =>
+        assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
+      case None       =>
+        throw new IllegalStateException("Response code was not set in the Given block")
+    }
+  }
 }
