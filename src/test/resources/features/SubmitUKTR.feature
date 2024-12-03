@@ -1,7 +1,7 @@
 @apiTests
 Feature: Verify UKTR submission apis
 
-  Scenario Outline: verify error code 422
+  Scenario Outline: verify error codes for uktr submission
     Given I make api call to uktr "<Stub>" for <StatusCode>
     Then I verify response code is <StatusCode>
     Examples:
