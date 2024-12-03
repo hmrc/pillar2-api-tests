@@ -16,20 +16,21 @@
 
 package uk.gov.hmrc.api.cucumber.stepdefs
 
-import io.cucumber.scala.{EN, ScalaDsl}
-import uk.gov.hmrc.api.conf.TestEnvironment
 import java.net.URI
 import java.net.http.HttpRequest.BodyPublishers
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import java.nio.charset.StandardCharsets
+
+import io.cucumber.scala.{EN, ScalaDsl}
+import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody._
 
-class UktrSteps extends ScalaDsl with EN {
+class IdentifyGroupsSteps extends ScalaDsl with EN {
 
   private var responseCode: Option[Int] = None
 
-  Given("""I make api call to uktr {string} for {int}""") { (stub: String, expectedResponseStatusCode: Int) =>
-    val apiUrl = TestEnvironment.url("pillar2") + "submitUKTR/" + stub
+  Given("""I make api call to plr uktr {string} for {int}""") { (stub: String, expectedResponseStatusCode: Int) =>
+    val apiUrl = "http://localhost:10054/RESTAdapter/PLR/UKTaxReturn"
 
     val client = HttpClient.newHttpClient()
 
