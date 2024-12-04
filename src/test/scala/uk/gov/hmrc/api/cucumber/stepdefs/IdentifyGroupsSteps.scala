@@ -30,8 +30,7 @@ class IdentifyGroupsSteps extends ScalaDsl with EN {
   private var responseCode: Option[Int] = None
 
   Given("""I make API call to PLR UKTR for {int}""") { (expectedResponseStatusCode: Int) =>
-    val apiUrl = TestEnvironment.url("idGroup") + "UKTaxReturn"
-    println("api end point url: "+apiUrl)
+    val apiUrl = TestEnvironment.url("pillar2-submission-api") + "UKTaxReturn"
     val client = HttpClient.newHttpClient()
 
     val request = HttpRequest

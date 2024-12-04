@@ -17,8 +17,10 @@
 package uk.gov.hmrc.api.client
 
 import org.apache.pekko.actor.ActorSystem
+import play.api.libs.ws.DefaultBodyWritables._
 import play.api.libs.ws.{DefaultWSProxyServer, StandaloneWSRequest, StandaloneWSResponse}
 import play.api.libs.ws.ahc.StandaloneAhcWSClient
+
 import scala.concurrent.{ExecutionContext, Future}
 
 trait HttpClient {
@@ -42,10 +44,10 @@ trait HttpClient {
       .withHttpHeaders(headers: _*)
       .get()
 
-//  def post(url: String, bodyAsJson: String, headers: (String, String)*): Future[StandaloneWSResponse] =
-//    standAloneWsRequestWithProxyIfConfigSet(wsClient.url(url))
-//      .withHttpHeaders(headers: _*)
-//      .post(bodyAsJson)
+  def post(url: String, bodyAsJson: String, headers: (String, String)*): Future[StandaloneWSResponse] =
+    standAloneWsRequestWithProxyIfConfigSet(wsClient.url(url))
+      .withHttpHeaders(headers: _*)
+      .post(bodyAsJson)
 
   def delete(url: String, headers: (String, String)*): Future[StandaloneWSResponse] =
     standAloneWsRequestWithProxyIfConfigSet(wsClient.url(url))

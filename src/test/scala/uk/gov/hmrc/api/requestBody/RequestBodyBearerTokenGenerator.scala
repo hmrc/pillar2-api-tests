@@ -25,7 +25,7 @@ import uk.gov.hmrc.api.conf.TestEnvironment
 
 object RequestBodyBearerTokenGenerator {
   var trimToken                         = "";
-  val authSessionsUrl                   = TestEnvironment.url("session-login")
+  val authSessionsUrl                   = TestEnvironment.url("auth-login-api")
   private var responseCode: Option[Int] = None
   var bearerToken                       = "_"
   var body                              = "_"
