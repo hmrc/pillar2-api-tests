@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Welcome3",
+  "definitions": {
+    "Welcome3": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "success": {
+          "$ref": "#/definitions/Success"
+        }
+      },
+      "required": [
+        "success"
+      ],
+      "title": "Welcome3"
+    },
+    "Success": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "processingDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "formBundleNumber": {
+          "type": "string"
+        },
+        "chargeReference": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chargeReference",
+        "formBundleNumber",
+        "processingDate"
+      ],
+      "title": "Success"
+    }
+  }
+}
