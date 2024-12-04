@@ -21,10 +21,11 @@ import uk.gov.hmrc.api.requestBody.RequestBodyBearerTokenGenerator
 
 class LocalBearerTokenSteps extends ScalaDsl with EN {
   Given("""^I have generated a bearer token for an (.*) and (.*)$""") { (affinity: String, enrolment: String) =>
-    if (enrolment == "with enrolment") {
-      RequestBodyBearerTokenGenerator.obtainBearerTokenWithEnrolment(affinity, enrolment)
-    } else if (enrolment == "without enrolment") {
-      RequestBodyBearerTokenGenerator.obtainBearerTokenWithOutEnrolment(affinity, enrolment)
+    enrolment match {
+      case "with enrolment"    =>
+        RequestBodyBearerTokenGenerator.obtainBearerTokenWithEnrolment(affinity, enrolment)
+      case "without enrolment" =>
+        RequestBodyBearerTokenGenerator.obtainBearerTokenWithOutEnrolment(affinity, enrolment)
     }
   }
 }

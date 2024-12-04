@@ -31,10 +31,11 @@ object RequestBodyBearerTokenGenerator {
   var body                              = "_"
 
   def getBearerLocal(affinityGroup: String, enrolment: String): String = {
-    if (enrolment == "with enrolment") {
-      body = putBodyWithEnrolment(affinityGroup)
-    } else if (enrolment == "without enrolment") {
-      val body = putBodyWithOutEnrolment(affinityGroup)
+    enrolment match {
+      case "with enrolment"    =>
+        body = putBodyWithEnrolment(affinityGroup)
+      case "without enrolment" =>
+        body = putBodyWithOutEnrolment(affinityGroup)
     }
     val client  = HttpClient.newHttpClient()
     val request = HttpRequest

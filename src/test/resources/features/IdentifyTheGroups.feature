@@ -8,5 +8,5 @@ Feature: Identify the Group
     Examples:
       | UserType     | Enrolment         | StatusCode |
       | Organisation | with enrolment    | 201        |
-#      | Organisation | without enrolment | 401        |
+      | Organisation | without enrolment | 401        |
  
