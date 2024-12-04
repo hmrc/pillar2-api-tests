@@ -16,18 +16,15 @@
 
 package uk.gov.hmrc.api.cucumber.stepdefs
 
-import java.net.URI
-import java.net.http.HttpRequest.BodyPublishers
-import java.net.http.{HttpClient, HttpRequest, HttpResponse}
-import java.nio.charset.StandardCharsets
-
 import io.cucumber.scala.{EN, ScalaDsl}
-import uk.gov.hmrc.api.conf.TestEnvironment
-import uk.gov.hmrc.api.requestBody.{RequestBodyBearerTokenGenerator, RequestBodyUKTR}
+import uk.gov.hmrc.api.requestBody.RequestBodyBearerTokenGenerator
 
 class LocalBearerTokenSteps extends ScalaDsl with EN {
-//  Given("""^I have generated a bearer token for an (.*)$""") { (affinity: String) =>
-//    RequestBodyBearerTokenGenerator.obtainBearerToken(affinity)
-//  }
-
+  Given("""^I have generated a bearer token for an (.*) and (.*)$""") { (affinity: String, enrolment: String) =>
+    if (enrolment == "with enrolment") {
+      RequestBodyBearerTokenGenerator.obtainBearerTokenWithEnrolment(affinity, enrolment)
+    } else if (enrolment == "without enrolment") {
+      RequestBodyBearerTokenGenerator.obtainBearerTokenWithOutEnrolment(affinity, enrolment)
+    }
+  }
 }

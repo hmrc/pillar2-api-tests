@@ -29,9 +29,9 @@ class IdentifyGroupsSteps extends ScalaDsl with EN {
 
   private var responseCode: Option[Int] = None
 
-  Given("""I make api call to plr uktr {string} for {int}""") { (stub: String, expectedResponseStatusCode: Int) =>
-    val apiUrl = "http://localhost:10054/RESTAdapter/PLR/UKTaxReturn"
-
+  Given("""I make API call to PLR UKTR for {int}""") { (expectedResponseStatusCode: Int) =>
+    val apiUrl = TestEnvironment.url("idGroup") + "UKTaxReturn"
+    println("api end point url: "+apiUrl)
     val client = HttpClient.newHttpClient()
 
     val request = HttpRequest
@@ -39,22 +39,21 @@ class IdentifyGroupsSteps extends ScalaDsl with EN {
       .uri(URI.create(apiUrl))
       .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
       .header("Content-Type", "application/json")
-      .header("Authorization", "Bearer valid_token")
+      .header("Authorization", RequestBodyBearerTokenGenerator.bearerToken)
       .build()
 
     val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-
     responseCode = Some(response.statusCode())
 
     println(s"Response Code: ${response.statusCode()}")
     println(s"Response Body: ${response.body()}")
   }
 
-  Then("""I verify response code is {int}""") { (expectedResponseStatusCode: Int) =>
+  Then("""I verify the response code is {int}""") { (expectedResponseStatusCode: Int) =>
     responseCode match {
       case Some(code) =>
         assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
-      case None       =>
+      case None =>
         throw new IllegalStateException("Response code was not set in the Given block")
     }
   }

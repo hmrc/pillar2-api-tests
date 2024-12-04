@@ -1,9 +1,12 @@
-@apiTests1
-Feature: Verify that the Group has enrolled or not
+@apiTests @idGroup
+Feature: Identify the Group
 
-  Background:
-    Given I have generated a bearer token for an Organisation
-
-  Scenario: Verify that the Group has enrolled or not
-    Given I make api call to plr uktr "<Stub>" for 201
-      Then I verify response code is 201
+  Scenario Outline: Verify that the Group has not enrolled
+    Given I have generated a bearer token for an <UserType> and <Enrolment>
+    And I make API call to PLR UKTR for <StatusCode>
+    Then I verify the response code is <StatusCode>
+    Examples:
+      | UserType     | Enrolment         | StatusCode |
+      | Organisation | with enrolment    | 201        |
+#      | Organisation | without enrolment | 401        |
+ 
