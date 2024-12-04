@@ -17,12 +17,9 @@
 package uk.gov.hmrc.api.client
 
 import org.apache.pekko.actor.ActorSystem
-
 import play.api.libs.ws.{DefaultWSProxyServer, StandaloneWSRequest, StandaloneWSResponse}
 import play.api.libs.ws.ahc.StandaloneAhcWSClient
-
 import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration.Duration
 
 trait HttpClient {
 
@@ -30,7 +27,6 @@ trait HttpClient {
   val wsClient: StandaloneAhcWSClient   = StandaloneAhcWSClient()
   implicit val ec: ExecutionContext     = ExecutionContext.global
   lazy val shouldProxyForZap: Boolean   = sys.props.get("security.assessment").exists(_.toBoolean)
-  private val readTimeout: Duration     = Duration("5s")
 
   def standAloneWsRequestWithProxyIfConfigSet(standAloneWsRequest: StandaloneWSRequest): StandaloneWSRequest =
     if (shouldProxyForZap) {
