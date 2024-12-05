@@ -19,6 +19,7 @@ package uk.gov.hmrc.api.cucumber.stepdefs
 import cats.data.Validated.{Invalid, Valid}
 import io.cucumber.scala.{EN, ScalaDsl}
 import uk.gov.hmrc.api.conf.TestEnvironment
+
 import java.net.URI
 import java.net.http.HttpRequest.BodyPublishers
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
@@ -26,12 +27,16 @@ import java.nio.charset.StandardCharsets
 import uk.gov.hmrc.api.requestBody._
 import io.circe._
 import io.circe.schema.Schema
+
+
 import scala.io.Source
 
 class UktrSteps extends ScalaDsl with EN {
 
   private var responseCode: Option[Int]    = None
   private var responseBody: Option[String] = None
+  private var requestBody: Option[String] = None
+
 
   Given("""I make api call to uktr {string} for {int}""") { (stub: String, expectedResponseStatusCode: Int) =>
     val apiUrl = TestEnvironment.url("pillar2") + "submitUKTR/" + stub
@@ -41,7 +46,7 @@ class UktrSteps extends ScalaDsl with EN {
     val request = HttpRequest
       .newBuilder()
       .uri(URI.create(apiUrl))
-      .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
+      .POST(BodyPublishers.ofString(RequestBodyUKTR.request, StandardCharsets.UTF_8))
       .header("Content-Type", "application/json")
       .header("Authorization", "Bearer valid_token")
       .build()
@@ -50,6 +55,7 @@ class UktrSteps extends ScalaDsl with EN {
 
     responseCode = Some(response.statusCode())
     responseBody = Some(response.body())
+    requestBody = Some(RequestBodyUKTR.request).map(_.replace("\n", " "))
 
     println(s"Response Code: ${response.statusCode()}")
     println(s"Response Body: ${response.body()}")
@@ -64,7 +70,39 @@ class UktrSteps extends ScalaDsl with EN {
     }
   }
 
-  Then("""I validate json schema for {string}""") { (schemaFilePath: String) =>
+  Then("""I validate request json schema for {string}""") { (schemaFilePath: String) =>
+    requestBody match {
+      case Some(body) =>
+        val schemaContent: String = Source.fromResource(schemaFilePath).getLines().mkString
+
+        val parsedSchema   = parser
+          .parse(schemaContent)
+          .getOrElse(
+            throw new RuntimeException("Invalid schema JSON")
+          )
+        val parsedResponse = parser
+          .parse(body)
+          .getOrElse(
+            throw new RuntimeException("Invalid response JSON")
+          )
+
+        val schema = Schema.load(parsedSchema)
+
+        schema.validate(parsedResponse) match {
+          case Valid(_) =>
+            println(s"Validation successful: JSON response matches $schemaFilePath!")
+
+          case Invalid(errors) =>
+            val errorMessages = errors.toList.map(_.getMessage).mkString(", ")
+            throw new AssertionError(s"JSON schema validation failed: $errorMessages")
+        }
+
+      case None =>
+        throw new IllegalStateException("Response body was not set in the Given block")
+    }
+  }
+
+  Then("""I validate response json schema for {string}""") { (schemaFilePath: String) =>
     responseBody match {
       case Some(body) =>
         val schemaContent: String = Source.fromResource(schemaFilePath).getLines().mkString
