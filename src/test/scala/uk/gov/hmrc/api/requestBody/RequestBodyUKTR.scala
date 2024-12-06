@@ -17,7 +17,7 @@
 package uk.gov.hmrc.api.requestBody
 
 object RequestBodyUKTR {
-  val request: String =
+  val requestBody: String =
     """
       |{
       |  "accountingPeriodFrom": "2024-08-14",

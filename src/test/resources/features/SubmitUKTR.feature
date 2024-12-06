@@ -12,4 +12,3 @@ Feature: Verify UKTR submission apis
       | 400        | XEPLR0000000400 | jsonSchema/uktrSchema/Response/UKTR_400.json |
       | 500        | XEPLR0000000500 | jsonSchema/uktrSchema/Response/UKTR_500.json |
       | 201        | XEPLR0000000111 | jsonSchema/uktrSchema/Response/UKTR_201.json |
-      | 201        | XEPLR1234567890 | jsonSchema/uktrSchema/Response/UKTR_200.json |

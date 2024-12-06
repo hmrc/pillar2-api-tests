@@ -19,7 +19,6 @@ package uk.gov.hmrc.api.cucumber.stepdefs
 import cats.data.Validated.{Invalid, Valid}
 import io.cucumber.scala.{EN, ScalaDsl}
 import uk.gov.hmrc.api.conf.TestEnvironment
-
 import java.net.URI
 import java.net.http.HttpRequest.BodyPublishers
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
@@ -27,8 +26,6 @@ import java.nio.charset.StandardCharsets
 import uk.gov.hmrc.api.requestBody._
 import io.circe._
 import io.circe.schema.Schema
-
-
 import scala.io.Source
 
 class UktrSteps extends ScalaDsl with EN {
@@ -46,7 +43,7 @@ class UktrSteps extends ScalaDsl with EN {
     val request = HttpRequest
       .newBuilder()
       .uri(URI.create(apiUrl))
-      .POST(BodyPublishers.ofString(RequestBodyUKTR.request, StandardCharsets.UTF_8))
+      .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
       .header("Content-Type", "application/json")
       .header("Authorization", "Bearer valid_token")
       .build()
@@ -55,7 +52,7 @@ class UktrSteps extends ScalaDsl with EN {
 
     responseCode = Some(response.statusCode())
     responseBody = Some(response.body())
-    requestBody = Some(RequestBodyUKTR.request).map(_.replace("\n", " "))
+    requestBody = Some(RequestBodyUKTR.requestBody).map(_.replace("\n", " "))
 
     println(s"Response Code: ${response.statusCode()}")
     println(s"Response Body: ${response.body()}")
