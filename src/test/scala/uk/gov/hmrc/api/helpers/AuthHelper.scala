@@ -31,7 +31,6 @@ class AuthHelper {
   var bearerToken                       = "_"
   var body                              = "_"
 
-
   def getBearerLocal(affinityGroup: String, enrolment: String): String = {
     enrolment match {
       case "with enrolment"    =>

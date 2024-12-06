@@ -2,7 +2,7 @@
 Feature: Verify UKTR submission apis
 
   Scenario Outline: verify error codes for uktr submission
-    Given I make API call to UKTR "<PLRID>" for <StatusCode>
+    Given I make API call to UKTR with "<PLRID>"
     When I verify response code is <StatusCode>
     Then I validate json schema for "<JsonSchema>"
     Examples:

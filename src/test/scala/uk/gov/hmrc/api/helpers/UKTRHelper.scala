@@ -24,25 +24,28 @@ import java.net.http.HttpRequest.BodyPublishers
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import java.nio.charset.StandardCharsets
 
-class IdentifyGroupHelper {
-  val authHelper: AuthHelper = new AuthHelper
-  val apiUrl                 = TestEnvironment.url("pillar2-submission-api") + "UKTaxReturn"
-  var body                   = "_"
+class UKTRHelper {
+  val authHelper: AuthHelper       = new AuthHelper
+  var responseBody: Option[String] = None
 
-  def sendPLRUKTRRequest(bearerToken: String): Int = {
-    val client       = HttpClient.newHttpClient()
-    val request      = HttpRequest
+  def sendUKTRRequest(PLRID: String): Int = {
+    val apiUrl = TestEnvironment.url("pillar2-external-test-stub") + "submitUKTR/" + PLRID
+    val client = HttpClient.newHttpClient()
+
+    val request = HttpRequest
       .newBuilder()
       .uri(URI.create(apiUrl))
       .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
       .header("Content-Type", "application/json")
-      .header("Authorization", bearerToken)
+      .header("Authorization", "Bearer valid_token")
       .build()
+
     val response     = client.send(request, HttpResponse.BodyHandlers.ofString())
     val responseCode = response.statusCode()
+    responseBody = Option(response.body())
 
-    println(s"Response Code: ${response.statusCode()}")
-    println(s"Response Body: ${response.body()}");
+    println(s"Response Code: " + responseCode)
+    println(s"Response Body: " + responseBody)
     responseCode
   }
 }
