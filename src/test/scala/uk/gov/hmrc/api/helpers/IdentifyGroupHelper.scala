@@ -26,8 +26,7 @@ import java.nio.charset.StandardCharsets
 
 class IdentifyGroupHelper {
   val authHelper: AuthHelper = new AuthHelper
-  val apiUrl                 = TestEnvironment.url("pillar2-submission-api") + "UKTaxReturn"
-  var body                   = "_"
+  val apiUrl: String         = TestEnvironment.url("pillar2-submission-api") + "UKTaxReturn"
 
   def sendPLRUKTRRequest(bearerToken: String): Int = {
     val client       = HttpClient.newHttpClient()
@@ -42,7 +41,7 @@ class IdentifyGroupHelper {
     val responseCode = response.statusCode()
 
     println(s"Response Code: ${response.statusCode()}")
-    println(s"Response Body: ${response.body()}");
+    println(s"Response Body: ${response.body()}")
     responseCode
   }
 }
