@@ -30,7 +30,7 @@ import scala.io.Source
 
 class UktrSteps extends ScalaDsl with EN {
 
-  private var responseCode: Option[Int]    = None
+  private var responseCode: Option[Int] = None
   private var responseBody: Option[String] = None
   private var requestBody: Option[String] = None
 
@@ -62,7 +62,7 @@ class UktrSteps extends ScalaDsl with EN {
     responseCode match {
       case Some(code) =>
         assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
-      case None       =>
+      case None =>
         throw new IllegalStateException("Response code was not set in the Given block")
     }
   }
@@ -72,7 +72,7 @@ class UktrSteps extends ScalaDsl with EN {
       case Some(body) =>
         val schemaContent: String = Source.fromResource(schemaFilePath).getLines().mkString
 
-        val parsedSchema   = parser
+        val parsedSchema = parser
           .parse(schemaContent)
           .getOrElse(
             throw new RuntimeException("Invalid schema JSON")
@@ -104,7 +104,7 @@ class UktrSteps extends ScalaDsl with EN {
       case Some(body) =>
         val schemaContent: String = Source.fromResource(schemaFilePath).getLines().mkString
 
-        val parsedSchema   = parser
+        val parsedSchema = parser
           .parse(schemaContent)
           .getOrElse(
             throw new RuntimeException("Invalid schema JSON")
