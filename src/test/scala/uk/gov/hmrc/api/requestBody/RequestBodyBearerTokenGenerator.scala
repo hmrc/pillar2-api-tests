@@ -16,58 +16,7 @@
 
 package uk.gov.hmrc.api.requestBody
 
-import java.net.URI
-import java.net.http.HttpRequest.BodyPublishers
-import java.net.http.{HttpClient, HttpRequest, HttpResponse}
-import java.nio.charset.StandardCharsets
-
-import uk.gov.hmrc.api.conf.TestEnvironment
-
 object RequestBodyBearerTokenGenerator {
-  var trimToken                         = "";
-  val authSessionsUrl                   = TestEnvironment.url("auth-login-api")
-  private var responseCode: Option[Int] = None
-  var bearerToken                       = "_"
-  var body                              = "_"
-
-  def getBearerLocal(affinityGroup: String, enrolment: String): String = {
-    enrolment match {
-      case "with enrolment"    =>
-        body = putBodyWithEnrolment(affinityGroup)
-      case "without enrolment" =>
-        body = putBodyWithOutEnrolment(affinityGroup)
-    }
-    val client  = HttpClient.newHttpClient()
-    val request = HttpRequest
-      .newBuilder()
-      .uri(URI.create(authSessionsUrl))
-      .POST(BodyPublishers.ofString(body, StandardCharsets.UTF_8))
-      .header("Content-Type", "application/json")
-      .build()
-
-    val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-
-    responseCode = Some(response.statusCode());
-    println(s"Response Code: ${response.statusCode()}")
-    println(s"Response Body: ${response.body()}");
-    val bearerTokenHeader = response
-      .headers()
-      .firstValue("authorization")
-
-    val bearerToken = bearerTokenHeader
-      .orElse("")
-      .split(",")
-      .find(_.trim.startsWith("Bearer"))
-      .getOrElse("")
-
-    println(s"Extracted Bearer Token: $bearerToken")
-    bearerToken
-  }
-
-  def obtainBearerTokenWithEnrolment(affinityGroup: String, enrolment: String): Unit    = bearerToken =
-    getBearerLocal(affinityGroup, enrolment: String)
-  def obtainBearerTokenWithOutEnrolment(affinityGroup: String, enrolment: String): Unit = bearerToken =
-    getBearerLocal(affinityGroup, enrolment: String)
 
   def putBodyWithOutEnrolment(affinityGroup: String): String =
     s"""

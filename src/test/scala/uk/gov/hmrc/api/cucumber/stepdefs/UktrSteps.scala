@@ -33,7 +33,7 @@ class UktrSteps extends ScalaDsl with EN {
   private var responseCode: Option[Int]    = None
   private var responseBody: Option[String] = None
 
-  Given("""I make api call to uktr {string} for {int}""") { (stub: String, expectedResponseStatusCode: Int) =>
+  Given("""I make API call to UKTR {string} for {int}""") { (stub: String, expectedResponseStatusCode: Int) =>
     val apiUrl = TestEnvironment.url("pillar2-external-test-stub") + "submitUKTR/" + stub
 
     val client = HttpClient.newHttpClient()

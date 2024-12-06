@@ -20,40 +20,35 @@ import java.net.URI
 import java.net.http.HttpRequest.BodyPublishers
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import java.nio.charset.StandardCharsets
-
 import io.cucumber.scala.{EN, ScalaDsl}
 import uk.gov.hmrc.api.conf.TestEnvironment
+import uk.gov.hmrc.api.helpers.{AuthHelper, IdentifyGroupHelper}
 import uk.gov.hmrc.api.requestBody._
 
 class IdentifyGroupsSteps extends ScalaDsl with EN {
+  val identifyGroupHelper: IdentifyGroupHelper = new IdentifyGroupHelper
+  val authHelper: AuthHelper                   = new AuthHelper
+  private var responseCode: Option[Int]        = None
+  private var bearerToken                      = "";
 
-  private var responseCode: Option[Int] = None
+  Given("""^I have generated a bearer token for an (.*) and (.*)$""") { (affinity: String, enrolment: String) =>
+    enrolment match {
+      case "with enrolment"    =>
+        bearerToken = authHelper.getBearerLocal(affinity, enrolment)
+      case "without enrolment" =>
+        bearerToken = authHelper.getBearerLocal(affinity, enrolment)
+    }
+  }
 
-  Given("""I make API call to PLR UKTR for {int}""") { (expectedResponseStatusCode: Int) =>
-    val apiUrl = TestEnvironment.url("pillar2-submission-api") + "UKTaxReturn"
-    val client = HttpClient.newHttpClient()
-
-    val request = HttpRequest
-      .newBuilder()
-      .uri(URI.create(apiUrl))
-      .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
-      .header("Content-Type", "application/json")
-      .header("Authorization", RequestBodyBearerTokenGenerator.bearerToken)
-      .build()
-
-    val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-    responseCode = Some(response.statusCode())
-
-    println(s"Response Code: ${response.statusCode()}")
-    println(s"Response Body: ${response.body()}")
+  Given("""I make API call to PLR UKTR""") { () =>
+    responseCode = Option(identifyGroupHelper.sendPLRUKTRRequest(bearerToken))
   }
 
   Then("""I verify the response code is {int}""") { (expectedResponseStatusCode: Int) =>
-    responseCode match {
-      case Some(code) =>
-        assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
-      case None =>
-        throw new IllegalStateException("Response code was not set in the Given block")
-    }
+    val code = responseCode.getOrElse(
+      throw new IllegalStateException("Response code was not set in the Given block")
+    )
+    assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
+
   }
 }
