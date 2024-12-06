@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Welcome8",
+  "definitions": {
+    "Welcome8": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "errors": {
+          "$ref": "#/definitions/Errors"
+        }
+      },
+      "required": [
+        "errors"
+      ],
+      "title": "Welcome8"
+    },
+    "Errors": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "processingDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "code": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "processingDate",
+        "text"
+      ],
+      "title": "Errors"
+    }
+  }
+}
