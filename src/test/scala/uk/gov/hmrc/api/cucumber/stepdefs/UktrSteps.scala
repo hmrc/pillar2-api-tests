@@ -18,53 +18,27 @@ package uk.gov.hmrc.api.cucumber.stepdefs
 
 import cats.data.Validated.{Invalid, Valid}
 import io.cucumber.scala.{EN, ScalaDsl}
-import uk.gov.hmrc.api.conf.TestEnvironment
-import java.net.URI
-import java.net.http.HttpRequest.BodyPublishers
-import java.net.http.{HttpClient, HttpRequest, HttpResponse}
-import java.nio.charset.StandardCharsets
-import uk.gov.hmrc.api.requestBody._
 import io.circe._
 import io.circe.schema.Schema
+import uk.gov.hmrc.api.helpers.{IdentifyGroupHelper, UKTRHelper}
 import scala.io.Source
 
 class UktrSteps extends ScalaDsl with EN {
-
-  private var responseCode: Option[Int] = None
+  val uktrHelper: UKTRHelper               = new UKTRHelper
+  private var responseCode: Option[Int]    = None
   private var responseBody: Option[String] = None
   private var requestBody: Option[String] = None
 
-
-  Given("""I make api call to uktr {string} for {int}""") { (stub: String, expectedResponseStatusCode: Int) =>
-    val apiUrl = TestEnvironment.url("pillar2") + "submitUKTR/" + stub
-
-    val client = HttpClient.newHttpClient()
-
-    val request = HttpRequest
-      .newBuilder()
-      .uri(URI.create(apiUrl))
-      .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
-      .header("Content-Type", "application/json")
-      .header("Authorization", "Bearer valid_token")
-      .build()
-
-    val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-
-    responseCode = Some(response.statusCode())
-    responseBody = Some(response.body())
-    requestBody = Some(RequestBodyUKTR.requestBody).map(_.replace("\n", " "))
-
-    println(s"Response Code: ${response.statusCode()}")
-    println(s"Response Body: ${response.body()}")
+  Given("""I make API call to UKTR with {string}""") { (PLRID: String) =>
+    responseCode = Option(uktrHelper.sendUKTRRequest(PLRID))
+    responseBody = uktrHelper.responseBody;
   }
 
   Then("""I verify response code is {int}""") { (expectedResponseStatusCode: Int) =>
-    responseCode match {
-      case Some(code) =>
-        assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
-      case None =>
-        throw new IllegalStateException("Response code was not set in the Given block")
-    }
+    val code = responseCode.getOrElse(
+      throw new IllegalStateException("Response code was not set in the Given block")
+    )
+    assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
   }
 
   Then("""I validate request json schema for {string}""") { (schemaFilePath: String) =>
