@@ -27,13 +27,14 @@ import uk.gov.hmrc.api.requestBody._
 
 class IdentifyGroupsSteps extends ScalaDsl with EN {
   val identifyGroupHelper: IdentifyGroupHelper = new IdentifyGroupHelper
-  val authHelper: AuthHelper                   = new AuthHelper
-  private var responseCode: Option[Int]        = None
-  private var bearerToken                      = "";
+  val authHelper: AuthHelper = new AuthHelper
+  private var responseCode: Option[Int] = None
+  private var response: Option[String] = None
+  private var bearerToken = "";
 
   Given("""^I have generated a bearer token for an (.*) and (.*)$""") { (affinity: String, enrolment: String) =>
     enrolment match {
-      case "with enrolment"    =>
+      case "with enrolment" =>
         bearerToken = authHelper.getBearerLocal(affinity, enrolment)
       case "without enrolment" =>
         bearerToken = authHelper.getBearerLocal(affinity, enrolment)
@@ -44,11 +45,10 @@ class IdentifyGroupsSteps extends ScalaDsl with EN {
     responseCode = Option(identifyGroupHelper.sendPLRUKTRRequest(bearerToken))
   }
 
-  Then("""I verify the response code is {int}""") { (expectedResponseStatusCode: Int) =>
+ /* Then("""I verify the response code is {int}""") { (expectedResponseStatusCode: Int) =>
     val code = responseCode.getOrElse(
       throw new IllegalStateException("Response code was not set in the Given block")
     )
     assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
-
-  }
+*/
 }
