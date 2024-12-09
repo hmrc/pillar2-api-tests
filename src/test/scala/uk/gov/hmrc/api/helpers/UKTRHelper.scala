@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets
 class UKTRHelper {
   val authHelper: AuthHelper       = new AuthHelper
   var responseBody: Option[String] = None
+  var requestBody: Option[String]  = None
 
   def sendUKTRRequest(PLRID: String): Int = {
     val apiUrl = TestEnvironment.url("pillar2-external-test-stub") + "submitUKTR/" + PLRID
@@ -40,9 +41,10 @@ class UKTRHelper {
       .header("Authorization", "Bearer valid_token")
       .build()
 
-    val response     = client.send(request, HttpResponse.BodyHandlers.ofString())
+    val response = client.send(request, HttpResponse.BodyHandlers.ofString())
     val responseCode = response.statusCode()
     responseBody = Option(response.body())
+    requestBody = Some(RequestBodyUKTR.requestBody).map(_.replace("\n", " "))
 
     println(s"Response Code: " + responseCode)
     println(s"Response Body: " + responseBody)

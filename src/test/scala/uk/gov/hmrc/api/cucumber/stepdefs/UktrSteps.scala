@@ -27,11 +27,12 @@ class UktrSteps extends ScalaDsl with EN {
   val uktrHelper: UKTRHelper               = new UKTRHelper
   private var responseCode: Option[Int]    = None
   private var responseBody: Option[String] = None
-  private var requestBody: Option[String] = None
+  private var requestBody: Option[String]  = None
 
   Given("""I make API call to UKTR with {string}""") { (PLRID: String) =>
     responseCode = Option(uktrHelper.sendUKTRRequest(PLRID))
-    responseBody = uktrHelper.responseBody;
+    responseBody = uktrHelper.responseBody
+    requestBody = uktrHelper.requestBody
   }
 
   Then("""I verify response code is {int}""") { (expectedResponseStatusCode: Int) =>
@@ -49,19 +50,19 @@ class UktrSteps extends ScalaDsl with EN {
         val parsedSchema = parser
           .parse(schemaContent)
           .getOrElse(
-            throw new RuntimeException("Invalid schema JSON")
+            throw new RuntimeException("Invalid Request schema JSON")
           )
-        val parsedResponse = parser
+        val parsedRequest = parser
           .parse(body)
           .getOrElse(
-            throw new RuntimeException("Invalid response JSON")
+            throw new RuntimeException("Invalid request JSON")
           )
 
         val schema = Schema.load(parsedSchema)
 
-        schema.validate(parsedResponse) match {
+        schema.validate(parsedRequest) match {
           case Valid(_) =>
-            println(s"Validation successful: JSON response matches $schemaFilePath!")
+            println(s"Validation successful: JSON request matches $schemaFilePath!")
 
           case Invalid(errors) =>
             val errorMessages = errors.toList.map(_.getMessage).mkString(", ")
@@ -69,7 +70,7 @@ class UktrSteps extends ScalaDsl with EN {
         }
 
       case None =>
-        throw new IllegalStateException("Response body was not set in the Given block")
+        throw new IllegalStateException("Request body was not set in the Given block")
     }
   }
 
@@ -81,7 +82,7 @@ class UktrSteps extends ScalaDsl with EN {
         val parsedSchema = parser
           .parse(schemaContent)
           .getOrElse(
-            throw new RuntimeException("Invalid schema JSON")
+            throw new RuntimeException("Invalid Response schema JSON")
           )
         val parsedResponse = parser
           .parse(body)
