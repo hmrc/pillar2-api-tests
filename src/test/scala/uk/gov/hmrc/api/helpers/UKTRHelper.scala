@@ -25,9 +25,9 @@ import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import java.nio.charset.StandardCharsets
 
 class UKTRHelper {
-  val authHelper: AuthHelper = new AuthHelper
+  val authHelper: AuthHelper       = new AuthHelper
   var responseBody: Option[String] = None
-  var requestBody: Option[String] = None
+  var requestBody: Option[String]  = None
 
   def sendUKTRRequest(PLRID: String): Int = {
     val apiUrl = TestEnvironment.url("pillar2-external-test-stub") + "submitUKTR/" + PLRID

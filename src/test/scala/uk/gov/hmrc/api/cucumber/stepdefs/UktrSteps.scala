@@ -24,10 +24,10 @@ import uk.gov.hmrc.api.helpers.{IdentifyGroupHelper, UKTRHelper}
 import scala.io.Source
 
 class UktrSteps extends ScalaDsl with EN {
-  val uktrHelper: UKTRHelper = new UKTRHelper
-  private var responseCode: Option[Int] = None
+  val uktrHelper: UKTRHelper               = new UKTRHelper
+  private var responseCode: Option[Int]    = None
   private var responseBody: Option[String] = None
-  private var requestBody: Option[String] = None
+  private var requestBody: Option[String]  = None
 
   Given("""I make API call to UKTR with {string}""") { (PLRID: String) =>
     responseCode = Option(uktrHelper.sendUKTRRequest(PLRID))
