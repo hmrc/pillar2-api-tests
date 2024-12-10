@@ -30,8 +30,8 @@ class IdentifyGroupHelper {
   val apiUrl = TestEnvironment.url("pillar2-submission-api") + "UKTaxReturn"
   var body = "_"
   var responseBody: Option[String] = None
-  var ResponseErrorCodeVal: Option[String] = None
-  var ResponseErrorMessage: Option[String] = None
+  var responseErrorCodeVal: Option[String] = None
+  var responseErrorMessage: Option[String] = None
   var request: Option[String] = None
 
   def sendPLRUKTRRequest(bearerToken: String): Int = {
@@ -66,8 +66,8 @@ class IdentifyGroupHelper {
 
       responseBody = Option(response.body())
       val ResponseBodyCode: JsValue = Json.parse(responseBody.get)
-      ResponseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
-      ResponseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
+      responseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
+      responseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
 
       println(s"Response Code: ${response.statusCode()}")
       println(s"Response Body: ${response.body()}")
@@ -86,8 +86,8 @@ class IdentifyGroupHelper {
 
       responseBody = Option(response.body())
       val ResponseBodyCode: JsValue = Json.parse(responseBody.get)
-      ResponseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
-      ResponseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
+      responseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
+      responseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
 
       println(s"Response Code: ${response.statusCode()}")
       println(s"Response Body: ${response.body()}")
@@ -108,8 +108,8 @@ class IdentifyGroupHelper {
 
       responseBody = Option(response.body())
       val ResponseBodyCode: JsValue = Json.parse(responseBody.get)
-      ResponseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
-      ResponseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
+      responseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
+      responseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
 
       println(s"Response Code: ${response.statusCode()}")
       println(s"Response Body: ${response.body()}")

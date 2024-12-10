@@ -24,16 +24,19 @@ class IdentifyGroupsSteps extends ScalaDsl with EN {
   val authHelper: AuthHelper = new AuthHelper
   private var responseCode: Option[Int] = None
   private var responseBody: Option[String] = None
-  private var ResponseErrorCodeVal: Option[String] = None
-  private var ResponseErrorMessage: Option[String] = None
+  private var responseErrorCodeVal: Option[String] = None
+  private var responseErrorMessage: Option[String] = None
   private var bearerToken = ""
 
-  Given("""^I have generated a bearer token for an (.*) and (.*)$""") { (affinity: String, enrolment: String) =>
-    enrolment match {
-      case "with enrolment" =>
-        bearerToken = authHelper.getBearerLocal(affinity, enrolment)
+  Given("""^I have generated a bearer token for an (.*) and (.*)$""") { (affinity: String, value: String) =>
+    value match {
+      case "with enrolment"    =>
+        bearerToken = authHelper.getBearerLocal(affinity, value)
       case "without enrolment" =>
-        bearerToken = authHelper.getBearerLocal(affinity, enrolment)
+        bearerToken = authHelper.getBearerLocal(affinity, value)
+      case "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" | "XEPLR0123456422" | "XEPLR0123456500" |
+          "XEPLR0123456503" =>
+        bearerToken = authHelper.getBearerLocal(affinity, value)
     }
   }
 
@@ -44,8 +47,8 @@ class IdentifyGroupsSteps extends ScalaDsl with EN {
   Given("""I make API call to PLR UKTR with (.*)$""") { (errorCode: String) =>
     responseCode  = Option(identifyGroupHelper.sendPLRUKTRErrorcodeRequest(bearerToken, errorCode))
     responseBody  = identifyGroupHelper.responseBody
-    ResponseErrorCodeVal = identifyGroupHelper.ResponseErrorCodeVal
-    ResponseErrorMessage = identifyGroupHelper.ResponseErrorMessage
+    responseErrorCodeVal = identifyGroupHelper.responseErrorCodeVal
+    responseErrorMessage = identifyGroupHelper.responseErrorMessage
   }
 
   Then("""I verify the response code is {int}""") { (expectedResponseStatusCode: Int) =>
@@ -61,14 +64,14 @@ class IdentifyGroupsSteps extends ScalaDsl with EN {
     )
     assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
 
-    val errorcode = ResponseErrorCodeVal.getOrElse(
+    val errorCode = responseErrorCodeVal.getOrElse(
       throw new IllegalStateException("Response error code was not set in the Given block")
     )
-    assert(errorcode == expectedResponseErrorCode, s"Expected Error code $expectedResponseErrorCode but got $errorcode")
+    assert(errorCode == expectedResponseErrorCode, s"Expected Error code $expectedResponseErrorCode but got $errorCode")
 
-    val errormessage = ResponseErrorMessage.getOrElse(
+    val errorMessage = responseErrorMessage.getOrElse(
       throw new IllegalStateException("Response error message was not set in the Given block")
     )
-    assert(errormessage == expectedResponseErrorMessage, s"Expected Error Message $expectedResponseErrorMessage but got $errormessage")
+    assert(errorMessage == expectedResponseErrorMessage, s"Expected Error Message $expectedResponseErrorMessage but got $errorMessage")
   }
 }

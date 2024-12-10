@@ -55,4 +55,28 @@ object RequestBodyBearerTokenGenerator {
        |  ]
        | }
         """.stripMargin
+
+  def putBodyWithPlrid(affinityGroup: String, plrid: String): String =
+    s"""
+       | {
+       |  "confidenceLevel": 50,
+       |  "email": "user@test.com",
+       |  "credentialRole": "User",
+       |  "affinityGroup": "$affinityGroup",
+       |  "credentialStrength": "strong",
+       |  "credId": "453234543adr54hy9",
+       |  "enrolments": [
+       |  {
+       |      "key": "HMRC-PILLAR2-ORG",
+       |      "identifiers": [
+       |        {
+       |          "key": "PLRID",
+       |          "value": "$plrid"
+       |        }
+       |      ],
+       |      "state": "Activated"
+       |    }
+       |  ]
+       | }
+        """.stripMargin
 }
