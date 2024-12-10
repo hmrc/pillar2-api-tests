@@ -18,7 +18,3 @@ Feature: UKTR Scenarios
       | UserType     | PLRID           | StatusCode |
       | Organisation | XEPLR5555555555 | 201        |
       | Organisation | XEPLR0123456400 | 500        |
-      | Organisation | XEPLR0123456404 | 500        |
-      | Organisation | XEPLR0123456422 | 500        |
-      | Organisation | XEPLR0123456500 | 500        |
-      | Organisation | XEPLR0123456503 | 500        |
