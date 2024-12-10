@@ -16,20 +16,17 @@
 
 package uk.gov.hmrc.api.cucumber.stepdefs
 
-import java.net.URI
-import java.net.http.HttpRequest.BodyPublishers
-import java.net.http.{HttpClient, HttpRequest, HttpResponse}
-import java.nio.charset.StandardCharsets
 import io.cucumber.scala.{EN, ScalaDsl}
-import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.helpers.{AuthHelper, IdentifyGroupHelper}
-import uk.gov.hmrc.api.requestBody._
 
 class IdentifyGroupsSteps extends ScalaDsl with EN {
   val identifyGroupHelper: IdentifyGroupHelper = new IdentifyGroupHelper
-  val authHelper: AuthHelper                   = new AuthHelper
-  private var responseCode: Option[Int]        = None
-  private var bearerToken                      = "";
+  val authHelper: AuthHelper = new AuthHelper
+  private var responseCode: Option[Int] = None
+  private var responseBody: Option[String] = None
+  private var responseErrorCodeVal: Option[String] = None
+  private var responseErrorMessage: Option[String] = None
+  private var bearerToken = ""
 
   Given("""^I have generated a bearer token for an (.*) and (.*)$""") { (affinity: String, value: String) =>
     value match {
@@ -47,11 +44,34 @@ class IdentifyGroupsSteps extends ScalaDsl with EN {
     responseCode = Option(identifyGroupHelper.sendPLRUKTRRequest(bearerToken))
   }
 
+  Given("""I make API call to PLR UKTR with (.*)$""") { (errorCode: String) =>
+    responseCode  = Option(identifyGroupHelper.sendPLRUKTRErrorcodeRequest(bearerToken, errorCode))
+    responseBody  = identifyGroupHelper.responseBody
+    responseErrorCodeVal = identifyGroupHelper.responseErrorCodeVal
+    responseErrorMessage = identifyGroupHelper.responseErrorMessage
+  }
+
   Then("""I verify the response code is {int}""") { (expectedResponseStatusCode: Int) =>
     val code = responseCode.getOrElse(
       throw new IllegalStateException("Response code was not set in the Given block")
     )
     assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
+  }
 
+  Then("""I verify the response code is (.*) and (.*) and (.*)$""") { (expectedResponseStatusCode: Int, expectedResponseErrorCode: String, expectedResponseErrorMessage: String) =>
+    val code = responseCode.getOrElse(
+      throw new IllegalStateException("Response code was not set in the Given block")
+    )
+    assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
+
+    val errorCode = responseErrorCodeVal.getOrElse(
+      throw new IllegalStateException("Response error code was not set in the Given block")
+    )
+    assert(errorCode == expectedResponseErrorCode, s"Expected Error code $expectedResponseErrorCode but got $errorCode")
+
+    val errorMessage = responseErrorMessage.getOrElse(
+      throw new IllegalStateException("Response error message was not set in the Given block")
+    )
+    assert(errorMessage == expectedResponseErrorMessage, s"Expected Error Message $expectedResponseErrorMessage but got $errorMessage")
   }
 }
