@@ -31,12 +31,15 @@ class IdentifyGroupsSteps extends ScalaDsl with EN {
   private var responseCode: Option[Int]        = None
   private var bearerToken                      = "";
 
-  Given("""^I have generated a bearer token for an (.*) and (.*)$""") { (affinity: String, enrolment: String) =>
-    enrolment match {
+  Given("""^I have generated a bearer token for an (.*) and (.*)$""") { (affinity: String, value: String) =>
+    value match {
       case "with enrolment"    =>
-        bearerToken = authHelper.getBearerLocal(affinity, enrolment)
+        bearerToken = authHelper.getBearerLocal(affinity, value)
       case "without enrolment" =>
-        bearerToken = authHelper.getBearerLocal(affinity, enrolment)
+        bearerToken = authHelper.getBearerLocal(affinity, value)
+      case "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" | "XEPLR0123456422" | "XEPLR0123456500" |
+          "XEPLR0123456503" =>
+        bearerToken = authHelper.getBearerLocal(affinity, value)
     }
   }
 
