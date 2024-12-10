@@ -17,7 +17,7 @@
 package uk.gov.hmrc.api.helpers
 
 import uk.gov.hmrc.api.conf.TestEnvironment
-import uk.gov.hmrc.api.requestBody.RequestBodyBearerTokenGenerator.{putBodyWithEnrolment, putBodyWithOutEnrolment}
+import uk.gov.hmrc.api.requestBody.RequestBodyBearerTokenGenerator.{putBodyWithEnrolment, putBodyWithOutEnrolment, putBodyWithPlrid}
 
 import java.net.URI
 import java.net.http.HttpRequest.BodyPublishers
@@ -31,12 +31,15 @@ class AuthHelper {
   var bearerToken                       = "_"
   var body                              = "_"
 
-  def getBearerLocal(affinityGroup: String, enrolment: String): String = {
-    enrolment match {
+  def getBearerLocal(affinityGroup: String, value: String): String = {
+    value match {
       case "with enrolment"    =>
         body = putBodyWithEnrolment(affinityGroup)
       case "without enrolment" =>
         body = putBodyWithOutEnrolment(affinityGroup)
+      case "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" | "XEPLR0123456422" | "XEPLR0123456500" |
+          "XEPLR0123456503" =>
+        body = putBodyWithPlrid(affinityGroup, value)
     }
     val client  = HttpClient.newHttpClient()
     val request = HttpRequest
