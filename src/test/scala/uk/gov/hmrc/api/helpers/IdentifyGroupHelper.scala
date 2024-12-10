@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.api.helpers
 
+import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.RequestBodyUKTR
 
@@ -26,12 +27,16 @@ import java.nio.charset.StandardCharsets
 
 class IdentifyGroupHelper {
   val authHelper: AuthHelper = new AuthHelper
-  val apiUrl                 = TestEnvironment.url("pillar2-submission-api") + "UKTaxReturn"
-  var body                   = "_"
+  val apiUrl = TestEnvironment.url("pillar2-submission-api") + "UKTaxReturn"
+  var body = "_"
+  var responseBody: Option[String] = None
+  var ResponseErrorCodeVal: Option[String] = None
+  var ResponseErrorMessage: Option[String] = None
+  var request: Option[String] = None
 
   def sendPLRUKTRRequest(bearerToken: String): Int = {
-    val client       = HttpClient.newHttpClient()
-    val request      = HttpRequest
+    val client   = HttpClient.newHttpClient()
+    val request  = HttpRequest
       .newBuilder()
       .uri(URI.create(apiUrl))
       .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
@@ -42,7 +47,73 @@ class IdentifyGroupHelper {
     val responseCode = response.statusCode()
 
     println(s"Response Code: ${response.statusCode()}")
-    println(s"Response Body: ${response.body()}");
+    println(s"Response Body: ${response.body()}")
     responseCode
+  }
+
+  def sendPLRUKTRErrorcodeRequest(bearerToken: String, errorCode: String): Int = {
+    val client = HttpClient.newHttpClient()
+    if (errorCode == "001") {
+      val request = HttpRequest
+        .newBuilder()
+        .uri(URI.create(apiUrl))
+        .POST(BodyPublishers.ofString(RequestBodyUKTR.requestErrorCodeGeneratorBody, StandardCharsets.UTF_8))
+        .header("Content-Type", "application/json")
+        .header("Authorization", bearerToken)
+        .build()
+      val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+      val responseCode = response.statusCode()
+
+      responseBody = Option(response.body())
+      val ResponseBodyCode: JsValue = Json.parse(responseBody.get)
+      ResponseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
+      ResponseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
+
+      println(s"Response Code: ${response.statusCode()}")
+      println(s"Response Body: ${response.body()}")
+      responseCode
+    }
+    else if (errorCode == "002") {
+      val request = HttpRequest
+        .newBuilder()
+        .uri(URI.create(apiUrl))
+        .POST(BodyPublishers.ofString("", StandardCharsets.UTF_8))
+        .header("Content-Type", "application/json")
+        .header("Authorization", bearerToken)
+        .build()
+      val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+      val responseCode = response.statusCode()
+
+      responseBody = Option(response.body())
+      val ResponseBodyCode: JsValue = Json.parse(responseBody.get)
+      ResponseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
+      ResponseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
+
+      println(s"Response Code: ${response.statusCode()}")
+      println(s"Response Body: ${response.body()}")
+      responseCode
+    }
+    else {
+      val bearerToken = " "
+      println(s"bearerToken : $bearerToken")
+      val request = HttpRequest
+        .newBuilder()
+        .uri(URI.create(apiUrl))
+        .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
+        .header("Content-Type", "application/json")
+        .header("Authorization", bearerToken)
+        .build()
+      val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+      val responseCode = response.statusCode()
+
+      responseBody = Option(response.body())
+      val ResponseBodyCode: JsValue = Json.parse(responseBody.get)
+      ResponseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
+      ResponseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
+
+      println(s"Response Code: ${response.statusCode()}")
+      println(s"Response Body: ${response.body()}")
+      responseCode
+    }
   }
 }
