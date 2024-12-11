@@ -19,7 +19,7 @@ Feature: UKTR Scenarios
       | Organisation | XEPLR5555555555 | 201        |
       | Organisation | XEPLR0123456400 | 500        |
 
-  Scenario Outline: Verify the errorcodes for the invalid UKTR requests
+  Scenario Outline: Verify the errorcode and errormessage for the invalid UKTR requests
     Given I have generated a bearer token for an <UserType> and <Enrolment>
     And I make API call to PLR UKTR with <ErrorCode>
     Then I verify the response code is <StatusCode> and <ErrorCode> and <ErrorMessage>
