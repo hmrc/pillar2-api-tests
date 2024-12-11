@@ -22,8 +22,6 @@ object RequestBodyUKTR {
       |{
       |  "accountingPeriodFrom": "2024-08-14",
       |  "accountingPeriodTo": "2024-12-14",
-      |  "qualifyingGroup": true,
-      |  "obligationDTT": true,
       |  "obligationMTT": true,
       |  "electionUKGAAP": true,
       |  "liabilities": {
@@ -56,8 +54,6 @@ object RequestBodyUKTR {
       |{
       |  "accountingPeriodFrom": "2024-08-14",
       |  "accountingPeriodTo": "2024-12-14",
-      |  "qualifyingGroup": true,
-      |  "obligationDTT": true,
       |  "obligationMTT": true,
       |  "electionUKGAAP": "true",
       |  "liabilities": {
