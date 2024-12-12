@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://localhost:10055/pillar2/submitUKTR/XEPLR0000000111
+  url: http://localhost:10055/pillar2/submitUKTR/XEPLR0000000401
   body: json
   auth: none
 }
@@ -19,8 +19,6 @@ body:json {
   {
     "accountingPeriodFrom": "2024-08-14",
     "accountingPeriodTo": "2024-12-14",
-    "qualifyingGroup": true,
-    "obligationDTT": true,
     "obligationMTT": true,
     "electionUKGAAP": true,
     "liabilities": {
@@ -34,14 +32,12 @@ body:json {
       "totalLiabilityUTPR": 10000.99,
       "liableEntities": [
         {
-          "ukChargeableEntityName": "UKTR Newco PLC",
+          "ukChargeableEntityName": "Newco PLC",
           "idType": "CRN",
           "idValue": "12345678",
-          "amountOwedDTT": 5000,
-          "electedDTT": true,
-          "amountOwedIIR": 3400,
-          "amountOwedUTPR": 6000.5,
-          "electedUTPR": true
+          "amountOwedDTT": 5000.33,
+          "amountOwedIIR": 3400.66,
+          "amountOwedUTPR": 6000.58
         }
       ]
     }
