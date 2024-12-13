@@ -27,7 +27,7 @@ import java.nio.charset.StandardCharsets
 
 class IdentifyGroupHelper {
   val authHelper: AuthHelper = new AuthHelper
-  val apiUrl = TestEnvironment.url("pillar2-submission-api") + "UKTaxReturn"
+  val apiUrl: String = TestEnvironment.url("pillar2-submission-api") + "UKTaxReturn"
   var body = "_"
   var responseBody: Option[String] = None
   var responseErrorCodeVal: Option[String] = None
@@ -46,6 +46,7 @@ class IdentifyGroupHelper {
     val response     = client.send(request, HttpResponse.BodyHandlers.ofString())
     val responseCode = response.statusCode()
 
+    println(s"Request URL: ${request.uri()}")
     println(s"Response Code: ${response.statusCode()}")
     println(s"Response Body: ${response.body()}")
     responseCode
@@ -69,6 +70,7 @@ class IdentifyGroupHelper {
       responseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
       responseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
 
+      println(s"Request URL: ${request.uri()}")
       println(s"Response Code: ${response.statusCode()}")
       println(s"Response Body: ${response.body()}")
       responseCode
@@ -89,6 +91,7 @@ class IdentifyGroupHelper {
       responseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
       responseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
 
+      println(s"Request URL: ${request.uri()}")
       println(s"Response Code: ${response.statusCode()}")
       println(s"Response Body: ${response.body()}")
       responseCode
@@ -111,6 +114,7 @@ class IdentifyGroupHelper {
       responseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
       responseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
 
+      println(s"Request URL: ${request.uri()}")
       println(s"Response Code: ${response.statusCode()}")
       println(s"Response Body: ${response.body()}")
       responseCode

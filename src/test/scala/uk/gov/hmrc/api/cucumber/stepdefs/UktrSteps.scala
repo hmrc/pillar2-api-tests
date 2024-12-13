@@ -24,10 +24,12 @@ import uk.gov.hmrc.api.helpers.{IdentifyGroupHelper, UKTRHelper}
 import scala.io.Source
 
 class UktrSteps extends ScalaDsl with EN {
-  val uktrHelper: UKTRHelper               = new UKTRHelper
-  private var responseCode: Option[Int]    = None
-  private var responseBody: Option[String] = None
-  private var requestBody: Option[String]  = None
+  val uktrHelper: UKTRHelper                       = new UKTRHelper
+  private var responseCode: Option[Int]            = None
+  private var responseBody: Option[String]         = None
+  private var requestBody: Option[String]          = None
+  private var responseErrorCodeVal: Option[String] = None
+  private var responseErrorMessage: Option[String] = None
 
   Given("""I make API call to UKTR with {string}""") { (PLRID: String) =>
     responseCode = Option(uktrHelper.sendUKTRRequest(PLRID))
@@ -47,7 +49,7 @@ class UktrSteps extends ScalaDsl with EN {
       case Some(body) =>
         val schemaContent: String = Source.fromResource(schemaFilePath).getLines().mkString
 
-        val parsedSchema = parser
+        val parsedSchema  = parser
           .parse(schemaContent)
           .getOrElse(
             throw new RuntimeException("Invalid Request schema JSON")
@@ -79,7 +81,7 @@ class UktrSteps extends ScalaDsl with EN {
       case Some(body) =>
         val schemaContent: String = Source.fromResource(schemaFilePath).getLines().mkString
 
-        val parsedSchema = parser
+        val parsedSchema   = parser
           .parse(schemaContent)
           .getOrElse(
             throw new RuntimeException("Invalid Response schema JSON")
@@ -104,5 +106,33 @@ class UktrSteps extends ScalaDsl with EN {
       case None =>
         throw new IllegalStateException("Response body was not set in the Given block")
     }
+  }
+
+  Then("""I verify error code is {string} and error message is {string}""") {
+    (expectedResponseErrorCode: String, expectedResponseErrorMessage: String) =>
+      val errorCode = responseErrorCodeVal.getOrElse(
+        throw new IllegalStateException("Response error code was not set in the Given block")
+      )
+      assert(
+        errorCode == expectedResponseErrorCode,
+        s"Expected Error code $expectedResponseErrorCode but got $errorCode"
+      )
+
+      val errorMessage = responseErrorMessage.getOrElse(
+        throw new IllegalStateException("Response error message was not set in the Given block")
+      )
+      assert(
+        errorMessage == expectedResponseErrorMessage,
+        s"Expected Error Message $expectedResponseErrorMessage but got $errorMessage"
+      )
+
+  }
+
+  Given("""I make API call to UKTR with PLRID {string} , {string}, {string}, {string}""") {
+    (PLRID: String, idType: String, idValue: String, amountOwedDTT: String) =>
+      responseCode = Option(uktrHelper.sendUKTRRequestForErrorMessageValidation(PLRID, idType, idValue, amountOwedDTT))
+      responseBody = uktrHelper.responseBody
+      responseErrorCodeVal = uktrHelper.responseErrorCodeVal
+      responseErrorMessage = uktrHelper.responseErrorMessage
   }
 }

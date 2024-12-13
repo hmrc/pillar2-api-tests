@@ -26,7 +26,7 @@ import java.nio.charset.StandardCharsets
 
 class AuthHelper {
   var trimToken                         = ""
-  val authSessionsUrl                   = TestEnvironment.url("auth-login-api")
+  val authSessionsUrl: String           = TestEnvironment.url("auth-login-api")
   private var responseCode: Option[Int] = None
   var bearerToken                       = "_"
   var body                              = "_"
@@ -52,6 +52,7 @@ class AuthHelper {
     val response = client.send(request, HttpResponse.BodyHandlers.ofString())
 
     responseCode = Some(response.statusCode())
+    println(s"Request URL: ${request.uri()}")
     println(s"Response Code: ${response.statusCode()}")
     println(s"Response Body: ${response.body()}")
     val bearerTokenHeader = response

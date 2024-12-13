@@ -1,41 +1,21 @@
 {
-  "$schema": "http://json-schema.org/draft-06/schema#",
-  "$ref": "#/definitions/Welcome8",
-  "definitions": {
-    "Welcome8": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "accountingPeriodFrom": {
-          "type": "string",
-          "format": "date"
-        },
-        "accountingPeriodTo": {
-          "type": "string",
-          "format": "date"
-        },
-        "obligationMTT": {
-          "type": "boolean"
-        },
-        "electionUKGAAP": {
-          "type": "boolean"
-        },
-        "liabilities": {
-          "$ref": "#/definitions/Liabilities"
-        }
-      },
-      "required": [
-        "accountingPeriodFrom",
-        "accountingPeriodTo",
-        "electionUKGAAP",
-        "liabilities",
-        "obligationMTT"
-      ],
-      "title": "Welcome8"
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "accountingPeriodFrom": {
+      "type": "string"
     },
-    "Liabilities": {
+    "accountingPeriodTo": {
+      "type": "string"
+    },
+    "obligationMTT": {
+      "type": "boolean"
+    },
+    "electionUKGAAP": {
+      "type": "boolean"
+    },
+    "liabilities": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "electionDTTSingleMember": {
           "type": "boolean"
@@ -63,65 +43,59 @@
         },
         "liableEntities": {
           "type": "array",
-          "items": {
-            "$ref": "#/definitions/LiableEntity"
-          }
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "ukChargeableEntityName": {
+                  "type": "string"
+                },
+                "idType": {
+                  "type": "string"
+                },
+                "idValue": {
+                  "type": "string"
+                },
+                "amountOwedDTT": {
+                  "type": "number"
+                },
+                "amountOwedIIR": {
+                  "type": "number"
+                },
+                "amountOwedUTPR": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "ukChargeableEntityName",
+                "idType",
+                "idValue",
+                "amountOwedDTT",
+                "amountOwedIIR",
+                "amountOwedUTPR"
+              ]
+            }
+          ]
         }
       },
       "required": [
         "electionDTTSingleMember",
         "electionUTPRSingleMember",
-        "liableEntities",
         "numberSubGroupDTT",
         "numberSubGroupUTPR",
         "totalLiability",
         "totalLiabilityDTT",
         "totalLiabilityIIR",
-        "totalLiabilityUTPR"
-      ],
-      "title": "Liabilities"
-    },
-    "LiableEntity": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "ukChargeableEntityName": {
-          "type": "string"
-        },
-        "idType": {
-          "type": "string"
-        },
-        "idValue": {
-          "type": "string",
-          "format": "integer"
-        },
-        "amountOwedDTT": {
-          "type": "integer"
-        },
-        "electedDTT": {
-          "type": "boolean"
-        },
-        "amountOwedIIR": {
-          "type": "integer"
-        },
-        "amountOwedUTPR": {
-          "type": "number"
-        },
-        "electedUTPR": {
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "amountOwedDTT",
-        "amountOwedIIR",
-        "amountOwedUTPR",
-        "electedDTT",
-        "electedUTPR",
-        "idType",
-        "idValue",
-        "ukChargeableEntityName"
-      ],
-      "title": "LiableEntity"
+        "totalLiabilityUTPR",
+        "liableEntities"
+      ]
     }
-  }
+  },
+  "required": [
+    "accountingPeriodFrom",
+    "accountingPeriodTo",
+    "obligationMTT",
+    "electionUKGAAP",
+    "liabilities"
+  ]
 }
