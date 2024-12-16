@@ -27,7 +27,7 @@ import java.nio.charset.StandardCharsets
 
 class IdentifyGroupHelper {
   val authHelper: AuthHelper               = new AuthHelper
-  val apiUrl                               = TestEnvironment.url("pillar2-submission-api") + "UKTaxReturn"
+  val apiUrl: String = TestEnvironment.url("pillar2-submission-api")
   var body                                 = "_"
   var responseBody: Option[String]         = None
   var responseErrorCodeVal: Option[String] = None
