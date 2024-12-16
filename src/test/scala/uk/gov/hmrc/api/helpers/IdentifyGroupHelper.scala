@@ -26,17 +26,17 @@ import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import java.nio.charset.StandardCharsets
 
 class IdentifyGroupHelper {
-  val authHelper: AuthHelper = new AuthHelper
-  val apiUrl = TestEnvironment.url("pillar2-submission-api") + "UKTaxReturn"
-  var body = "_"
-  var responseBody: Option[String] = None
+  val authHelper: AuthHelper               = new AuthHelper
+  val apiUrl                               = TestEnvironment.url("pillar2-submission-api") + "UKTaxReturn"
+  var body                                 = "_"
+  var responseBody: Option[String]         = None
   var responseErrorCodeVal: Option[String] = None
   var responseErrorMessage: Option[String] = None
-  var request: Option[String] = None
+  var request: Option[String]              = None
 
   def sendPLRUKTRRequest(bearerToken: String): Int = {
-    val client   = HttpClient.newHttpClient()
-    val request  = HttpRequest
+    val client       = HttpClient.newHttpClient()
+    val request      = HttpRequest
       .newBuilder()
       .uri(URI.create(apiUrl))
       .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
@@ -53,67 +53,46 @@ class IdentifyGroupHelper {
 
   def sendPLRUKTRErrorcodeRequest(bearerToken: String, errorCode: String): Int = {
     val client = HttpClient.newHttpClient()
-    if (errorCode == "001") {
-      val request = HttpRequest
-        .newBuilder()
-        .uri(URI.create(apiUrl))
-        .POST(BodyPublishers.ofString(RequestBodyUKTR.requestErrorCodeGeneratorBody, StandardCharsets.UTF_8))
-        .header("Content-Type", "application/json")
-        .header("Authorization", bearerToken)
-        .build()
-      val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-      val responseCode = response.statusCode()
 
-      responseBody = Option(response.body())
-      val ResponseBodyCode: JsValue = Json.parse(responseBody.get)
-      responseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
-      responseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
-
-      println(s"Response Code: ${response.statusCode()}")
-      println(s"Response Body: ${response.body()}")
-      responseCode
+    val (requestBody: String, requestUrl: String, bearerTkn: String) = errorCode match {
+      case "001" => (RequestBodyUKTR.requestErrorCodeGeneratorBody, apiUrl, bearerToken)
+      case "002" => ("", apiUrl, bearerToken)
+      case "003" => ("", apiUrl, " ")
+      case _     => (RequestBodyUKTR.requestBody, apiUrl, bearerToken)
     }
-    else if (errorCode == "002") {
-      val request = HttpRequest
-        .newBuilder()
-        .uri(URI.create(apiUrl))
-        .POST(BodyPublishers.ofString("", StandardCharsets.UTF_8))
-        .header("Content-Type", "application/json")
-        .header("Authorization", bearerToken)
-        .build()
-      val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-      val responseCode = response.statusCode()
+    val request    = HttpRequest
+      .newBuilder()
+      .uri(URI.create(requestUrl))
+      .POST(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
+      .header("Content-Type", "application/json")
+      .header("Authorization", bearerTkn)
+      .build()
 
-      responseBody = Option(response.body())
-      val ResponseBodyCode: JsValue = Json.parse(responseBody.get)
-      responseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
-      responseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
+    val response = client.send(request, HttpResponse.BodyHandlers.ofString())
 
-      println(s"Response Code: ${response.statusCode()}")
-      println(s"Response Body: ${response.body()}")
-      responseCode
-    }
-    else {
-      val bearerToken = " "
-      println(s"bearerToken : $bearerToken")
-      val request = HttpRequest
-        .newBuilder()
-        .uri(URI.create(apiUrl))
-        .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
-        .header("Content-Type", "application/json")
-        .header("Authorization", bearerToken)
-        .build()
-      val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-      val responseCode = response.statusCode()
+    handleResponse(response)
+  }
+  def handleResponse(response: HttpResponse[String]): Int   = {
+    val responseCode = response.statusCode()
 
-      responseBody = Option(response.body())
-      val ResponseBodyCode: JsValue = Json.parse(responseBody.get)
-      responseErrorCodeVal = Some((ResponseBodyCode \ "code").as[String])
-      responseErrorMessage = Some((ResponseBodyCode \ "message").as[String])
+    val responseBodyOpt           = Option(response.body())
+    val responseBodyCode: JsValue = responseBodyOpt
+      .flatMap(body =>
+        try
+          Some(Json.parse(body))
+        catch {
+          case _: Exception => None
+        }
+      )
+      .getOrElse(Json.obj())
 
-      println(s"Response Code: ${response.statusCode()}")
-      println(s"Response Body: ${response.body()}")
-      responseCode
-    }
+    responseErrorCodeVal = (responseBodyCode \ "code").asOpt[String]
+    responseErrorMessage = (responseBodyCode \ "message").asOpt[String]
+
+
+    println(s"Response Code: $responseCode")
+    println(s"Response Body: ${response.body()}")
+
+    responseCode
   }
 }
