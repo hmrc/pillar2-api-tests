@@ -75,7 +75,6 @@ class IdentifyGroupHelper {
   def handleResponse(response: HttpResponse[String]): Int   = {
     val responseCode = response.statusCode()
 
-    // Parse the response body as JSON
     val responseBodyOpt           = Option(response.body())
     val responseBodyCode: JsValue = responseBodyOpt
       .flatMap(body =>
@@ -87,15 +86,13 @@ class IdentifyGroupHelper {
       )
       .getOrElse(Json.obj())
 
-    // Extract error code and message
     responseErrorCodeVal = (responseBodyCode \ "code").asOpt[String]
     responseErrorMessage = (responseBodyCode \ "message").asOpt[String]
 
-    // Log the response
+
     println(s"Response Code: $responseCode")
     println(s"Response Body: ${response.body()}")
 
     responseCode
   }
-
 }
