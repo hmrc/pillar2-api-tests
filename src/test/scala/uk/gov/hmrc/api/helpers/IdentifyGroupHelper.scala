@@ -27,7 +27,7 @@ import java.nio.charset.StandardCharsets
 
 class IdentifyGroupHelper {
   val authHelper: AuthHelper               = new AuthHelper
-  val apiUrl: String = TestEnvironment.url("pillar2-submission-api")
+  val apiUrl: String                       = TestEnvironment.url("pillar2-submission-api")
   var body                                 = "_"
   var responseBody: Option[String]         = None
   var responseErrorCodeVal: Option[String] = None
@@ -60,7 +60,7 @@ class IdentifyGroupHelper {
       case "003" => ("", apiUrl, " ")
       case _     => (RequestBodyUKTR.requestBody, apiUrl, bearerToken)
     }
-    val request    = HttpRequest
+    val request                                                      = HttpRequest
       .newBuilder()
       .uri(URI.create(requestUrl))
       .POST(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
@@ -72,7 +72,7 @@ class IdentifyGroupHelper {
 
     handleResponse(response)
   }
-  def handleResponse(response: HttpResponse[String]): Int   = {
+  def handleResponse(response: HttpResponse[String]): Int                      = {
     val responseCode = response.statusCode()
 
     val responseBodyOpt           = Option(response.body())
@@ -88,7 +88,6 @@ class IdentifyGroupHelper {
 
     responseErrorCodeVal = (responseBodyCode \ "code").asOpt[String]
     responseErrorMessage = (responseBodyCode \ "message").asOpt[String]
-
 
     println(s"Response Code: $responseCode")
     println(s"Response Body: ${response.body()}")
