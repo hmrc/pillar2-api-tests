@@ -1,28 +1,27 @@
 meta {
-  name: External Stub-UKTR
+  name: Pillar2 Stubs
   type: http
-  seq: 9
+  seq: 1
 }
 
 post {
-  url: http://localhost:10055/RESTAdapter/PLR/UKTaxReturn
+  url: http://localhost:10052/RESTAdapter/PLR/UKTaxReturn
   body: json
   auth: none
 }
 
 headers {
   Authorization: {{bearerToken}}
-  Content-Type: application/json
-  X-Pillar2-Id: XEPLR0000000400
-  ~X-Pillar2-Id: XEPLR0000000500
-  ~X-Pillar2-Id: XEPLR0000000422
-  ~X-Pillar2-Id: XMPLR0000000012
+  X-Pillar2-Id: XMPLR0000000012
+  ~X-Pillar2-Id: XEPLR1066196400
 }
 
 body:json {
   {
     "accountingPeriodFrom": "2024-08-14",
     "accountingPeriodTo": "2024-12-14",
+    "qualifyingGroup": true,
+    "obligationDTT": true,
     "obligationMTT": true,
     "electionUKGAAP": true,
     "liabilities": {
@@ -39,9 +38,9 @@ body:json {
           "ukChargeableEntityName": "Newco PLC",
           "idType": "CRN",
           "idValue": "12345678",
-          "amountOwedDTT": 5000.33,
-          "amountOwedIIR": 3400.66,
-          "amountOwedUTPR": 6000.58
+          "amountOwedDTT": 5000,
+          "amountOwedIIR": 3400,
+          "amountOwedUTPR": 6000.5
         }
       ]
     }
