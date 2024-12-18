@@ -5,17 +5,19 @@ meta {
 }
 
 post {
-  url: http://localhost:10054/RESTAdapter/PLR/UKTaxReturn
+  url: http://localhost:10054/uk-tax-return
   body: json
   auth: none
 }
 
 headers {
-  correlationid: f0bd1f32-de51-45cc-9b18-0520d6e3ab1a
-  X-Originating-System: MDTP
-  X-Pillar2-Id: XMPLR0000000012
-  X-Receipt-Date: 2024-01-01T01:01:01Z
-  X-Transmitting-System: HIP
+  Authorization: {{bearerToken}}
+  ~X-Pillar2-Id: XEPLR0123456400
+  ~correlationid: f0bd1f32-de51-45cc-9b18-0520d6e3ab1a
+  ~X-Originating-System: MDTP
+  ~X-Pillar2-Id: XMPLR0000000012
+  ~X-Receipt-Date: 2024-01-01T01:01:01Z
+  ~X-Transmitting-System: HIP
 }
 
 body:json {

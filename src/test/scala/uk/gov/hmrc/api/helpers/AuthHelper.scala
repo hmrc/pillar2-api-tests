@@ -25,11 +25,11 @@ import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import java.nio.charset.StandardCharsets
 
 class AuthHelper {
-  var trimToken                         = ""
   val authSessionsUrl                   = TestEnvironment.url("auth-login-api")
-  private var responseCode: Option[Int] = None
+  var trimToken                         = ""
   var bearerToken                       = "_"
   var body                              = "_"
+  private var responseCode: Option[Int] = None
 
   def getBearerLocal(affinityGroup: String, value: String): String = {
     value match {
@@ -38,7 +38,8 @@ class AuthHelper {
       case "without enrolment" =>
         body = putBodyWithOutEnrolment(affinityGroup)
       case "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" | "XEPLR0123456422" | "XEPLR0123456500" |
-          "XEPLR0123456503" =>
+          "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" | "XEPLR0000000400" | "XEPLR0000000500" |
+          "XEPLR0000000422" | "XEPLR1066196400" =>
         body = putBodyWithPlrid(affinityGroup, value)
     }
     val client  = HttpClient.newHttpClient()

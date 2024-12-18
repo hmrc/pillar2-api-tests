@@ -27,18 +27,23 @@ import java.nio.charset.StandardCharsets
 
 class IdentifyGroupHelper {
   val authHelper: AuthHelper               = new AuthHelper
-  val apiUrl: String                       = TestEnvironment.url("pillar2-submission-api")
+  val submissionapiUrl: String             = TestEnvironment.url("pillar2-submission-api")
+  val externalstubUrl: String              = TestEnvironment.url("pillar2-external-test-stub")
+  val stubUrl: String                      = TestEnvironment.url("pillar2-stub")
+  val backendUrl: String                   = TestEnvironment.url("pillar2-backend")
   var body                                 = "_"
   var responseBody: Option[String]         = None
+  var requestBody: Option[String]          = None
   var responseErrorCodeVal: Option[String] = None
   var responseErrorMessage: Option[String] = None
   var request: Option[String]              = None
 
   def sendPLRUKTRRequest(bearerToken: String): Int = {
-    val client       = HttpClient.newHttpClient()
+    val client = HttpClient.newHttpClient()
+
     val request      = HttpRequest
       .newBuilder()
-      .uri(URI.create(apiUrl))
+      .uri(URI.create(submissionapiUrl))
       .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
       .header("Content-Type", "application/json")
       .header("Authorization", bearerToken)
@@ -51,25 +56,54 @@ class IdentifyGroupHelper {
     responseCode
   }
 
+  def sendUKTRRequest(bearerToken: String, requestapi: String, endpoint: String, pillarID: String): Int = {
+    val client = HttpClient.newHttpClient()
+
+    val requestapiurl: String = requestapi match {
+      case "External stub"  => externalstubUrl + endpoint
+      case "Submission Api" => submissionapiUrl + endpoint
+      case "Stub"           => stubUrl + endpoint
+      case "Backend"        => backendUrl + endpoint
+      // case _     => (submissionapiUrl)
+    }
+    val request               = HttpRequest
+      .newBuilder()
+      .uri(URI.create(requestapiurl))
+      .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
+      .header("Content-Type", "application/json")
+      .header("X-Pillar2-Id", pillarID)
+      .header("Authorization", bearerToken)
+      .build()
+    val response              = client.send(request, HttpResponse.BodyHandlers.ofString())
+    val responseCode          = response.statusCode()
+    responseBody = Option(response.body())
+    requestBody = Some(RequestBodyUKTR.requestBody).map(_.replace("\n", " "))
+
+    println(s"Response Code: ${response.statusCode()}")
+    println(s"Response Body: ${response.body()}")
+    responseCode
+  }
+
   def sendPLRUKTRErrorcodeRequest(bearerToken: String, errorCode: String): Int = {
     val client = HttpClient.newHttpClient()
 
     val (requestBody: String, requestUrl: String, bearerTkn: String) = errorCode match {
-      case "001" => (RequestBodyUKTR.requestErrorCodeGeneratorBody, apiUrl, bearerToken)
-      case "002" => ("", apiUrl, bearerToken)
-      case "003" => ("", apiUrl, " ")
-      case _     => (RequestBodyUKTR.requestBody, apiUrl, bearerToken)
+      case "001" => (RequestBodyUKTR.requestErrorCodeGeneratorBody, submissionapiUrl, bearerToken)
+      case "002" => ("", submissionapiUrl, bearerToken)
+      case "003" => ("", submissionapiUrl, " ")
+      case _     => (RequestBodyUKTR.requestBody, submissionapiUrl, bearerToken)
     }
+    // to do: parameterize requestUrl
+    val url                                                          = submissionapiUrl + "uk-tax-return"
     val request                                                      = HttpRequest
       .newBuilder()
-      .uri(URI.create(requestUrl))
+      .uri(URI.create(url))
       .POST(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
       .header("Content-Type", "application/json")
       .header("Authorization", bearerTkn)
       .build()
 
     val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-
     handleResponse(response)
   }
   def handleResponse(response: HttpResponse[String]): Int                      = {
