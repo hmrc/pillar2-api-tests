@@ -1,4 +1,3 @@
-@apiTests
 Feature: Verify UKTR submission apis
 
   Scenario Outline: verify error codes for uktr submission
