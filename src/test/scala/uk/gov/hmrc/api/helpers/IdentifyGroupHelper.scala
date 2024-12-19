@@ -40,10 +40,10 @@ class IdentifyGroupHelper {
 
   def sendPLRUKTRRequest(bearerToken: String): Int = {
     val client = HttpClient.newHttpClient()
-
+    val url = submissionapiUrl + "uk-tax-return"
     val request      = HttpRequest
       .newBuilder()
-      .uri(URI.create(submissionapiUrl))
+      .uri(URI.create(url))
       .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
       .header("Content-Type", "application/json")
       .header("Authorization", bearerToken)

@@ -3,12 +3,12 @@ Feature: UKTR Scenarios
 
   Scenario Outline: Verify that the Group has not enrolled
     Given I have generated a bearer token for an <UserType> and <Enrolment>
-    And I make API call to <RequestUrl> and <Endpoint> and <PLRID>
+    And I make API call to PLR UKTR
     Then I verify the response code is <StatusCode>
     Examples:
-      | UserType     | Enrolment         | StatusCode | RequestUrl     | Endpoint      |
-      | Organisation | with enrolment    | 201        | Submission Api | uk-tax-return |
-      | Organisation | without enrolment | 401        | Submission Api | uk-tax-return |
+      | UserType     | Enrolment         | StatusCode |
+      | Organisation | with enrolment    | 201        |
+      | Organisation | without enrolment | 401        |
 
   Scenario Outline: Verify that user has sent a authenticated UKTR request to verify UKTR submission
     Given I have generated a bearer token for an <UserType> and <PLRID>
@@ -30,7 +30,7 @@ Feature: UKTR Scenarios
       | UserType     | StatusCode | PLRID           | JsonSchema                                   | RequestUrl     | Endpoint      |
   #   | Organisation | 422        | XEPLR0000000422 | jsonSchema/uktrSchema/Response/UKTR_422.json | Submission Api |uk-tax-return|
   #   | Organisation | 400        | XEPLR0000000400 | jsonSchema/uktrSchema/Response/UKTR_400.json | Submission Api |uk-tax-return|
-  #   | Organisation | 500        | XEPLR0000000500 | jsonSchema/uktrSchema/Response/UKTR_500.json | Submission Api |uk-tax-return|
+      | Organisation | 500        | XEPLR0000000500 | jsonSchema/uktrSchema/Response/UKTR_500.json | Submission Api | uk-tax-return |
       | Organisation | 201        | XMPLR0000000012 | jsonSchema/uktrSchema/Response/UKTR_201.json | Submission Api | uk-tax-return |
 
   Scenario Outline: Verify the error code and error message for the invalid UKTR requests
