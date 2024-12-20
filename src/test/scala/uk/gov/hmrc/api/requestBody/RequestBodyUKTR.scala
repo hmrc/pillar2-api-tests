@@ -80,4 +80,18 @@ object RequestBodyUKTR {
       |  }
       |}
       |""".stripMargin
+  val requestSubmitUktrNilReturnBody: String =
+    """
+      |{
+      |  "accountingPeriodFrom": "2024-08-14",
+      |  "accountingPeriodTo": "2024-08-14",
+      |  "qualifyingGroup": true,
+      |  "obligationDTT": true,
+      |  "obligationMTT": true,
+      |  "electionUKGAAP": true,
+      |  "liabilities": {
+      |    "returnType": "NIL_RETURN"
+      |  }
+      |}
+      |""".stripMargin
 }

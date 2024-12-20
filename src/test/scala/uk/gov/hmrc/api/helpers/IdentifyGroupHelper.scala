@@ -39,8 +39,8 @@ class IdentifyGroupHelper {
   var request: Option[String]              = None
 
   def sendPLRUKTRRequest(bearerToken: String): Int = {
-    val client = HttpClient.newHttpClient()
-    val url = submissionapiUrl + "uk-tax-return"
+    val client       = HttpClient.newHttpClient()
+    val url          = submissionapiUrl + "uk-tax-return"
     val request      = HttpRequest
       .newBuilder()
       .uri(URI.create(url))
@@ -60,13 +60,21 @@ class IdentifyGroupHelper {
     val client = HttpClient.newHttpClient()
 
     val requestapiurl: String = requestapi match {
-      case "External stub"  => externalstubUrl + endpoint
-      case "Submission Api" => submissionapiUrl + endpoint
-      case "Stub"           => stubUrl + endpoint
-      case "Backend"        => backendUrl + endpoint
+      case "External stub"             => externalstubUrl + endpoint
+      case "Submission Api"            => submissionapiUrl + endpoint
+      case "Submission Nil Return Api" => submissionapiUrl + endpoint
+      case "Stub"                      => stubUrl + endpoint
+      case "Backend"                   => backendUrl + endpoint
       // case _     => (submissionapiUrl)
     }
-    val request               = HttpRequest
+    requestBody = requestapi match {
+      case "Submission Nil Return Api" => Some(RequestBodyUKTR.requestSubmitUktrNilReturnBody)
+      case "Submission Api"            => Some(RequestBodyUKTR.requestBody)
+      case _                           => Some(RequestBodyUKTR.requestBody)
+    }
+    requestBody = requestBody.map(_.replace("\n", " "))
+
+    val request = HttpRequest
       .newBuilder()
       .uri(URI.create(requestapiurl))
       .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
@@ -74,10 +82,11 @@ class IdentifyGroupHelper {
       .header("X-Pillar2-Id", pillarID)
       .header("Authorization", bearerToken)
       .build()
-    val response              = client.send(request, HttpResponse.BodyHandlers.ofString())
-    val responseCode          = response.statusCode()
+
+    val response     = client.send(request, HttpResponse.BodyHandlers.ofString())
+    val responseCode = response.statusCode()
+
     responseBody = Option(response.body())
-    requestBody = Some(RequestBodyUKTR.requestBody).map(_.replace("\n", " "))
 
     println(s"Response Code: ${response.statusCode()}")
     println(s"Response Body: ${response.body()}")

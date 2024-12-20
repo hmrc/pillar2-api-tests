@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Welcome4",
+  "definitions": {
+    "Welcome4": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "accountingPeriodFrom": {
+          "type": "string",
+          "format": "date"
+        },
+        "accountingPeriodTo": {
+          "type": "string",
+          "format": "date"
+        },
+        "qualifyingGroup": {
+          "type": "boolean"
+        },
+        "obligationDTT": {
+          "type": "boolean"
+        },
+        "obligationMTT": {
+          "type": "boolean"
+        },
+        "electionUKGAAP": {
+          "type": "boolean"
+        },
+        "liabilities": {
+          "$ref": "#/definitions/Liabilities"
+        }
+      },
+      "required": [
+        "accountingPeriodFrom",
+        "accountingPeriodTo",
+        "electionUKGAAP",
+        "liabilities",
+        "obligationDTT",
+        "obligationMTT",
+        "qualifyingGroup"
+      ],
+      "title": "Welcome4"
+    },
+    "Liabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "returnType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "returnType"
+      ],
+      "title": "Liabilities"
+    }
+  }
+}
