@@ -1,19 +1,28 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "$ref": "#/definitions/Welcome7",
+  "$ref": "#/definitions/Welcome10",
   "definitions": {
-    "Welcome7": {
+    "Welcome10": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "success": {
-          "type": "boolean"
+        "processingDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "formBundleNumber": {
+          "type": "string"
+        },
+        "chargeReference": {
+          "type": "string"
         }
       },
       "required": [
-        "success"
+        "chargeReference",
+        "formBundleNumber",
+        "processingDate"
       ],
-      "title": "Welcome7"
+      "title": "Welcome10"
     }
   }
 }
