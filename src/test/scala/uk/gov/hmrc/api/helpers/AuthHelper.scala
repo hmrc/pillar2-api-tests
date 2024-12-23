@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.api.helpers
 
+import com.google.inject.Singleton
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.RequestBodyBearerTokenGenerator.{putBodyWithEnrolment, putBodyWithOutEnrolment, putBodyWithPlrid}
 
@@ -24,12 +25,13 @@ import java.net.http.HttpRequest.BodyPublishers
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import java.nio.charset.StandardCharsets
 
+@Singleton
 class AuthHelper {
-  val authSessionsUrl                   = TestEnvironment.url("auth-login-api")
+  val authSessionsUrl: String                   = TestEnvironment.url("auth-login-api")
   var trimToken                         = ""
   var bearerToken                       = "_"
   var body                              = "_"
-  private var responseCode: Option[Int] = None
+  None
 
   def getBearerLocal(affinityGroup: String, value: String): String = {
     value match {

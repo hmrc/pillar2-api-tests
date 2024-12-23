@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.cucumber.stepdefs
+package uk.gov.hmrc.api.cucumber
 
-import com.google.inject.Inject
-import io.cucumber.scala.{EN, ScalaDsl}
-import uk.gov.hmrc.api.helpers.UKTRHelper
+import com.google.inject.{Guice, Injector, Stage}
+import io.cucumber.guice.{CucumberModules, InjectorSource}
 
-class UktrSteps @Inject() (uktrHelper: UKTRHelper) extends ScalaDsl with EN {
-  None
-  None
-  None
+class Pillar2InjectorSource extends InjectorSource {
 
-  Given("""I make API call to UKTR with {string}""") { (PLRID: String) =>
-    responseCode = Option(uktrHelper.sendUKTRRequest(PLRID))
-    responseBody = uktrHelper.responseBody
-    requestBody = uktrHelper.requestBody
-  }
+  override def getInjector: Injector =
+    Guice.createInjector(Stage.PRODUCTION, CucumberModules.createScenarioModule(), new Pillar2Module());
 }

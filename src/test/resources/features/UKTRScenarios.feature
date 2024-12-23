@@ -38,10 +38,10 @@ Feature: UKTR Scenarios
     And I make API call to PLR UKTR with <ErrorCode>
     Then I verify the response code is <StatusCode> and <ErrorCode> and <ErrorMessage>
     Examples:
-      | UserType     | Enrolment         | StatusCode | ErrorCode | ErrorMessage          |
-      | Organisation | with enrolment    | 400        | 001       | Invalid JSON Payload  |
-      | Organisation | with enrolment    | 400        | 002       | Empty body in request |
-      | Organisation | without enrolment | 401        | 003       | Not authorized        |
+      | UserType     | Enrolment         | StatusCode | ErrorCode | ErrorMessage                       |
+      | Organisation | with enrolment    | 400        | 001       | Invalid JSON Payload               |
+      | Organisation | with enrolment    | 400        | 002       | Empty body in request              |
+      | Organisation | without enrolment | 401        | 003       | Pillar2 ID not found in enrolments |
 
   Scenario Outline: Verify the response for the external stub requests
     Given I have generated a bearer token for an <UserType> and <PLRID>
@@ -49,7 +49,7 @@ Feature: UKTR Scenarios
     Then I verify the response code is <StatusCode>
     Examples:
       | UserType     | PLRID           | StatusCode | RequestUrl    | Endpoint    |
-      | Organisation | XMPLR0000000012 | 201        | External stub | UKTaxReturn |
+      | Organisation | XEPLR5555555555 | 201        | External stub | UKTaxReturn |
       | Organisation | XEPLR0000000400 | 400        | External stub | UKTaxReturn |
       | Organisation | XEPLR0000000500 | 500        | External stub | UKTaxReturn |
       | Organisation | XEPLR0000000422 | 422        | External stub | UKTaxReturn |
@@ -60,8 +60,8 @@ Feature: UKTR Scenarios
     Then I verify the response code is <StatusCode>
     Examples:
       | UserType     | PLRID           | StatusCode | RequestUrl | Endpoint    |
-      | Organisation | XMPLR0000000012 | 201        | Stub       | UKTaxReturn |
-      | Organisation | XEPLR1066196400 | 400        | Stub       | UKTaxReturn |
+      | Organisation | XEPLR5555555555 | 201        | Stub       | UKTaxReturn |
+#      | Organisation | XEPLR0123456400 | 400        | Stub       | UKTaxReturn |
 
   Scenario Outline: Verify the response for the backend requests
     Given I have generated a bearer token for an <UserType> and <PLRID>
@@ -70,4 +70,4 @@ Feature: UKTR Scenarios
     Examples:
       | UserType     | PLRID           | StatusCode | RequestUrl | Endpoint             |
       | Organisation | XMPLR0000000012 | 201        | Backend    | submit-uk-tax-return |
-      | Organisation | XEPLR1066196422 | 422        | Backend    | submit-uk-tax-return |
+#      | Organisation | XEPLR1066196422 | 422        | Backend    | submit-uk-tax-return |

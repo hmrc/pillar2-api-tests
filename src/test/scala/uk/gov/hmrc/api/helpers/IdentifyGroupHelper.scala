@@ -16,16 +16,20 @@
 
 package uk.gov.hmrc.api.helpers
 
-import play.api.libs.json.{JsValue, Json}
+import com.google.inject.{Inject, Singleton}
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.RequestBodyUKTR
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 
 import java.net.URI
-import java.net.http.HttpRequest.BodyPublishers
-import java.net.http.{HttpClient, HttpRequest, HttpResponse}
-import java.nio.charset.StandardCharsets
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.duration.DurationInt
 
-class IdentifyGroupHelper {
+@Singleton
+class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2) {
   val authHelper: AuthHelper               = new AuthHelper
   val submissionapiUrl: String             = TestEnvironment.url("pillar2-submission-api")
   val externalstubUrl: String              = TestEnvironment.url("pillar2-external-test-stub")
@@ -39,25 +43,20 @@ class IdentifyGroupHelper {
   var request: Option[String]              = None
 
   def sendPLRUKTRRequest(bearerToken: String): Int = {
-    val client = HttpClient.newHttpClient()
-    val url = submissionapiUrl + "uk-tax-return"
-    val request      = HttpRequest
-      .newBuilder()
-      .uri(URI.create(url))
-      .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
-      .header("Content-Type", "application/json")
-      .header("Authorization", bearerToken)
-      .build()
-    val response     = client.send(request, HttpResponse.BodyHandlers.ofString())
-    val responseCode = response.statusCode()
+    implicit val hc  = HeaderCarrier
+      .apply(authorization = Option(Authorization(bearerToken)))
+      .withExtraHeaders("Content-Type" -> "application/json")
+    val request      =
+      httpClient.post(URI.create(submissionapiUrl + "uk-tax-return").toURL).withBody(RequestBodyUKTR.requestBody)
+    val response     = Await.result(request.execute[HttpResponse], 5.seconds)
+    val responseCode = response.status
 
-    println(s"Response Code: ${response.statusCode()}")
-    println(s"Response Body: ${response.body()}")
+    println(s"Response Code: $responseCode")
+    println(s"Response Body: $responseBody")
     responseCode
   }
 
   def sendUKTRRequest(bearerToken: String, requestapi: String, endpoint: String, pillarID: String): Int = {
-    val client = HttpClient.newHttpClient()
 
     val requestapiurl: String = requestapi match {
       case "External stub"  => externalstubUrl + endpoint
@@ -66,26 +65,20 @@ class IdentifyGroupHelper {
       case "Backend"        => backendUrl + endpoint
       // case _     => (submissionapiUrl)
     }
-    val request               = HttpRequest
-      .newBuilder()
-      .uri(URI.create(requestapiurl))
-      .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
-      .header("Content-Type", "application/json")
-      .header("X-Pillar2-Id", pillarID)
-      .header("Authorization", bearerToken)
-      .build()
-    val response              = client.send(request, HttpResponse.BodyHandlers.ofString())
-    val responseCode          = response.statusCode()
-    responseBody = Option(response.body())
+    implicit val hc           = HeaderCarrier(authorization = Option(Authorization(bearerToken)))
+      .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
+    val request               = httpClient.post(URI.create(requestapiurl).toURL).withBody(RequestBodyUKTR.requestBody)
+    val response              = Await.result(request.execute[HttpResponse], 5.seconds)
+    val responseCode          = response.status
+    responseBody = Option(response.body)
     requestBody = Some(RequestBodyUKTR.requestBody).map(_.replace("\n", " "))
 
-    println(s"Response Code: ${response.statusCode()}")
-    println(s"Response Body: ${response.body()}")
+    println(s"Response Code: $responseCode")
+    println(s"Response Body: $responseBody")
     responseCode
   }
 
   def sendPLRUKTRErrorcodeRequest(bearerToken: String, errorCode: String): Int = {
-    val client = HttpClient.newHttpClient()
 
     val (requestBody: String, requestUrl: String, bearerTkn: String) = errorCode match {
       case "001" => (RequestBodyUKTR.requestErrorCodeGeneratorBody, submissionapiUrl, bearerToken)
@@ -93,38 +86,27 @@ class IdentifyGroupHelper {
       case "003" => ("", submissionapiUrl, " ")
       case _     => (RequestBodyUKTR.requestBody, submissionapiUrl, bearerToken)
     }
-    // to do: parameterize requestUrl
     val url                                                          = submissionapiUrl + "uk-tax-return"
-    val request                                                      = HttpRequest
-      .newBuilder()
-      .uri(URI.create(url))
-      .POST(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
-      .header("Content-Type", "application/json")
-      .header("Authorization", bearerTkn)
-      .build()
 
-    val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+    implicit val hc = HeaderCarrier
+      .apply(authorization = Option(Authorization(bearerToken)))
+      .withExtraHeaders("Content-Type" -> "application/json")
+    val request     =
+      httpClient.post(URI.create(url).toURL).withBody(requestBody)
+
+    val response = Await.result(request.execute[HttpResponse], 5.seconds)
     handleResponse(response)
   }
-  def handleResponse(response: HttpResponse[String]): Int                      = {
-    val responseCode = response.statusCode()
+  def handleResponse(response: HttpResponse): Int = {
+    val responseCode = response.status
 
-    val responseBodyOpt           = Option(response.body())
-    val responseBodyCode: JsValue = responseBodyOpt
-      .flatMap(body =>
-        try
-          Some(Json.parse(body))
-        catch {
-          case _: Exception => None
-        }
-      )
-      .getOrElse(Json.obj())
+    val responseBody = response.json
 
-    responseErrorCodeVal = (responseBodyCode \ "code").asOpt[String]
-    responseErrorMessage = (responseBodyCode \ "message").asOpt[String]
+    responseErrorCodeVal = (responseBody \ "code").asOpt[String]
+    responseErrorMessage = (responseBody \ "message").asOpt[String]
 
     println(s"Response Code: $responseCode")
-    println(s"Response Body: ${response.body()}")
+    println(s"Response Body: $responseBody")
 
     responseCode
   }

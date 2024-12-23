@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.cucumber.stepdefs
+package uk.gov.hmrc.api.cucumber
 
-import com.google.inject.Inject
-import io.cucumber.scala.{EN, ScalaDsl}
-import uk.gov.hmrc.api.helpers.UKTRHelper
+import com.google.inject.AbstractModule
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.test.HttpClientV2Support
 
-class UktrSteps @Inject() (uktrHelper: UKTRHelper) extends ScalaDsl with EN {
-  None
-  None
-  None
+class Pillar2Module extends AbstractModule with HttpClientV2Support {
 
-  Given("""I make API call to UKTR with {string}""") { (PLRID: String) =>
-    responseCode = Option(uktrHelper.sendUKTRRequest(PLRID))
-    responseBody = uktrHelper.responseBody
-    requestBody = uktrHelper.requestBody
-  }
+  override def configure(): Unit =
+    bind(classOf[HttpClientV2]).toInstance(httpClientV2)
 }

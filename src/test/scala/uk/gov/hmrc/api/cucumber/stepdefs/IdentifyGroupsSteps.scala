@@ -17,6 +17,7 @@
 package uk.gov.hmrc.api.cucumber.stepdefs
 
 import cats.data.Validated.{Invalid, Valid}
+import com.google.inject.Inject
 import io.circe.parser
 import io.circe.schema.Schema
 import io.cucumber.scala.{EN, ScalaDsl}
@@ -24,9 +25,9 @@ import uk.gov.hmrc.api.helpers.{AuthHelper, IdentifyGroupHelper}
 
 import scala.io.Source
 
-class IdentifyGroupsSteps extends ScalaDsl with EN {
-  val identifyGroupHelper: IdentifyGroupHelper     = new IdentifyGroupHelper
-  val authHelper: AuthHelper                       = new AuthHelper
+class IdentifyGroupsSteps @Inject() (authHelper: AuthHelper, identifyGroupHelper: IdentifyGroupHelper)
+    extends ScalaDsl
+    with EN {
   private var responseCode: Option[Int]            = None
   private var responseBody: Option[String]         = None
   private var responseErrorCodeVal: Option[String] = None

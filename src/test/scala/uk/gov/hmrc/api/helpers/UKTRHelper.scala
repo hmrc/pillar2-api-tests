@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.api.helpers
 
+import com.google.inject.Singleton
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.RequestBodyUKTR
 
@@ -24,6 +25,7 @@ import java.net.http.HttpRequest.BodyPublishers
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import java.nio.charset.StandardCharsets
 
+@Singleton
 class UKTRHelper {
   val authHelper: AuthHelper       = new AuthHelper
   var responseBody: Option[String] = None
@@ -41,7 +43,7 @@ class UKTRHelper {
       .header("Authorization", "Bearer valid_token")
       .build()
 
-    val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+    val response     = client.send(request, HttpResponse.BodyHandlers.ofString())
     val responseCode = response.statusCode()
     responseBody = Option(response.body())
     requestBody = Some(RequestBodyUKTR.requestBody).map(_.replace("\n", " "))

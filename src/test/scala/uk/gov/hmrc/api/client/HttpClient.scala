@@ -18,8 +18,8 @@ package uk.gov.hmrc.api.client
 
 import org.apache.pekko.actor.ActorSystem
 import play.api.libs.ws.DefaultBodyWritables._
-import play.api.libs.ws.{DefaultWSProxyServer, StandaloneWSRequest, StandaloneWSResponse}
 import play.api.libs.ws.ahc.StandaloneAhcWSClient
+import play.api.libs.ws.{DefaultWSProxyServer, StandaloneWSRequest, StandaloneWSResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 
