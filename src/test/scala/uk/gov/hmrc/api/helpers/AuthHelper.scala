@@ -27,11 +27,11 @@ import java.nio.charset.StandardCharsets
 
 @Singleton
 class AuthHelper {
-  val authSessionsUrl: String                   = TestEnvironment.url("auth-login-api")
-  var trimToken                         = ""
-  var bearerToken                       = "_"
-  var body                              = "_"
-  None
+  val authSessionsUrl: String   = TestEnvironment.url("auth-login-api")
+  var trimToken                 = ""
+  var bearerToken               = "_"
+  var body                      = "_"
+  var responseCode: Option[Int] = None
 
   def getBearerLocal(affinityGroup: String, value: String): String = {
     value match {
