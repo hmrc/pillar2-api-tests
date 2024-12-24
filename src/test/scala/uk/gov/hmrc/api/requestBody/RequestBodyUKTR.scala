@@ -80,13 +80,12 @@ object RequestBodyUKTR {
       |  }
       |}
       |""".stripMargin
-  val requestSubmitUktrNilReturnBody: String =
-    """
+
+  def requestSubmitUktrNilReturnBody(accountingPeriodTo: String): String  =
+    s"""
       |{
       |  "accountingPeriodFrom": "2024-08-14",
-      |  "accountingPeriodTo": "2024-08-14",
-      |  "qualifyingGroup": true,
-      |  "obligationDTT": true,
+      |  "accountingPeriodTo": "$accountingPeriodTo",
       |  "obligationMTT": true,
       |  "electionUKGAAP": true,
       |  "liabilities": {

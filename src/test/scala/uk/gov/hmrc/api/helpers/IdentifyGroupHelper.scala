@@ -67,17 +67,24 @@ class IdentifyGroupHelper {
       case "Backend"                   => backendUrl + endpoint
       // case _     => (submissionapiUrl)
     }
-    requestBody = requestapi match {
-      case "Submission Nil Return Api" => Some(RequestBodyUKTR.requestSubmitUktrNilReturnBody)
-      case "Submission Api"            => Some(RequestBodyUKTR.requestBody)
-      case _                           => Some(RequestBodyUKTR.requestBody)
+
+    val accountingPeriodTo = pillarID match{
+      case "XMPLR0000000012" => "2024-09-14"
+      case "XEPLR0000000422" => "2024-08-14"
+      case "XEPLR0123456500" => "2024-09-14"
+      case _                 => "2024-09-14"
     }
-    requestBody = requestBody.map(_.replace("\n", " "))
+    val temprequest = requestapi match {
+      case "Submission Nil Return Api" => RequestBodyUKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo)
+      case "Submission Api"            => RequestBodyUKTR.requestBody
+      case _                           => RequestBodyUKTR.requestBody
+    }
+    requestBody = Some(temprequest.replace("\n", " "))
 
     val request = HttpRequest
       .newBuilder()
       .uri(URI.create(requestapiurl))
-      .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
+      .POST(BodyPublishers.ofString(temprequest, StandardCharsets.UTF_8))
       .header("Content-Type", "application/json")
       .header("X-Pillar2-Id", pillarID)
       .header("Authorization", bearerToken)
