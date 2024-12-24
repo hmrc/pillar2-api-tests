@@ -22,7 +22,7 @@ object RequestBodyUKTR {
       |{
       |  "accountingPeriodFrom": "2024-08-14",
       |  "accountingPeriodTo": "2024-12-14",
-      |  "obligationMTT": true,
+      |  "obligationMTT": false,
       |  "electionUKGAAP": true,
       |  "liabilities": {
       |    "electionDTTSingleMember": false,
@@ -77,6 +77,19 @@ object RequestBodyUKTR {
       |        "electedUTPR": true
       |      }
       |    ]
+      |  }
+      |}
+      |""".stripMargin
+
+  def requestSubmitUktrNilReturnBody(accountingPeriodTo: String): String =
+    s"""
+      |{
+      |  "accountingPeriodFrom": "2024-08-14",
+      |  "accountingPeriodTo": "$accountingPeriodTo",
+      |  "obligationMTT": true,
+      |  "electionUKGAAP": true,
+      |  "liabilities": {
+      |    "returnType": "NIL_RETURN"
       |  }
       |}
       |""".stripMargin
