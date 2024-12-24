@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.api.helpers
 
-import com.google.inject.{Inject, Singleton}
+import com.google.inject.Inject
 import io.cucumber.guice.ScenarioScoped
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.RequestBodyUKTR
@@ -56,17 +56,30 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
     val requestapiurl: String = requestapi match {
       case "External stub"  => externalstubUrl + endpoint
       case "Submission Api" => submissionapiUrl + endpoint
+      case "Submission Nil Return Api" => submissionapiUrl + endpoint
       case "Stub"           => stubUrl + endpoint
       case "Backend"        => backendUrl + endpoint
-      // case _     => (submissionapiUrl)
     }
-    implicit val hc           = HeaderCarrier(authorization = Option(Authorization(bearerToken)))
+
+    val accountingPeriodTo = pillarID match {
+      case "XEPLR0000000422" => "2024-08-14"
+      case _                 => "2024-09-14"
+    }
+
+    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
-    val request               = httpClient.post(URI.create(requestapiurl).toURL).withBody(RequestBodyUKTR.requestBody)
+    val request               = requestapi match {
+      case "Submission Nil Return Api" =>
+        state.setRequestBody(RequestBodyUKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo).replace("\n", " "))
+        httpClient.post(URI.create(requestapiurl).toURL).withBody(RequestBodyUKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo))
+
+      case _                           =>
+        state.setRequestBody(RequestBodyUKTR.requestBody.replace("\n", " "))
+        httpClient.post(URI.create(requestapiurl).toURL).withBody(RequestBodyUKTR.requestBody)
+    }
     val response              = Await.result(request.execute[HttpResponse], 5.seconds)
     val responseCode          = response.status
     state.setResponseBody(response.body)
-    state.setRequestBody(RequestBodyUKTR.requestBody.replace("\n", " "))
 
     println(s"Response Code: $responseCode")
     println(s"Response Body: ${state.getResponseBody}")
@@ -82,7 +95,7 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
     }
     val url                 = submissionapiUrl + "uk-tax-return"
 
-    implicit val hc = HeaderCarrier
+    implicit val hc: HeaderCarrier = HeaderCarrier
       .apply(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("Content-Type" -> "application/json")
     val request     =

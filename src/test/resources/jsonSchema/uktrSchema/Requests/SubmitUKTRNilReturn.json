@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Welcome2",
+  "definitions": {
+    "Welcome2": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "accountingPeriodFrom": {
+          "type": "string",
+          "format": "date"
+        },
+        "accountingPeriodTo": {
+          "type": "string",
+          "format": "date"
+        },
+        "obligationMTT": {
+          "type": "boolean"
+        },
+        "electionUKGAAP": {
+          "type": "boolean"
+        },
+        "liabilities": {
+          "$ref": "#/definitions/Liabilities"
+        }
+      },
+      "required": [
+        "accountingPeriodFrom",
+        "accountingPeriodTo",
+        "electionUKGAAP",
+        "liabilities",
+        "obligationMTT"
+      ],
+      "title": "Welcome2"
+    },
+    "Liabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "returnType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "returnType"
+      ],
+      "title": "Liabilities"
+    }
+  }
+}
