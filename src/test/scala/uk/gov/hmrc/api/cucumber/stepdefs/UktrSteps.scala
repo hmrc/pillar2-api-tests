@@ -21,13 +21,8 @@ import io.cucumber.scala.{EN, ScalaDsl}
 import uk.gov.hmrc.api.helpers.UKTRHelper
 
 class UktrSteps @Inject() (uktrHelper: UKTRHelper) extends ScalaDsl with EN {
-  var responseCode: Option[Int]    = None
-  var responseBody: Option[String] = None
-  var requestBody: Option[String]  = None
 
   Given("""I make API call to UKTR with {string}""") { (PLRID: String) =>
-    responseCode = Option(uktrHelper.sendUKTRRequest(PLRID))
-    responseBody = uktrHelper.responseBody
-    requestBody = uktrHelper.requestBody
+    uktrHelper.sendUKTRRequest(PLRID)
   }
 }
