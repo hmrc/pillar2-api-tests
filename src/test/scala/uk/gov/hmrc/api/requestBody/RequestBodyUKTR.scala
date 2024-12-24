@@ -81,7 +81,7 @@ object RequestBodyUKTR {
       |}
       |""".stripMargin
 
-  def requestSubmitUktrNilReturnBody(accountingPeriodTo: String): String  =
+  def requestSubmitUktrNilReturnBody(accountingPeriodTo: String): String =
     s"""
       |{
       |  "accountingPeriodFrom": "2024-08-14",

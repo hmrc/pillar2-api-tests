@@ -54,11 +54,11 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
   def sendUKTRRequest(requestapi: String, endpoint: String, pillarID: String): Int = {
     val bearerToken           = state.getBearerToken
     val requestapiurl: String = requestapi match {
-      case "External stub"  => externalstubUrl + endpoint
-      case "Submission Api" => submissionapiUrl + endpoint
+      case "External stub"             => externalstubUrl + endpoint
+      case "Submission Api"            => submissionapiUrl + endpoint
       case "Submission Nil Return Api" => submissionapiUrl + endpoint
-      case "Stub"           => stubUrl + endpoint
-      case "Backend"        => backendUrl + endpoint
+      case "Stub"                      => stubUrl + endpoint
+      case "Backend"                   => backendUrl + endpoint
     }
 
     val accountingPeriodTo = pillarID match {
@@ -68,17 +68,19 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
 
     implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
-    val request               = requestapi match {
+    val request                    = requestapi match {
       case "Submission Nil Return Api" =>
         state.setRequestBody(RequestBodyUKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo).replace("\n", " "))
-        httpClient.post(URI.create(requestapiurl).toURL).withBody(RequestBodyUKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo))
+        httpClient
+          .post(URI.create(requestapiurl).toURL)
+          .withBody(RequestBodyUKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo))
 
-      case _                           =>
+      case _ =>
         state.setRequestBody(RequestBodyUKTR.requestBody.replace("\n", " "))
         httpClient.post(URI.create(requestapiurl).toURL).withBody(RequestBodyUKTR.requestBody)
     }
-    val response              = Await.result(request.execute[HttpResponse], 5.seconds)
-    val responseCode          = response.status
+    val response                   = Await.result(request.execute[HttpResponse], 5.seconds)
+    val responseCode               = response.status
     state.setResponseBody(response.body)
 
     println(s"Response Code: $responseCode")
@@ -98,7 +100,7 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
     implicit val hc: HeaderCarrier = HeaderCarrier
       .apply(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("Content-Type" -> "application/json")
-    val request     =
+    val request                    =
       httpClient.post(URI.create(url).toURL).withBody(requestBody)
 
     val response = Await.result(request.execute[HttpResponse], 5.seconds)
