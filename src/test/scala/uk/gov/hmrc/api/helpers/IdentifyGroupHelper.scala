@@ -16,49 +16,43 @@
 
 package uk.gov.hmrc.api.helpers
 
-import play.api.libs.json.{JsValue, Json}
+import com.google.inject.{Inject, Singleton}
+import io.cucumber.guice.ScenarioScoped
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.RequestBodyUKTR
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 
 import java.net.URI
-import java.net.http.HttpRequest.BodyPublishers
-import java.net.http.{HttpClient, HttpRequest, HttpResponse}
-import java.nio.charset.StandardCharsets
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.duration.DurationInt
 
-class IdentifyGroupHelper {
-  val authHelper: AuthHelper               = new AuthHelper
-  val submissionapiUrl: String             = TestEnvironment.url("pillar2-submission-api")
-  val externalstubUrl: String              = TestEnvironment.url("pillar2-external-test-stub")
-  val stubUrl: String                      = TestEnvironment.url("pillar2-stub")
-  val backendUrl: String                   = TestEnvironment.url("pillar2-backend")
-  var body                                 = "_"
-  var responseBody: Option[String]         = None
-  var requestBody: Option[String]          = None
-  var responseErrorCodeVal: Option[String] = None
-  var responseErrorMessage: Option[String] = None
-  var request: Option[String]              = None
+@ScenarioScoped
+class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
+  val authHelper: AuthHelper   = new AuthHelper
+  val submissionapiUrl: String = TestEnvironment.url("pillar2-submission-api")
+  val externalstubUrl: String  = TestEnvironment.url("pillar2-external-test-stub")
+  val stubUrl: String          = TestEnvironment.url("pillar2-stub")
+  val backendUrl: String       = TestEnvironment.url("pillar2-backend")
 
-  def sendPLRUKTRRequest(bearerToken: String): Int = {
-    val client = HttpClient.newHttpClient()
-    val url = submissionapiUrl + "uk-tax-return"
-    val request      = HttpRequest
-      .newBuilder()
-      .uri(URI.create(url))
-      .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
-      .header("Content-Type", "application/json")
-      .header("Authorization", bearerToken)
-      .build()
-    val response     = client.send(request, HttpResponse.BodyHandlers.ofString())
-    val responseCode = response.statusCode()
+  def sendPLRUKTRRequest(): Int = {
+    val bearerToken  = state.getBearerToken
+    implicit val hc  = HeaderCarrier
+      .apply(authorization = Option(Authorization(bearerToken)))
+      .withExtraHeaders("Content-Type" -> "application/json")
+    val request      =
+      httpClient.post(URI.create(submissionapiUrl + "uk-tax-return").toURL).withBody(RequestBodyUKTR.requestBody)
+    val response     = Await.result(request.execute[HttpResponse], 5.seconds)
+    val responseCode = response.status
 
-    println(s"Response Code: ${response.statusCode()}")
-    println(s"Response Body: ${response.body()}")
+    println(s"Response Code: $responseCode")
     responseCode
   }
 
-  def sendUKTRRequest(bearerToken: String, requestapi: String, endpoint: String, pillarID: String): Int = {
-    val client = HttpClient.newHttpClient()
-
+  def sendUKTRRequest(requestapi: String, endpoint: String, pillarID: String): Int = {
+    val bearerToken           = state.getBearerToken
     val requestapiurl: String = requestapi match {
       case "External stub"  => externalstubUrl + endpoint
       case "Submission Api" => submissionapiUrl + endpoint
@@ -66,65 +60,49 @@ class IdentifyGroupHelper {
       case "Backend"        => backendUrl + endpoint
       // case _     => (submissionapiUrl)
     }
-    val request               = HttpRequest
-      .newBuilder()
-      .uri(URI.create(requestapiurl))
-      .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
-      .header("Content-Type", "application/json")
-      .header("X-Pillar2-Id", pillarID)
-      .header("Authorization", bearerToken)
-      .build()
-    val response              = client.send(request, HttpResponse.BodyHandlers.ofString())
-    val responseCode          = response.statusCode()
-    responseBody = Option(response.body())
-    requestBody = Some(RequestBodyUKTR.requestBody).map(_.replace("\n", " "))
+    implicit val hc           = HeaderCarrier(authorization = Option(Authorization(bearerToken)))
+      .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
+    val request               = httpClient.post(URI.create(requestapiurl).toURL).withBody(RequestBodyUKTR.requestBody)
+    val response              = Await.result(request.execute[HttpResponse], 5.seconds)
+    val responseCode          = response.status
+    state.setResponseBody(response.body)
+    state.setRequestBody(RequestBodyUKTR.requestBody.replace("\n", " "))
 
-    println(s"Response Code: ${response.statusCode()}")
-    println(s"Response Body: ${response.body()}")
+    println(s"Response Code: $responseCode")
+    println(s"Response Body: ${state.getResponseBody}")
     responseCode
   }
 
-  def sendPLRUKTRErrorcodeRequest(bearerToken: String, errorCode: String): Int = {
-    val client = HttpClient.newHttpClient()
-
-    val (requestBody: String, requestUrl: String, bearerTkn: String) = errorCode match {
-      case "001" => (RequestBodyUKTR.requestErrorCodeGeneratorBody, submissionapiUrl, bearerToken)
-      case "002" => ("", submissionapiUrl, bearerToken)
-      case "003" => ("", submissionapiUrl, " ")
-      case _     => (RequestBodyUKTR.requestBody, submissionapiUrl, bearerToken)
+  def sendPLRUKTRErrorcodeRequest(errorCode: String): Int = {
+    val bearerToken         = state.getBearerToken
+    val requestBody: String = errorCode match {
+      case "001"         => RequestBodyUKTR.requestErrorCodeGeneratorBody
+      case "002" | "003" => ""
+      case _             => RequestBodyUKTR.requestBody
     }
-    // to do: parameterize requestUrl
-    val url                                                          = submissionapiUrl + "uk-tax-return"
-    val request                                                      = HttpRequest
-      .newBuilder()
-      .uri(URI.create(url))
-      .POST(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
-      .header("Content-Type", "application/json")
-      .header("Authorization", bearerTkn)
-      .build()
+    val url                 = submissionapiUrl + "uk-tax-return"
 
-    val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+    implicit val hc = HeaderCarrier
+      .apply(authorization = Option(Authorization(bearerToken)))
+      .withExtraHeaders("Content-Type" -> "application/json")
+    val request     =
+      httpClient.post(URI.create(url).toURL).withBody(requestBody)
+
+    val response = Await.result(request.execute[HttpResponse], 5.seconds)
+    state.setResponseBody(response.body)
     handleResponse(response)
   }
-  def handleResponse(response: HttpResponse[String]): Int                      = {
-    val responseCode = response.statusCode()
 
-    val responseBodyOpt           = Option(response.body())
-    val responseBodyCode: JsValue = responseBodyOpt
-      .flatMap(body =>
-        try
-          Some(Json.parse(body))
-        catch {
-          case _: Exception => None
-        }
-      )
-      .getOrElse(Json.obj())
+  def handleResponse(response: HttpResponse): Int = {
+    val responseCode = response.status
 
-    responseErrorCodeVal = (responseBodyCode \ "code").asOpt[String]
-    responseErrorMessage = (responseBodyCode \ "message").asOpt[String]
+    val responseBody = response.json
+
+    state.setResponseErrorCodeVal((responseBody \ "code").as[String])
+    state.setResponseErrorMessage((responseBody \ "message").as[String])
 
     println(s"Response Code: $responseCode")
-    println(s"Response Body: ${response.body()}")
+    println(s"Response Body: $responseBody")
 
     responseCode
   }

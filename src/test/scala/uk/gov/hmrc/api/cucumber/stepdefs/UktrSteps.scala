@@ -16,22 +16,13 @@
 
 package uk.gov.hmrc.api.cucumber.stepdefs
 
-import cats.data.Validated.{Invalid, Valid}
+import com.google.inject.Inject
 import io.cucumber.scala.{EN, ScalaDsl}
-import io.circe._
-import io.circe.schema.Schema
-import uk.gov.hmrc.api.helpers.{IdentifyGroupHelper, UKTRHelper}
-import scala.io.Source
+import uk.gov.hmrc.api.helpers.UKTRHelper
 
-class UktrSteps extends ScalaDsl with EN {
-  val uktrHelper: UKTRHelper               = new UKTRHelper
-  private var responseCode: Option[Int]    = None
-  private var responseBody: Option[String] = None
-  private var requestBody: Option[String]  = None
+class UktrSteps @Inject() (uktrHelper: UKTRHelper) extends ScalaDsl with EN {
 
   Given("""I make API call to UKTR with {string}""") { (PLRID: String) =>
-    responseCode = Option(uktrHelper.sendUKTRRequest(PLRID))
-    responseBody = uktrHelper.responseBody
-    requestBody = uktrHelper.requestBody
+    uktrHelper.sendUKTRRequest(PLRID)
   }
 }

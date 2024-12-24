@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.api.helpers
 
+import io.cucumber.guice.ScenarioScoped
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.RequestBodyBearerTokenGenerator.{putBodyWithEnrolment, putBodyWithOutEnrolment, putBodyWithPlrid}
 
@@ -24,23 +25,21 @@ import java.net.http.HttpRequest.BodyPublishers
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import java.nio.charset.StandardCharsets
 
+@ScenarioScoped
 class AuthHelper {
-  val authSessionsUrl                   = TestEnvironment.url("auth-login-api")
-  var trimToken                         = ""
-  var bearerToken                       = "_"
-  var body                              = "_"
-  private var responseCode: Option[Int] = None
+  val authSessionsUrl: String = TestEnvironment.url("auth-login-api")
+  val trimToken               = ""
 
   def getBearerLocal(affinityGroup: String, value: String): String = {
-    value match {
+    val body    = value match {
       case "with enrolment"    =>
-        body = putBodyWithEnrolment(affinityGroup)
+        putBodyWithEnrolment(affinityGroup)
       case "without enrolment" =>
-        body = putBodyWithOutEnrolment(affinityGroup)
+        putBodyWithOutEnrolment(affinityGroup)
       case "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" | "XEPLR0123456422" | "XEPLR0123456500" |
           "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" | "XEPLR0000000400" | "XEPLR0000000500" |
           "XEPLR0000000422" | "XEPLR1066196400" =>
-        body = putBodyWithPlrid(affinityGroup, value)
+        putBodyWithPlrid(affinityGroup, value)
     }
     val client  = HttpClient.newHttpClient()
     val request = HttpRequest
@@ -52,7 +51,6 @@ class AuthHelper {
 
     val response = client.send(request, HttpResponse.BodyHandlers.ofString())
 
-    responseCode = Some(response.statusCode())
     println(s"Response Code: ${response.statusCode()}")
     println(s"Response Body: ${response.body()}")
     val bearerTokenHeader = response
@@ -63,7 +61,7 @@ class AuthHelper {
       .orElse("")
       .split(",")
       .find(_.trim.startsWith("Bearer"))
-      .getOrElse("")
+      .getOrElse(throw new RuntimeException("BearerToken not found"))
 
     println(s"Extracted Bearer Token: $bearerToken")
     bearerToken

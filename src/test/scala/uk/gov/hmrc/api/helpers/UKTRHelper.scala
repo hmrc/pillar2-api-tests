@@ -16,38 +16,32 @@
 
 package uk.gov.hmrc.api.helpers
 
+import com.google.inject.Inject
+import io.cucumber.guice.ScenarioScoped
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.RequestBodyUKTR
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 
 import java.net.URI
-import java.net.http.HttpRequest.BodyPublishers
-import java.net.http.{HttpClient, HttpRequest, HttpResponse}
-import java.nio.charset.StandardCharsets
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.DurationInt
 
-class UKTRHelper {
-  val authHelper: AuthHelper       = new AuthHelper
-  var responseBody: Option[String] = None
-  var requestBody: Option[String]  = None
+@ScenarioScoped
+class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
 
-  def sendUKTRRequest(PLRID: String): Int = {
+  def sendUKTRRequest(PLRID: String): Unit = {
     val apiUrl = TestEnvironment.url("pillar2-external-test-stub") + "submitUKTR/" + PLRID
-    val client = HttpClient.newHttpClient()
 
-    val request = HttpRequest
-      .newBuilder()
-      .uri(URI.create(apiUrl))
-      .POST(BodyPublishers.ofString(RequestBodyUKTR.requestBody, StandardCharsets.UTF_8))
-      .header("Content-Type", "application/json")
-      .header("Authorization", "Bearer valid_token")
-      .build()
+    implicit val hc = HeaderCarrier(authorization = Option(Authorization("Bearer valid_token")))
+      .withExtraHeaders("Content-Type" -> "application/json")
+    val request     = httpClient.post(URI.create(apiUrl).toURL).withBody(RequestBodyUKTR.requestBody)
 
-    val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-    val responseCode = response.statusCode()
-    responseBody = Option(response.body())
-    requestBody = Some(RequestBodyUKTR.requestBody).map(_.replace("\n", " "))
+    val response = Await.result(request.execute[HttpResponse], 5.seconds)
+    state.setResponseBody(response.body)
+    state.setRequestBody(RequestBodyUKTR.requestBody.replace("\n", " "))
+    state.setResponseCode(response.status)
 
-    println(s"Response Code: " + responseCode)
-    println(s"Response Body: " + responseBody)
-    responseCode
   }
 }
