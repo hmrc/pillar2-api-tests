@@ -27,20 +27,19 @@ import java.nio.charset.StandardCharsets
 
 @ScenarioScoped
 class AuthHelper {
-  val authSessionsUrl: String   = TestEnvironment.url("auth-login-api")
-  val trimToken                 = ""
-  var responseCode: Option[Int] = None
+  val authSessionsUrl: String = TestEnvironment.url("auth-login-api")
+  val trimToken               = ""
 
   def getBearerLocal(affinityGroup: String, value: String): String = {
-   val body = value match {
+    val body    = value match {
       case "with enrolment"    =>
         putBodyWithEnrolment(affinityGroup)
       case "without enrolment" =>
-         putBodyWithOutEnrolment(affinityGroup)
+        putBodyWithOutEnrolment(affinityGroup)
       case "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" | "XEPLR0123456422" | "XEPLR0123456500" |
           "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" | "XEPLR0000000400" | "XEPLR0000000500" |
           "XEPLR0000000422" | "XEPLR1066196400" =>
-         putBodyWithPlrid(affinityGroup, value)
+        putBodyWithPlrid(affinityGroup, value)
     }
     val client  = HttpClient.newHttpClient()
     val request = HttpRequest
@@ -52,7 +51,6 @@ class AuthHelper {
 
     val response = client.send(request, HttpResponse.BodyHandlers.ofString())
 
-    responseCode = Some(response.statusCode())
     println(s"Response Code: ${response.statusCode()}")
     println(s"Response Body: ${response.body()}")
     val bearerTokenHeader = response

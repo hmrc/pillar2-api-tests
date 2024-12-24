@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.api.helpers
 
-import com.google.inject.Singleton
+import com.google.inject.{Inject, Singleton}
+import io.cucumber.guice.ScenarioScoped
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.RequestBodyUKTR
 
@@ -25,9 +26,8 @@ import java.net.http.HttpRequest.BodyPublishers
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import java.nio.charset.StandardCharsets
 
-@Singleton
-class UKTRHelper {
-  val authHelper: AuthHelper       = new AuthHelper
+@ScenarioScoped
+class UKTRHelper @Inject() {
   var responseBody: Option[String] = None
   var requestBody: Option[String]  = None
 

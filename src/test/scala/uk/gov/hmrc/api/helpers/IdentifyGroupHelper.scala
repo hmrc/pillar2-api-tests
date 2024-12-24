@@ -17,6 +17,7 @@
 package uk.gov.hmrc.api.helpers
 
 import com.google.inject.{Inject, Singleton}
+import io.cucumber.guice.ScenarioScoped
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.RequestBodyUKTR
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -28,19 +29,16 @@ import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration.DurationInt
 
-@Singleton
+@ScenarioScoped
 class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
-  val authHelper: AuthHelper               = new AuthHelper
-  val submissionapiUrl: String             = TestEnvironment.url("pillar2-submission-api")
-  val externalstubUrl: String              = TestEnvironment.url("pillar2-external-test-stub")
-  val stubUrl: String                      = TestEnvironment.url("pillar2-stub")
-  val backendUrl: String                   = TestEnvironment.url("pillar2-backend")
-  var requestBody: Option[String]          = None
-  var responseErrorCodeVal: Option[String] = None
-  var responseErrorMessage: Option[String] = None
-  var request: Option[String]              = None
+  val authHelper: AuthHelper   = new AuthHelper
+  val submissionapiUrl: String = TestEnvironment.url("pillar2-submission-api")
+  val externalstubUrl: String  = TestEnvironment.url("pillar2-external-test-stub")
+  val stubUrl: String          = TestEnvironment.url("pillar2-stub")
+  val backendUrl: String       = TestEnvironment.url("pillar2-backend")
 
-  def sendPLRUKTRRequest(bearerToken: String): Int = {
+  def sendPLRUKTRRequest(): Int = {
+    val bearerToken  = state.getBearerToken
     implicit val hc  = HeaderCarrier
       .apply(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("Content-Type" -> "application/json")
@@ -53,8 +51,8 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
     responseCode
   }
 
-  def sendUKTRRequest(bearerToken: String, requestapi: String, endpoint: String, pillarID: String): Int = {
-
+  def sendUKTRRequest(requestapi: String, endpoint: String, pillarID: String): Int = {
+    val bearerToken           = state.getBearerToken
     val requestapiurl: String = requestapi match {
       case "External stub"  => externalstubUrl + endpoint
       case "Submission Api" => submissionapiUrl + endpoint
@@ -68,15 +66,15 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
     val response              = Await.result(request.execute[HttpResponse], 5.seconds)
     val responseCode          = response.status
     state.setResponseBody(response.body)
-    requestBody = Some(RequestBodyUKTR.requestBody).map(_.replace("\n", " "))
+    state.setRequestBody(RequestBodyUKTR.requestBody.replace("\n", " "))
 
     println(s"Response Code: $responseCode")
     println(s"Response Body: ${state.getResponseBody}")
     responseCode
   }
 
-  def sendPLRUKTRErrorcodeRequest(bearerToken: String, errorCode: String): Int = {
-
+  def sendPLRUKTRErrorcodeRequest(errorCode: String): Int = {
+    val bearerToken         = state.getBearerToken
     val requestBody: String = errorCode match {
       case "001"         => RequestBodyUKTR.requestErrorCodeGeneratorBody
       case "002" | "003" => ""
@@ -100,8 +98,8 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
 
     val responseBody = response.json
 
-    responseErrorCodeVal = (responseBody \ "code").asOpt[String]
-    responseErrorMessage = (responseBody \ "message").asOpt[String]
+    state.setResponseErrorCodeVal((responseBody \ "code").as[String])
+    state.setResponseErrorMessage((responseBody \ "message").as[String])
 
     println(s"Response Code: $responseCode")
     println(s"Response Body: $responseBody")

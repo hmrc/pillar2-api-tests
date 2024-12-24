@@ -20,82 +20,73 @@ import cats.data.Validated.{Invalid, Valid}
 import com.google.inject.Inject
 import io.circe.parser
 import io.circe.schema.Schema
+import io.cucumber.guice.ScenarioScoped
 import io.cucumber.scala.{EN, ScalaDsl}
 import uk.gov.hmrc.api.helpers.{AuthHelper, IdentifyGroupHelper, StateStorage}
 
 import scala.io.Source
 
+@ScenarioScoped
 class IdentifyGroupsSteps @Inject() (
   authHelper: AuthHelper,
   identifyGroupHelper: IdentifyGroupHelper,
   state: StateStorage
 ) extends ScalaDsl
     with EN {
-  private var responseCode: Option[Int]            = None
-  private var responseErrorCodeVal: Option[String] = None
-  private var responseErrorMessage: Option[String] = None
-  private var requestBody: Option[String]          = None
-  private var bearerToken                          = ""
 
   Given("""^I have generated a bearer token for an (.*) and (.*)$""") { (affinity: String, value: String) =>
-    value match {
+    val bearerToken = value match {
       case "with enrolment"    =>
-        bearerToken = authHelper.getBearerLocal(affinity, value)
+        authHelper.getBearerLocal(affinity, value)
       case "without enrolment" =>
-        bearerToken = authHelper.getBearerLocal(affinity, value)
+        authHelper.getBearerLocal(affinity, value)
       case "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" | "XEPLR0123456422" | "XEPLR0123456500" |
           "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" | "XEPLR0000000400" | "XEPLR0000000500" |
           "XEPLR0000000422" | "XEPLR1066196400" =>
-        bearerToken = authHelper.getBearerLocal(affinity, value)
+        authHelper.getBearerLocal(affinity, value)
     }
+    state.setBearerToken(bearerToken)
   }
 
   Given("""I make API call to PLR UKTR""") { () =>
-    responseCode = Option(identifyGroupHelper.sendPLRUKTRRequest(bearerToken))
+    state.setResponseCode(identifyGroupHelper.sendPLRUKTRRequest())
   }
 
   Given("""I make API call to (.*) and (.*) and (.*)$""") { (requestapi: String, endpoint: String, pillarID: String) =>
     // Write code here that turns the phrase above into concrete actions
-    responseCode = Option(identifyGroupHelper.sendUKTRRequest(bearerToken, requestapi, endpoint, pillarID))
-    requestBody = identifyGroupHelper.requestBody
+    state.setResponseCode(identifyGroupHelper.sendUKTRRequest(requestapi, endpoint, pillarID))
   }
 
   Given("""I make API call to PLR UKTR with (.*)$""") { (errorCode: String) =>
-    responseCode = Option(identifyGroupHelper.sendPLRUKTRErrorcodeRequest(bearerToken, errorCode))
-    responseErrorCodeVal = identifyGroupHelper.responseErrorCodeVal
-    responseErrorMessage = identifyGroupHelper.responseErrorMessage
+    state.setResponseCode(identifyGroupHelper.sendPLRUKTRErrorcodeRequest(errorCode))
   }
 
   Then("""I validate request json schema for {string}""") { (schemaFilePath: String) =>
-    requestBody match {
-      case Some(body) =>
-        val schemaContent: String = Source.fromResource(schemaFilePath).getLines().mkString
+    val body                  = state.getRequestBody
+    val schemaContent: String = Source.fromResource(schemaFilePath).getLines().mkString
 
-        val parsedSchema  = parser
-          .parse(schemaContent)
-          .getOrElse(
-            throw new RuntimeException("Invalid Request schema JSON")
-          )
-        val parsedRequest = parser
-          .parse(body)
-          .getOrElse(
-            throw new RuntimeException("Invalid request JSON")
-          )
+    val parsedSchema  = parser
+      .parse(schemaContent)
+      .getOrElse(
+        throw new RuntimeException("Invalid Request schema JSON")
+      )
+    val parsedRequest = parser
+      .parse(body)
+      .getOrElse(
+        throw new RuntimeException("Invalid request JSON")
+      )
 
-        val schema = Schema.load(parsedSchema)
+    val schema = Schema.load(parsedSchema)
 
-        schema.validate(parsedRequest) match {
-          case Valid(_) =>
-            println(s"Validation successful: JSON request matches $schemaFilePath!")
+    schema.validate(parsedRequest) match {
+      case Valid(_) =>
+        println(s"Validation successful: JSON request matches $schemaFilePath!")
 
-          case Invalid(errors) =>
-            val errorMessages = errors.toList.map(_.getMessage).mkString(", ")
-            throw new AssertionError(s"JSON schema validation failed: $errorMessages")
-        }
-
-      case None =>
-        throw new IllegalStateException("Request body was not set in the Given block")
+      case Invalid(errors) =>
+        val errorMessages = errors.toList.map(_.getMessage).mkString(", ")
+        throw new AssertionError(s"JSON schema validation failed: $errorMessages")
     }
+
   }
 
   Then("""I validate response json schema for {string}""") { (schemaFilePath: String) =>
@@ -128,40 +119,35 @@ class IdentifyGroupsSteps @Inject() (
   }
 
   Then("""I verify response code is {int}""") { (expectedResponseStatusCode: Int) =>
-    val code = responseCode.getOrElse(
-      throw new IllegalStateException("Response code was not set in the Given block")
+    assert(
+      state.getResponseCode == expectedResponseStatusCode,
+      s"Expected response code $expectedResponseStatusCode but got ${state.getResponseCode}"
     )
-    assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
   }
 
   Then("""I verify the response code is {int}""") { (expectedResponseStatusCode: Int) =>
-    val code = responseCode.getOrElse(
-      throw new IllegalStateException("Response code was not set in the Given block")
+    assert(
+      state.getResponseCode == expectedResponseStatusCode,
+      s"Expected response code $expectedResponseStatusCode but got ${state.getResponseCode}"
     )
-    assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
   }
 
   Then("""I verify the response code is (.*) and (.*) and (.*)$""") {
     (expectedResponseStatusCode: Int, expectedResponseErrorCode: String, expectedResponseErrorMessage: String) =>
-      val code = responseCode.getOrElse(
-        throw new IllegalStateException("Response code was not set in the Given block")
+      assert(
+        state.getResponseCode == expectedResponseStatusCode,
+        s"Expected response code $expectedResponseStatusCode but got ${state.getResponseCode}"
       )
-      assert(code == expectedResponseStatusCode, s"Expected response code $expectedResponseStatusCode but got $code")
 
-      val errorCode = responseErrorCodeVal.getOrElse(
-        throw new IllegalStateException("Response error code was not set in the Given block")
-      )
+      val errorCode = state.getResponseErrorCodeVal
       assert(
         errorCode == expectedResponseErrorCode,
         s"Expected Error code $expectedResponseErrorCode but got $errorCode"
       )
 
-      val errorMessage = responseErrorMessage.getOrElse(
-        throw new IllegalStateException("Response error message was not set in the Given block")
-      )
       assert(
-        errorMessage == expectedResponseErrorMessage,
-        s"Expected Error Message $expectedResponseErrorMessage but got $errorMessage"
+        state.getResponseErrorMessage == expectedResponseErrorMessage,
+        s"Expected Error Message $expectedResponseErrorMessage but got ${state.getResponseErrorMessage}"
       )
   }
 }
