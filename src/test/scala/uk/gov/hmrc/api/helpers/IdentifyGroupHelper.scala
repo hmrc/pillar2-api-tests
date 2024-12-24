@@ -29,14 +29,12 @@ import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration.DurationInt
 
 @Singleton
-class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2) {
+class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
   val authHelper: AuthHelper               = new AuthHelper
   val submissionapiUrl: String             = TestEnvironment.url("pillar2-submission-api")
   val externalstubUrl: String              = TestEnvironment.url("pillar2-external-test-stub")
   val stubUrl: String                      = TestEnvironment.url("pillar2-stub")
   val backendUrl: String                   = TestEnvironment.url("pillar2-backend")
-  var body                                 = "_"
-  var responseBody: Option[String]         = None
   var requestBody: Option[String]          = None
   var responseErrorCodeVal: Option[String] = None
   var responseErrorMessage: Option[String] = None
@@ -52,7 +50,6 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2) {
     val responseCode = response.status
 
     println(s"Response Code: $responseCode")
-    println(s"Response Body: $responseBody")
     responseCode
   }
 
@@ -70,23 +67,22 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2) {
     val request               = httpClient.post(URI.create(requestapiurl).toURL).withBody(RequestBodyUKTR.requestBody)
     val response              = Await.result(request.execute[HttpResponse], 5.seconds)
     val responseCode          = response.status
-    responseBody = Option(response.body)
+    state.setResponseBody(response.body)
     requestBody = Some(RequestBodyUKTR.requestBody).map(_.replace("\n", " "))
 
     println(s"Response Code: $responseCode")
-    println(s"Response Body: $responseBody")
+    println(s"Response Body: ${state.getResponseBody}")
     responseCode
   }
 
   def sendPLRUKTRErrorcodeRequest(bearerToken: String, errorCode: String): Int = {
 
-    val (requestBody: String, requestUrl: String, bearerTkn: String) = errorCode match {
-      case "001" => (RequestBodyUKTR.requestErrorCodeGeneratorBody, submissionapiUrl, bearerToken)
-      case "002" => ("", submissionapiUrl, bearerToken)
-      case "003" => ("", submissionapiUrl, " ")
-      case _     => (RequestBodyUKTR.requestBody, submissionapiUrl, bearerToken)
+    val requestBody: String = errorCode match {
+      case "001"         => RequestBodyUKTR.requestErrorCodeGeneratorBody
+      case "002" | "003" => ""
+      case _             => RequestBodyUKTR.requestBody
     }
-    val url                                                          = submissionapiUrl + "uk-tax-return"
+    val url                 = submissionapiUrl + "uk-tax-return"
 
     implicit val hc = HeaderCarrier
       .apply(authorization = Option(Authorization(bearerToken)))
@@ -95,8 +91,10 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2) {
       httpClient.post(URI.create(url).toURL).withBody(requestBody)
 
     val response = Await.result(request.execute[HttpResponse], 5.seconds)
+    state.setResponseBody(response.body)
     handleResponse(response)
   }
+
   def handleResponse(response: HttpResponse): Int = {
     val responseCode = response.status
 

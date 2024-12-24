@@ -21,15 +21,17 @@ import com.google.inject.Inject
 import io.circe.parser
 import io.circe.schema.Schema
 import io.cucumber.scala.{EN, ScalaDsl}
-import uk.gov.hmrc.api.helpers.{AuthHelper, IdentifyGroupHelper}
+import uk.gov.hmrc.api.helpers.{AuthHelper, IdentifyGroupHelper, StateStorage}
 
 import scala.io.Source
 
-class IdentifyGroupsSteps @Inject() (authHelper: AuthHelper, identifyGroupHelper: IdentifyGroupHelper)
-    extends ScalaDsl
+class IdentifyGroupsSteps @Inject() (
+  authHelper: AuthHelper,
+  identifyGroupHelper: IdentifyGroupHelper,
+  state: StateStorage
+) extends ScalaDsl
     with EN {
   private var responseCode: Option[Int]            = None
-  private var responseBody: Option[String]         = None
   private var responseErrorCodeVal: Option[String] = None
   private var responseErrorMessage: Option[String] = None
   private var requestBody: Option[String]          = None
@@ -55,13 +57,11 @@ class IdentifyGroupsSteps @Inject() (authHelper: AuthHelper, identifyGroupHelper
   Given("""I make API call to (.*) and (.*) and (.*)$""") { (requestapi: String, endpoint: String, pillarID: String) =>
     // Write code here that turns the phrase above into concrete actions
     responseCode = Option(identifyGroupHelper.sendUKTRRequest(bearerToken, requestapi, endpoint, pillarID))
-    responseBody = identifyGroupHelper.responseBody
     requestBody = identifyGroupHelper.requestBody
   }
 
   Given("""I make API call to PLR UKTR with (.*)$""") { (errorCode: String) =>
     responseCode = Option(identifyGroupHelper.sendPLRUKTRErrorcodeRequest(bearerToken, errorCode))
-    responseBody = identifyGroupHelper.responseBody
     responseErrorCodeVal = identifyGroupHelper.responseErrorCodeVal
     responseErrorMessage = identifyGroupHelper.responseErrorMessage
   }
@@ -99,35 +99,32 @@ class IdentifyGroupsSteps @Inject() (authHelper: AuthHelper, identifyGroupHelper
   }
 
   Then("""I validate response json schema for {string}""") { (schemaFilePath: String) =>
-    responseBody match {
-      case Some(body) =>
-        val schemaContent: String = Source.fromResource(schemaFilePath).getLines().mkString
+    val body = state.getResponseBody
 
-        val parsedSchema   = parser
-          .parse(schemaContent)
-          .getOrElse(
-            throw new RuntimeException("Invalid Response schema JSON")
-          )
-        val parsedResponse = parser
-          .parse(body)
-          .getOrElse(
-            throw new RuntimeException("Invalid response JSON")
-          )
+    val schemaContent: String = Source.fromResource(schemaFilePath).getLines().mkString
 
-        val schema = Schema.load(parsedSchema)
+    val parsedSchema   = parser
+      .parse(schemaContent)
+      .getOrElse(
+        throw new RuntimeException("Invalid Response schema JSON")
+      )
+    val parsedResponse = parser
+      .parse(body)
+      .getOrElse(
+        throw new RuntimeException("Invalid response JSON")
+      )
 
-        schema.validate(parsedResponse) match {
-          case Valid(_) =>
-            println(s"Validation successful: JSON response matches $schemaFilePath!")
+    val schema = Schema.load(parsedSchema)
 
-          case Invalid(errors) =>
-            val errorMessages = errors.toList.map(_.getMessage).mkString(", ")
-            throw new AssertionError(s"JSON schema validation failed: $errorMessages")
-        }
+    schema.validate(parsedResponse) match {
+      case Valid(_) =>
+        println(s"Validation successful: JSON response matches $schemaFilePath!")
 
-      case None =>
-        throw new IllegalStateException("Response body was not set in the Given block")
+      case Invalid(errors) =>
+        val errorMessages = errors.toList.map(_.getMessage).mkString(", ")
+        throw new AssertionError(s"JSON schema validation failed: $errorMessages")
     }
+
   }
 
   Then("""I verify response code is {int}""") { (expectedResponseStatusCode: Int) =>
