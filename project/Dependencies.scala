@@ -19,7 +19,6 @@ object Dependencies {
     "io.circe"          %% "circe-core"              % circeVersion,
     "io.circe"          %% "circe-generic"           % circeVersion,
     "io.circe"          %% "circe-parser"            % circeVersion,
-    "uk.gov.hmrc"       %% "http-verbs-play-30"      % "15.1.0",
     "uk.gov.hmrc"       %% "http-verbs-test-play-30" % "15.1.0"
   ) ++ Seq("slf4j", "serialization-jackson", "actor-typed", "protobuf-v3", "stream")
     .map(lib => "org.apache.pekko" %% s"pekko-$lib" % "1.1.2"))
