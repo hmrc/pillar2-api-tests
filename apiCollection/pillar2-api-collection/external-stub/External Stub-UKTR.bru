@@ -13,10 +13,14 @@ post {
 headers {
   Authorization: {{bearerToken}}
   Content-Type: application/json
-  X-Pillar2-Id: XEPLR0000000400
+  X-Pillar2-Id: XMPLR0000000012
+  ~X-Pillar2-Id: XEPLR0000000400
   ~X-Pillar2-Id: XEPLR0000000500
   ~X-Pillar2-Id: XEPLR0000000422
-  ~X-Pillar2-Id: XMPLR0000000012
+  ~X-Pillar2-Id: XEPLR5555555555
+  ~X-Pillar2-Id: XEPLR1234567890
+  ~X-Pillar2-Id: XEPLR0123456500
+  ~X-Pillar2-Id: XEPLR0123456503
 }
 
 body:json {
@@ -30,7 +34,7 @@ body:json {
       "electionUTPRSingleMember": false,
       "numberSubGroupDTT": 4,
       "numberSubGroupUTPR": 5,
-      "totalLiability": 10000.99,
+      "totalLiability": 0,
       "totalLiabilityDTT": 5000.99,
       "totalLiabilityIIR": 4000,
       "totalLiabilityUTPR": 10000.99,

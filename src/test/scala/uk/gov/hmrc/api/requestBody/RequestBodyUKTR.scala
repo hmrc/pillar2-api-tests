@@ -93,4 +93,11 @@ object RequestBodyUKTR {
       |  }
       |}
       |""".stripMargin
+
+  def requestSubmissionApiBTNBody(accountingPeriodTo: String): String =
+    s"""
+       |{
+       |"accountingPeriodFrom": "2024-01-01",
+       |  "accountingPeriodTo": "2025-01-01"
+       |}""".stripMargin
 }
