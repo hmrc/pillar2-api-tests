@@ -31,11 +31,12 @@ import scala.concurrent.duration.DurationInt
 
 @ScenarioScoped
 class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
-  val authHelper: AuthHelper   = new AuthHelper
-  val submissionapiUrl: String = TestEnvironment.url("pillar2-submission-api")
-  val externalstubUrl: String  = TestEnvironment.url("pillar2-external-test-stub")
-  val stubUrl: String          = TestEnvironment.url("pillar2-stub")
-  val backendUrl: String       = TestEnvironment.url("pillar2-backend")
+  val authHelper: AuthHelper      = new AuthHelper
+  val submissionapiUrl: String    = TestEnvironment.url("pillar2-submission-api")
+  val submissionapibtnUrl: String = TestEnvironment.url("pillar2-submission-api-btn")
+  val externalstubUrl: String     = TestEnvironment.url("pillar2-external-test-stub")
+  val stubUrl: String             = TestEnvironment.url("pillar2-stub")
+  val backendUrl: String          = TestEnvironment.url("pillar2-backend")
 
   def sendPLRUKTRRequest(): Int = {
     val bearerToken  = state.getBearerToken
@@ -57,6 +58,7 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
       case "External stub"             => externalstubUrl + endpoint
       case "Submission Api"            => submissionapiUrl + endpoint
       case "Submission Nil Return Api" => submissionapiUrl + endpoint
+      case "Submission Api BTN"        => submissionapibtnUrl + endpoint
       case "Stub"                      => stubUrl + endpoint
       case "Backend"                   => backendUrl + endpoint
     }
@@ -74,6 +76,11 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
         httpClient
           .post(URI.create(requestapiurl).toURL)
           .withBody(RequestBodyUKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo))
+      case "Submission Api BTN"        =>
+        state.setRequestBody(RequestBodyUKTR.requestSubmissionApiBTNBody(accountingPeriodTo).replace("\n", " "))
+        httpClient
+          .post(URI.create(requestapiurl).toURL)
+          .withBody(RequestBodyUKTR.requestSubmissionApiBTNBody(accountingPeriodTo))
 
       case _ =>
         state.setRequestBody(RequestBodyUKTR.requestBody.replace("\n", " "))

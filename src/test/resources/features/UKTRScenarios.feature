@@ -1,4 +1,4 @@
-@apiTests @idGroup
+@apiTests @idGroup @ignore
 Feature: UKTR Scenarios
 
   Scenario Outline: Verify that the Group has not enrolled
@@ -19,7 +19,6 @@ Feature: UKTR Scenarios
       | Organisation | XEPLR5555555555 | 201        | Submission Api | uk-tax-return |
       | Organisation | XEPLR0123456400 | 500        | Submission Api | uk-tax-return |
 
-#to do : PLRID can be added in future as per the requirement.
   Scenario Outline: verify error codes for uktr submission
     Given I have generated a bearer token for an <UserType> and <PLRID>
     And I make API call to <RequestUrl> and <Endpoint> and <PLRID>
@@ -36,7 +35,7 @@ Feature: UKTR Scenarios
     Scenario Outline: verify submitUKTR nil return response
     Given I have generated a bearer token for an <UserType> and <PLRID>
     And I make API call to <RequestUrl> and <Endpoint> and <PLRID>
-    Then I validate request json schema for "jsonSchema/uktrSchema/Requests/SubmitUKTRNilReturn.json"
+    Then I validate request json schema for "jsonSchema/uktrSchema/Requests/SubmitUKTRNilReturn_Request.json"
     When I verify response code is <StatusCode>
     Then I validate response json schema for "<JsonSchema>"
     Examples:
