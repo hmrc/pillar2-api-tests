@@ -1,0 +1,46 @@
+meta {
+  name: amend Submit UKTR
+  type: http
+  seq: 2
+}
+
+put {
+  url: http://localhost:10051/report-pillar2-top-up-taxes/amend-uk-tax-return
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: {{bearerToken}}
+  X-Pillar2-Id: XMPLR0123456789
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "accountingPeriodFrom": "2024-08-14",
+    "accountingPeriodTo": "2024-12-14",
+    "obligationMTT": true,
+    "electionUKGAAP": true,
+    "liabilities": {
+      "electionDTTSingleMember": false,
+      "electionUTPRSingleMember": false,
+      "numberSubGroupDTT": 1,
+      "numberSubGroupUTPR": 1,
+      "totalLiability": 10000.99,
+      "totalLiabilityDTT": 5000.99,
+      "totalLiabilityIIR": 4000,
+      "totalLiabilityUTPR": 10000.99,
+      "liableEntities": [
+        {
+          "ukChargeableEntityName": "Newco PLC",
+          "idType": "CRN",
+          "idValue": "12345678",
+          "amountOwedDTT": 5000,
+          "amountOwedIIR": 3400,
+          "amountOwedUTPR": 6000.5
+        }
+      ]
+    }
+  }
+}
