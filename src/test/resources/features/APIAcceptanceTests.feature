@@ -34,3 +34,13 @@ Feature: UKTR and BTN Scenarios
       | UserType     | StatusCode | PLRID           | JsonSchema                                              | RequestUrl         | Endpoint                     |
       | Organisation | 201        | XMPLR0000000012 | jsonSchema/uktrSchema/Response/UKTR_201.json            | Submission Api BTN | below-threshold-notification |
       | Organisation | 500        | XEPLR0123456500 | jsonSchema/uktrSchema/Response/UKTR_Error_Response.json | Submission Api BTN | below-threshold-notification |
+
+  Scenario Outline: verify submission api for agent
+    Given I have generated a bearer token for an <UserType> and <PLRID>
+    And I make API call to <RequestUrl> and <Endpoint> and <PLRID>
+    When I verify response code is <StatusCode>
+    Then I validate response json schema for "<JsonSchema>"
+    Examples:
+      | UserType | StatusCode | PLRID           | JsonSchema                                              | RequestUrl     | Endpoint      |
+      | Agent    | 201        | XEPLR5555551126 | jsonSchema/uktrSchema/Response/UKTR_201.json            | Submission Api | uk-tax-return |
+      | Agent    | 500        | XEPLR0123456400 | jsonSchema/uktrSchema/Response/UKTR_Error_Response.json | Submission Api | uk-tax-return |
