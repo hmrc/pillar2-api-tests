@@ -1,0 +1,21 @@
+meta {
+  name: Submit BTN - Unauthorized
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{externalStubsBaseUri}}below-threshold-notification
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-Pillar2-Id: {{testPlrId}}
+  content-type: application/json
+}
+
+body:json {
+  { "accountingPeriodFrom": "2024-01-01", "accountingPeriodTo": "2024-12-31" }
+}
