@@ -39,22 +39,22 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
   val backendUrl: String          = TestEnvironment.url("pillar2-backend")
 
   def sendPLRUKTRRequest(): Int = {
-    val bearerToken  = state.getBearerToken
+    val bearerToken                = state.getBearerToken
     implicit val hc: HeaderCarrier = HeaderCarrier
       .apply(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("Content-Type" -> "application/json")
-    val request      =
+    val request                    =
       httpClient.post(URI.create(submissionapiUrl + "uk-tax-return").toURL).withBody(RequestBodyUKTR.requestBody)
-    val response     = Await.result(request.execute[HttpResponse], 5.seconds)
-    val responseCode = response.status
+    val response                   = Await.result(request.execute[HttpResponse], 5.seconds)
+    val responseCode               = response.status
 
     println(s"Response Code: $responseCode")
     responseCode
   }
 
-  def sendUKTRRequest(requestapi: String, endpoint: String, pillarID: String): Int = {
+  def sendUKTRRequest(requestApi: String, endpoint: String, pillarID: String): Int = {
     val bearerToken           = state.getBearerToken
-    val requestApiUrl: String = requestapi match {
+    val requestApiUrl: String = requestApi match {
       case "External stub"             => externalstubUrl + endpoint
       case "Submission Api"            => submissionapiUrl + endpoint
       case "Amend UKTR"                => submissionapiUrl + endpoint
@@ -71,7 +71,7 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
 
     implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
-    val request                    = requestapi match {
+    val request                    = requestApi match {
       case "Submission Nil Return Api" =>
         state.setRequestBody(RequestBodyUKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo).replace("\n", " "))
         httpClient
@@ -84,9 +84,7 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
           .withBody(RequestBodyUKTR.requestSubmissionApiBTNBody(accountingPeriodTo))
       case "Amend UKTR"                =>
         state.setRequestBody(RequestBodyUKTR.requestBody.replace("\n", " "))
-        httpClient.
-          put(URI.create(requestApiUrl).toURL).
-          withBody(RequestBodyUKTR.requestBody)
+        httpClient.put(URI.create(requestApiUrl).toURL).withBody(RequestBodyUKTR.requestBody)
 
       case _ =>
         state.setRequestBody(RequestBodyUKTR.requestBody.replace("\n", " "))
