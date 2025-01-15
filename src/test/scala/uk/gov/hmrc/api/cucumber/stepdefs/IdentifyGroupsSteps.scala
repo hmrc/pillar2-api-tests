@@ -38,7 +38,8 @@ class IdentifyGroupsSteps @Inject() (
     val bearerToken = value match {
       case "with enrolment" | "without enrolment" | "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" |
           "XEPLR0123456422" | "XEPLR0123456500" | "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" |
-          "XEPLR0000000400" | "XEPLR0000000500" | "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR5555551126" =>
+          "XEPLR0000000400" | "XEPLR0000000500" | "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR5555551126" |
+          "XEPLR0500000000" =>
         authHelper.getBearerLocal(affinity, value)
       case _ =>
         throw new IllegalArgumentException(s"Invalid value: $value")
@@ -51,6 +52,7 @@ class IdentifyGroupsSteps @Inject() (
   }
 
   Given("""I make API call to (.*) and (.*) and (.*)$""") { (requestapi: String, endpoint: String, pillarID: String) =>
+    // Write code here that turns the phrase above into concrete actions
     state.setResponseCode(identifyGroupHelper.sendUKTRRequest(requestapi, endpoint, pillarID))
   }
 
