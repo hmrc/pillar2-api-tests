@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://localhost:10055/RESTAdapter/PLR/below-threshold-notification
+  url: {{externalStubsBaseUrl}}/below-threshold-notification
   body: json
   auth: none
 }
@@ -18,5 +18,8 @@ headers {
 }
 
 body:json {
-  { "accountingPeriodFrom": "2024-01-01", "accountingPeriodTo": "2024-12-31" }
+  {
+    "accountingPeriodFrom": "2024-01-01",
+    "accountingPeriodTo": "2024-12-31"
+  }
 }
