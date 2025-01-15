@@ -1,0 +1,48 @@
+meta {
+  name: Dev - Submit UKTR
+  type: http
+  seq: 14
+}
+
+post {
+  url: https://api.development.tax.service.gov.uk/organisations/pillar-two/uk-tax-return
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer 469e4849a97d10eccc238dad9fbe7d0d
+}
+
+body:json {
+  {
+    "accountingPeriodFrom": "2024-08-14",
+    "accountingPeriodTo": "2024-12-14",
+    "qualifyingGroup": true,
+    "obligationDTT": true,
+    "obligationMTT": true,
+    "electionUKGAAP": true,
+    "liabilities": {
+      "electionDTTSingleMember": false,
+      "electionUTPRSingleMember": false,
+      "numberSubGroupDTT": 4,
+      "numberSubGroupUTPR": 5,
+      "totalLiability": 10000.99,
+      "totalLiabilityDTT": 5000.99,
+      "totalLiabilityIIR": 4000,
+      "totalLiabilityUTPR": 10000.99,
+      "liableEntities": [
+        {
+          "ukChargeableEntityName": "Newco PLC",
+          "idType": "CRN",
+          "idValue": "12345678",
+          "amountOwedDTT": 5000,
+          "amountOwedIIR": 3400,
+          "amountOwedUTPR": 6000.5
+        }
+      ]
+    }
+  }
+  
+  
+}
