@@ -1,7 +1,7 @@
 meta {
-  name: Submit BTN - Missing X-Pillar2-Id Header
+  name: Invalid Date
   type: http
-  seq: 4
+  seq: 5
 }
 
 post {
@@ -13,9 +13,10 @@ post {
 headers {
   Authorization: {{bearerToken}}
   Content-Type: application/json
+  X-Pillar2-Id: {{testPlrId}}
   content-type: application/json
 }
 
 body:json {
-  { "accountingPeriodFrom": "2024-01-01", "accountingPeriodTo": "2024-12-31" }
+  { "accountingPeriodFrom": "2024-001-01", "accountingPeriodTo": "2024-12-31" }
 }
