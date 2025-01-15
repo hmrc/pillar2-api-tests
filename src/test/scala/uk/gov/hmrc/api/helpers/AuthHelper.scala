@@ -18,7 +18,7 @@ package uk.gov.hmrc.api.helpers
 
 import io.cucumber.guice.ScenarioScoped
 import uk.gov.hmrc.api.conf.TestEnvironment
-import uk.gov.hmrc.api.requestBody.RequestBodyBearerTokenGenerator.{putBodyWithEnrolment, putBodyWithOutEnrolment, putBodyWithPlrid}
+import uk.gov.hmrc.api.requestBody.RequestBodyBearerTokenGenerator.{putAgentBodyWithPlrid, putBodyWithEnrolment, putBodyWithOutEnrolment, putBodyWithPlrid}
 
 import java.net.URI
 import java.net.http.HttpRequest.BodyPublishers
@@ -31,7 +31,8 @@ class AuthHelper {
   val trimToken               = ""
 
   def getBearerLocal(affinityGroup: String, value: String): String = {
-    val body    = value match {
+
+    val body    = if (affinityGroup != "Agent") value match {
       case "with enrolment"    =>
         putBodyWithEnrolment(affinityGroup)
       case "without enrolment" =>
@@ -40,6 +41,10 @@ class AuthHelper {
           "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" | "XEPLR0000000400" | "XEPLR0000000500" |
           "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR0500000000" =>
         putBodyWithPlrid(affinityGroup, value)
+      case _                   => throw new IllegalArgumentException(s"Unexpected value: $value")
+    }
+    else {
+      putAgentBodyWithPlrid(affinityGroup, value)
     }
     val client  = HttpClient.newHttpClient()
     val request = HttpRequest

@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Welcome3",
+  "definitions": {
+    "Welcome3": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "electionUKGAAP": {
+          "type": "boolean"
+        },
+        "accountingPeriodFrom": {
+          "type": "string",
+          "format": "date"
+        },
+        "liabilities": {
+          "$ref": "#/definitions/Liabilities"
+        },
+        "accountingPeriodTo": {
+          "type": "string",
+          "format": "date"
+        },
+        "obligationMTT": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "accountingPeriodFrom",
+        "accountingPeriodTo",
+        "electionUKGAAP",
+        "liabilities",
+        "obligationMTT"
+      ],
+      "title": "Welcome3"
+    },
+    "Liabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "electionUTPRSingleMember": {
+          "type": "boolean"
+        },
+        "electionDTTSingleMember": {
+          "type": "boolean"
+        },
+        "numberSubGroupDTT": {
+          "type": "integer"
+        },
+        "totalLiabilityDTT": {
+          "type": "integer"
+        },
+        "totalLiabilityUTPR": {
+          "type": "integer"
+        },
+        "numberSubGroupUTPR": {
+          "type": "integer"
+        },
+        "liableEntities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LiableEntity"
+          }
+        },
+        "totalLiabilityIIR": {
+          "type": "integer"
+        },
+        "totalLiability": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "electionDTTSingleMember",
+        "electionUTPRSingleMember",
+        "liableEntities",
+        "numberSubGroupDTT",
+        "numberSubGroupUTPR",
+        "totalLiability",
+        "totalLiabilityDTT",
+        "totalLiabilityIIR",
+        "totalLiabilityUTPR"
+      ],
+      "title": "Liabilities"
+    },
+    "LiableEntity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "idType": {
+          "type": "string"
+        },
+        "idValue": {
+          "type": "string"
+        },
+        "ukChargeableEntityName": {
+          "type": "string"
+        },
+        "amountOwedUTPR": {
+          "type": "integer"
+        },
+        "amountOwedIIR": {
+          "type": "integer"
+        },
+        "amountOwedDTT": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "amountOwedDTT",
+        "amountOwedIIR",
+        "amountOwedUTPR",
+        "idType",
+        "idValue",
+        "ukChargeableEntityName"
+      ],
+      "title": "LiableEntity"
+    }
+  }
+}

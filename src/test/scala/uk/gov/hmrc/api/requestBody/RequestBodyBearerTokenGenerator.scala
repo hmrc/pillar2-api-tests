@@ -79,4 +79,38 @@ object RequestBodyBearerTokenGenerator {
        |  ]
        | }
         """.stripMargin
+
+  def putAgentBodyWithPlrid(affinityGroup: String, plrid: String): String =
+    s"""
+       |{
+       |  "credentialRole": "Admin",
+       |  "affinityGroup": "$affinityGroup",
+       |  "credentialStrength": "strong",
+       |  "credId": "123456789",
+       |  "enrolments": [
+       |      {
+       |      "key": "HMRC-AS-AGENT",
+       |      "identifiers": [
+       |          {
+       |          "key": "AgentReferenceNumber",
+       |          "value": "GARN0458621"
+       |          }
+       |      ],
+       |      "state": "Activated"
+       |      }
+       |  ],
+       |  "delegatedEnrolments": [
+       |      {
+       |      "key": "HMRC-PILLAR2-ORG",
+       |      "identifiers": [
+       |          {
+       |          "key": "PLRID",
+       |          "value": "$plrid"
+       |          }
+       |      ],
+       |      "delegatedAuthRule": "pillar2-auth"
+       |      }
+       |  ]
+       |  }
+    """.stripMargin
 }
