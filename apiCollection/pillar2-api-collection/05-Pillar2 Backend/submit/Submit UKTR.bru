@@ -1,19 +1,19 @@
 meta {
-  name: Pillar2 Stubs
+  name: Submit UKTR
   type: http
   seq: 1
 }
 
 post {
-  url: http://localhost:10052/RESTAdapter/PLR/UKTaxReturn
+  url: http://localhost:10051/report-pillar2-top-up-taxes/submit-uk-tax-return
   body: json
   auth: none
 }
 
 headers {
   Authorization: {{bearerToken}}
+  X-Pillar2-Id: XEPLR1066196422
   X-Pillar2-Id: XMPLR0000000012
-  ~X-Pillar2-Id: XEPLR1066196400
 }
 
 body:json {
