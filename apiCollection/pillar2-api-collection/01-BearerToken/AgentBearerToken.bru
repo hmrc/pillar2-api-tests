@@ -1,7 +1,7 @@
 meta {
-  name: Bearer Token with Enrolment
+  name: AgentBearerToken
   type: http
-  seq: 1
+  seq: 3
 }
 
 post {
@@ -51,5 +51,5 @@ body:json {
 script:post-response {
   let token = res.getHeader('authorization')
   let trimToken = token.split(",").find(str => str.startsWith('Bearer'));
-  bru.setVar("bearerToken",trimToken)
+  bru.setVar("agentBearerToken",trimToken)
 }

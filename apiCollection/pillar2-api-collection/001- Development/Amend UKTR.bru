@@ -1,32 +1,32 @@
 meta {
-  name: amend Submit UKTR
+  name: Amend UKTR
   type: http
-  seq: 2
+  seq: 3
 }
 
 put {
-  url: http://localhost:10051/report-pillar2-top-up-taxes/amend-uk-tax-return
+  url: https://api.development.tax.service.gov.uk/organisations/pillar-two/uk-tax-return
   body: json
   auth: none
 }
 
 headers {
-  Authorization: {{bearerToken}}
-  X-Pillar2-Id: XMPLR0123456789
-  Content-Type: application/json
+  Authorization: Bearer 469e4849a97d10eccc238dad9fbe7d0d
 }
 
 body:json {
   {
     "accountingPeriodFrom": "2024-08-14",
     "accountingPeriodTo": "2024-12-14",
+    "qualifyingGroup": true,
+    "obligationDTT": true,
     "obligationMTT": true,
     "electionUKGAAP": true,
     "liabilities": {
       "electionDTTSingleMember": false,
       "electionUTPRSingleMember": false,
-      "numberSubGroupDTT": 1,
-      "numberSubGroupUTPR": 1,
+      "numberSubGroupDTT": 4,
+      "numberSubGroupUTPR": 5,
       "totalLiability": 10000.99,
       "totalLiabilityDTT": 5000.99,
       "totalLiabilityIIR": 4000,
@@ -43,4 +43,6 @@ body:json {
       ]
     }
   }
+  
+  
 }
