@@ -1,5 +1,5 @@
 meta {
-  name: bearerTokenWithEnrolment
+  name: BearerTokenWithEnrolment
   type: http
   seq: 1
 }
@@ -11,7 +11,7 @@ post {
 }
 
 headers {
-  content-type: application/json
+  Content-Type: application/json
 }
 
 body:json {
@@ -28,11 +28,18 @@ body:json {
         "identifiers": [
           {
             "key": "PLRID",
-            "value": "{{testPlrId}}"
+            "value": "XMPLR0012345674"
           }
         ],
         "state": "Activated"
       }
     ]
   }
+}
+
+script:post-response {
+  let token = res.getHeader('authorization')
+  let trimToken = token.split(",").find(str => str.startsWith('Bearer'));
+  bru.setVar("bearerToken",trimToken)
+  
 }

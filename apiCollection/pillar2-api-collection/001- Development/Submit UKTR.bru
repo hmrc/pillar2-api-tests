@@ -1,19 +1,17 @@
 meta {
-  name: Pillar2 Backend
+  name: Submit UKTR
   type: http
-  seq: 1
+  seq: 14
 }
 
 post {
-  url: http://localhost:10051/report-pillar2-top-up-taxes/submit-uk-tax-return
+  url: https://api.development.tax.service.gov.uk/organisations/pillar-two/uk-tax-return
   body: json
   auth: none
 }
 
 headers {
-  Authorization: {{bearerToken}}
-  X-Pillar2-Id: XEPLR1066196422
-  X-Pillar2-Id: XMPLR0000000012
+  Authorization: Bearer 469e4849a97d10eccc238dad9fbe7d0d
 }
 
 body:json {
@@ -45,4 +43,6 @@ body:json {
       ]
     }
   }
+  
+  
 }

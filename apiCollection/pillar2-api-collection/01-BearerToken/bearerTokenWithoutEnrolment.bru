@@ -1,7 +1,7 @@
 meta {
-  name: bearerTokenWithEnrolment
+  name: BearerTokenWithoutEnrolment
   type: http
-  seq: 3
+  seq: 2
 }
 
 post {
@@ -23,16 +23,7 @@ body:json {
     "credentialStrength": "strong",
     "credId": "453234543adr54hy9",
     "enrolments": [
-      {
-        "key": "HMRC-PILLAR2-ORG",
-        "identifiers": [
-          {
-            "key": "PLRID",
-            "value": "XMPLR0123456789"
-          }
-        ],
-        "state": "Activated"
-      }
+      
     ]
   }
 }
