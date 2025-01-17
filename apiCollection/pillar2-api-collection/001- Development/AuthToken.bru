@@ -16,9 +16,17 @@ headers {
 }
 
 body:form-urlencoded {
-  code: 7199cdac6e254d4fa37ff718333a4927
+  code: f5781f890d784f9998baf02827d586ca
   client_id: fROjDEdHSy7dPo1QUGbF5S4CSYqY
   client_secret: 6660e437-5724-481a-b7a2-7ec95ec76895
   redirect_uri: urn:ietf:wg:oauth:2.0:oob
   grant_type: authorization_code
+}
+
+script:post-response {
+  let responseBody = res.getBody()
+  let token = responseBody.access_token;
+  bru.setVar("devBearerToken",token)
+  
+  
 }
