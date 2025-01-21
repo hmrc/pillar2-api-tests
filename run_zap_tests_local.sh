@@ -28,7 +28,7 @@ echo "=========================================="
 
 #sbt -Denvironment=$environment -Dzap.proxy=true clean 'testOnly uk.gov.hmrc.api.cucumber.runner.Runner'
 
-sbt -Dbrowser=${BROWSER} -Denvironment=${ENVIRONMENT} -Dsecurity.assessment=true "testOnly runner.Runner" testReport
+sbt -Dbrowser=${BROWSER} -Denvironment=${ENVIRONMENT} -Dzap.proxy=true "testOnly runner.Runner" testReport
 echo "Generating ZAP HTML report..."
 curl "http://localhost:11000/OTHER/core/other/htmlreport/" -o ./target/zap-report.html
 if [ $? -eq 0 ]; then
