@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apitestrunner.http.HttpClient
+package uk.gov.hmrc.apitestrunner.http
 
 import org.apache.pekko.actor.ActorSystem
 import play.api.libs.ws.DefaultBodyWritables._
