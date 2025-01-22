@@ -6,7 +6,7 @@ object Dependencies {
   val circeVersion = "0.14.10"
 
   val test: Seq[ModuleID] = (Seq(
-    "uk.gov.hmrc"       %% "api-test-runner"         % "0.7.0",
+    "uk.gov.hmrc"       %% "api-test-runner"         % "0.8.0",
     "io.cucumber"       %% "cucumber-scala"          % "8.25.1",
     "io.cucumber"        % "cucumber-guice"          % guiceVersion,
     "io.cucumber"        % "cucumber-junit"          % guiceVersion,
