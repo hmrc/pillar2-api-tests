@@ -44,7 +44,7 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
       .apply(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("Content-Type" -> "application/json")
     val request                    =
-      httpClient.post(URI.create(submissionapiUrl + "uk-tax-return").toURL).withBody(RequestBodyUKTR.requestBody)
+      httpClient.post(URI.create(submissionapiUrl + "uk-tax-return").toURL).withBody(RequestBodyUKTR.requestBody).withProxy
     val response                   = Await.result(request.execute[HttpResponse], 5.seconds)
     val responseCode               = response.status
 
@@ -76,15 +76,15 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
         state.setRequestBody(RequestBodyUKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo).replace("\n", " "))
         httpClient
           .post(URI.create(requestApiUrl).toURL)
-          .withBody(RequestBodyUKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo))
+          .withBody(RequestBodyUKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo)).withProxy
       case "Submission Api BTN"        =>
         state.setRequestBody(RequestBodyUKTR.requestSubmissionApiBTNBody(accountingPeriodTo).replace("\n", " "))
         httpClient
           .post(URI.create(requestApiUrl).toURL)
-          .withBody(RequestBodyUKTR.requestSubmissionApiBTNBody(accountingPeriodTo))
+          .withBody(RequestBodyUKTR.requestSubmissionApiBTNBody(accountingPeriodTo)).withProxy
       case "Amend UKTR"                =>
         state.setRequestBody(RequestBodyUKTR.requestBody.replace("\n", " "))
-        httpClient.put(URI.create(requestApiUrl).toURL).withBody(RequestBodyUKTR.requestBody)
+        httpClient.put(URI.create(requestApiUrl).toURL).withBody(RequestBodyUKTR.requestBody).withProxy
 
       case _ =>
         state.setRequestBody(RequestBodyUKTR.requestBody.replace("\n", " "))
@@ -112,7 +112,7 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
       .apply(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("Content-Type" -> "application/json")
     val request                    =
-      httpClient.post(URI.create(url).toURL).withBody(requestBody)
+      httpClient.post(URI.create(url).toURL).withBody(requestBody).withProxy
 
     val response = Await.result(request.execute[HttpResponse], 5.seconds)
     state.setResponseBody(response.body)

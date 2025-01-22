@@ -36,7 +36,7 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
 
     implicit val hc = HeaderCarrier(authorization = Option(Authorization("Bearer valid_token")))
       .withExtraHeaders("Content-Type" -> "application/json")
-    val request     = httpClient.post(URI.create(apiUrl).toURL).withBody(RequestBodyUKTR.requestBody)
+    val request     = httpClient.post(URI.create(apiUrl).toURL).withBody(RequestBodyUKTR.requestBody).withProxy
 
     val response = Await.result(request.execute[HttpResponse], 5.seconds)
     state.setResponseBody(response.body)
