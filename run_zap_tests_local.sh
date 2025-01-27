@@ -26,9 +26,7 @@ echo "ZAP Proxy Required:   true"
 echo "ZAP alert filters:    ${ZAP_LOCAL_ALERT_FILTERS}"
 echo "=========================================="
 
-#sbt -Denvironment=$environment -Dzap.proxy=true clean 'testOnly uk.gov.hmrc.api.cucumber.runner.Runner'
-
-sbt -Dbrowser=${BROWSER} -Denvironment=${ENVIRONMENT} -Dzap.proxy=true "testOnly runner.Runner" testReport
+sbt clean -Denvironment="${ENVIRONMENT:=local}" "testOnly uk.gov.hmrc.api.cucumber.runner.Runner" -Dsecurity.assessment=true
 echo "Generating ZAP HTML report..."
 curl "http://localhost:11000/OTHER/core/other/htmlreport/" -o ./target/zap-report.html
 if [ $? -eq 0 ]; then
