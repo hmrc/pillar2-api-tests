@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Welcome5",
+  "definitions": {
+    "Welcome5": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "processingDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "processingDate"
+      ],
+      "title": "Welcome5"
+    }
+  }
+}
