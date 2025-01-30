@@ -51,8 +51,8 @@ class IdentifyGroupsSteps @Inject() (
     state.setResponseCode(identifyGroupHelper.sendPLRUKTRRequest())
   }
 
-  Given("""I make API call to (.*) and (.*) and (.*)$""") { (requestApi: String, endpoint: String, pillarID: String) =>
-    state.setResponseCode(identifyGroupHelper.sendUKTRRequest(requestApi, endpoint, pillarID))
+  Given("""I make API call to (.*) and (.*) and (.*) and (.*)$""") { (requestApi: String, endpoint: String, pillarID: String, statusCode: String) =>
+    state.setResponseCode(identifyGroupHelper.sendUKTRRequest(requestApi, endpoint, pillarID, statusCode))
   }
 
   Given("""I make API call to PLR UKTR with (.*)$""") { (errorCode: String) =>
