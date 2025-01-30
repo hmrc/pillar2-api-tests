@@ -26,7 +26,7 @@ body:form-urlencoded {
 script:post-response {
   let responseBody = res.getBody()
   let token = responseBody.access_token;
-  bru.setVar("devBearerToken",token)
+  bru.setEnvVar("devBearerToken",token)
   
   
 }
