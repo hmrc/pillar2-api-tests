@@ -31,6 +31,6 @@ body:json {
 script:post-response {
   let token = res.getHeader('authorization')
   let trimToken = token.split(",").find(str => str.startsWith('Bearer'));
-  bru.setVar("bearerToken",trimToken)
+  bru.setEnvVar("bearerToken",trimToken)
   
 }
