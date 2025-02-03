@@ -17,11 +17,11 @@
 package uk.gov.hmrc.api.requestBody
 
 object RequestBodyUKTR {
-  val requestBody: String =
-    """
+  def requestBody(accountingPeriodTo: String): String =
+    s"""
       |{
       |  "accountingPeriodFrom": "2024-08-14",
-      |  "accountingPeriodTo": "2024-12-14",
+      |  "accountingPeriodTo": "$accountingPeriodTo",
       |  "obligationMTT": false,
       |  "electionUKGAAP": true,
       |  "liabilities": {
@@ -98,6 +98,6 @@ object RequestBodyUKTR {
     s"""
        |{
        |"accountingPeriodFrom": "2024-01-01",
-       |  "accountingPeriodTo": "2025-01-01"
+       |  "accountingPeriodTo": "$accountingPeriodTo"
        |}""".stripMargin
 }
