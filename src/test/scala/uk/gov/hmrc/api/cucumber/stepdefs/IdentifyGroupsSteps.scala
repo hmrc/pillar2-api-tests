@@ -34,27 +34,25 @@ class IdentifyGroupsSteps @Inject() (
 ) extends ScalaDsl
     with EN {
 
-  Given("""^I have generated a bearer token for an (.*) and (.*) and (.*)$""") {
-    (affinity: String, value: String, statusCode: String) =>
-      val bearerToken = value match {
-        case "with enrolment" | "without enrolment" | "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" |
-            "XEPLR0123456422" | "XEPLR0123456500" | "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" |
-            "XEPLR0000000400" | "XEPLR0000000500" | "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR5555551126" |
-            "XEPLR0500000000" =>
-          authHelper.getBearerLocal(affinity, value, statusCode)
-        case _ =>
-          throw new IllegalArgumentException(s"Invalid value: $value")
-      }
-      state.setBearerToken(bearerToken)
+  Given("""^I have generated a bearer token for an (.*) and (.*)$""") { (affinity: String, value: String) =>
+    val bearerToken = value match {
+      case "with enrolment" | "without enrolment" | "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" |
+          "XEPLR0123456422" | "XEPLR0123456500" | "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" |
+          "XEPLR0000000400" | "XEPLR0000000500" | "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR5555551126" |
+          "XEPLR0500000000" =>
+        authHelper.getBearerLocal(affinity, value)
+      case _ =>
+        throw new IllegalArgumentException(s"Invalid value: $value")
+    }
+    state.setBearerToken(bearerToken)
   }
 
   Given("""I make API call to PLR UKTR""") { () =>
     state.setResponseCode(identifyGroupHelper.sendPLRUKTRRequest())
   }
 
-  Given("""I make API call to (.*) and (.*) and (.*) and (.*)$""") {
-    (requestApi: String, endpoint: String, pillarID: String, statusCode: String) =>
-      state.setResponseCode(identifyGroupHelper.sendUKTRRequest(requestApi, endpoint, pillarID, statusCode))
+  Given("""I make API call to (.*) and (.*) and (.*)$""") { (requestApi: String, endpoint: String, pillarID: String) =>
+    state.setResponseCode(identifyGroupHelper.sendUKTRRequest(requestApi, endpoint, pillarID))
   }
 
   Given("""I make API call to PLR UKTR with (.*)$""") { (errorCode: String) =>

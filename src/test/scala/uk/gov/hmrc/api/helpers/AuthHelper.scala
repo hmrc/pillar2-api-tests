@@ -30,7 +30,7 @@ class AuthHelper {
   val authSessionsUrl: String = TestEnvironment.url("auth-login-api")
   val trimToken               = ""
 
-  def getBearerLocal(affinityGroup: String, value: String, statusCode: String): String = {
+  def getBearerLocal(affinityGroup: String, value: String): String = {
 
     val body    = if (affinityGroup != "Agent") value match {
       case "with enrolment"    =>
@@ -62,16 +62,12 @@ class AuthHelper {
       .headers()
       .firstValue("authorization")
 
-    val bearerToken = statusCode match {
-      case "401" => "invalid"
-      case _     =>
-        bearerTokenHeader
-          .orElse("")
-          .split(",")
-          .find(_.trim.startsWith("Bearer"))
-          .getOrElse(throw new RuntimeException("BearerToken not found"))
-    }
-    
+    val bearerToken = bearerTokenHeader
+      .orElse("")
+      .split(",")
+      .find(_.trim.startsWith("Bearer"))
+      .getOrElse(throw new RuntimeException("BearerToken not found"))
+
     println(s"Extracted Bearer Token: $bearerToken")
     bearerToken
   }
