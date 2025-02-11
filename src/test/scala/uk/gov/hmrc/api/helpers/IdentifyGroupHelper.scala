@@ -148,7 +148,7 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
 
     val requestApiUrl: String = requestUrl match {
 
-      case "Obligations and Submission Api" => backendUrl + parameters
+      case "Obligations and Submission Api" => backendUrl + "obligations-and-submissions/" + parameters
 
     }
 
