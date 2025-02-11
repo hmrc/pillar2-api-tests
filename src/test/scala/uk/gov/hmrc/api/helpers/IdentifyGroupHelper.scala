@@ -91,7 +91,10 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
           .withProxy
       case "Amend UKTR"                =>
         state.setRequestBody(RequestBodyUKTR.requestBody(accountingPeriodTo).replace("\n", " "))
-        httpClient.put(URI.create(requestApiUrl).toURL).withBody(RequestBodyUKTR.requestBody(accountingPeriodTo)).withProxy
+        httpClient
+          .put(URI.create(requestApiUrl).toURL)
+          .withBody(RequestBodyUKTR.requestBody(accountingPeriodTo))
+          .withProxy
 
       case _ =>
         state.setRequestBody(RequestBodyUKTR.requestBody(accountingPeriodTo).replace("\n", " "))
@@ -137,6 +140,31 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
     println(s"Response Code: $responseCode")
     println(s"Response Body: $responseBody")
 
+    responseCode
+  }
+
+  def sendGetRequest(requestUrl: String, parameters: String, pillarID: String): Int = {
+    val bearerToken = state.getBearerToken
+
+    val requestApiUrl: String = requestUrl match {
+
+      case "Obligations and Submission Api" => backendUrl + parameters
+
+    }
+
+    implicit val hc: HeaderCarrier = HeaderCarrier
+      .apply(authorization = Option(Authorization(bearerToken)))
+      .withExtraHeaders("x-pillar2-id" -> pillarID)
+
+    val request =
+      httpClient.get(URI.create(requestApiUrl).toURL)
+
+    val response = Await.result(request.execute[HttpResponse], 5.seconds)
+    state.setResponseBody(response.body)
+    val responseCode = response.status
+
+    println(s"Response Code: $responseCode")
+    println(s"Response Body: ${state.getResponseBody}")
     responseCode
   }
 }

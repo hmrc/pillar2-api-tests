@@ -52,6 +52,11 @@ class IdentifyGroupsSteps @Inject() (
     state.setResponseCode(identifyGroupHelper.sendPLRUKTRRequest())
   }
 
+  Given("""I make get API call to URL (.*) and (.*) and (.*)$""") {
+    (requestUrl: String, parameters: String, pillarID: String) =>
+      state.setResponseCode(identifyGroupHelper.sendGetRequest(requestUrl, parameters, pillarID))
+  }
+
   Given("""I make API call to (.*) and (.*) and (.*) and (.*)$""") {
     (requestApi: String, endpoint: String, pillarID: String, statusCode: String) =>
       state.setResponseCode(identifyGroupHelper.sendUKTRRequest(requestApi, endpoint, pillarID, statusCode))

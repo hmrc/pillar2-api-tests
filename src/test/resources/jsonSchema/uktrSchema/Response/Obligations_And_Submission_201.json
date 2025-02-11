@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Welcome1",
+  "definitions": {
+    "Welcome1": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "success": {
+          "$ref": "#/definitions/Success"
+        }
+      },
+      "required": [
+        "success"
+      ],
+      "title": "Welcome1"
+    },
+    "Success": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "processingDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "accountingPeriodDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AccountingPeriodDetail"
+          }
+        }
+      },
+      "required": [
+        "accountingPeriodDetails",
+        "processingDate"
+      ],
+      "title": "Success"
+    },
+    "AccountingPeriodDetail": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "startDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "underEnquiry": {
+          "type": "boolean"
+        },
+        "obligations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Obligation"
+          }
+        }
+      },
+      "required": [
+        "dueDate",
+        "endDate",
+        "obligations",
+        "startDate",
+        "underEnquiry"
+      ],
+      "title": "AccountingPeriodDetail"
+    },
+    "Obligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "obligationType": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "canAmend": {
+          "type": "boolean"
+        },
+        "submissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Submission"
+          }
+        }
+      },
+      "required": [
+        "canAmend",
+        "obligationType",
+        "status",
+        "submissions"
+      ],
+      "title": "Obligation"
+    },
+    "Submission": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "submissionType": {
+          "type": "string"
+        },
+        "receivedDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "receivedDate",
+        "submissionType"
+      ],
+      "title": "Submission"
+    }
+  }
+}
