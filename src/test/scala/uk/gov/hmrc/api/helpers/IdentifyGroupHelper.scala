@@ -142,29 +142,4 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
 
     responseCode
   }
-
-  def sendGetRequest(requestUrl: String, parameters: String, pillarID: String): Int = {
-    val bearerToken = state.getBearerToken
-
-    val requestApiUrl: String = requestUrl match {
-
-      case "Obligations and Submission Api" => backendUrl + "obligations-and-submissions/" + parameters
-
-    }
-
-    implicit val hc: HeaderCarrier = HeaderCarrier
-      .apply(authorization = Option(Authorization(bearerToken)))
-      .withExtraHeaders("x-pillar2-id" -> pillarID)
-
-    val request =
-      httpClient.get(URI.create(requestApiUrl).toURL)
-
-    val response = Await.result(request.execute[HttpResponse], 5.seconds)
-    state.setResponseBody(response.body)
-    val responseCode = response.status
-
-    println(s"Response Code: $responseCode")
-    println(s"Response Body: ${state.getResponseBody}")
-    responseCode
-  }
 }
