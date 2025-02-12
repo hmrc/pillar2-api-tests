@@ -91,7 +91,10 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
           .withProxy
       case "Amend UKTR"                =>
         state.setRequestBody(RequestBodyUKTR.requestBody(accountingPeriodTo).replace("\n", " "))
-        httpClient.put(URI.create(requestApiUrl).toURL).withBody(RequestBodyUKTR.requestBody(accountingPeriodTo)).withProxy
+        httpClient
+          .put(URI.create(requestApiUrl).toURL)
+          .withBody(RequestBodyUKTR.requestBody(accountingPeriodTo))
+          .withProxy
 
       case _ =>
         state.setRequestBody(RequestBodyUKTR.requestBody(accountingPeriodTo).replace("\n", " "))
