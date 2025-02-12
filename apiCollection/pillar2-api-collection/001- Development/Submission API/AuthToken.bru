@@ -1,0 +1,32 @@
+meta {
+  name: AuthToken
+  type: http
+  seq: 4
+}
+
+post {
+  url: https://api.development.tax.service.gov.uk/oauth/token
+  body: formUrlEncoded
+  auth: none
+}
+
+headers {
+  Content-Type: application/x-www-form-urlencoded
+  content-type: application/x-www-form-urlencoded
+}
+
+body:form-urlencoded {
+  code: adca450fc420422abd16fe64840106f4
+  client_id: fROjDEdHSy7dPo1QUGbF5S4CSYqY
+  client_secret: 6660e437-5724-481a-b7a2-7ec95ec76895
+  redirect_uri: urn:ietf:wg:oauth:2.0:oob
+  grant_type: authorization_code
+}
+
+script:post-response {
+  let responseBody = res.getBody()
+  let token = responseBody.access_token;
+  bru.setVar("devBearerToken",token)
+  
+  
+}
