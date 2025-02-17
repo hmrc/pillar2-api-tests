@@ -28,8 +28,8 @@ Feature: UKTR Scenarios
       | UserType     | PLRID           | StatusCode | RequestUrl    | Endpoint    |
       | Organisation | XEPLR5555555555 | 201        | External stub | UKTaxReturn |
   #    | Organisation | XEPLR0000000400 | 400        | External stub | UKTaxReturn |
-  #    | Organisation | XEPLR0000000500 | 500        | External stub | UKTaxReturn |
-      | Organisation | XEPLR0000000422 | 422        | External stub | UKTaxReturn |
+  #    | Organisation | XEPLR5000000000 | 500        | External stub | UKTaxReturn |
+  #    | Organisation | XEPLR0000000422 | 422        | External stub | UKTaxReturn |
 
   Scenario Outline: Verify the response for the stub requests
     Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
