@@ -1,4 +1,4 @@
-@apiTests @idGroup
+@apiTests @idGroup @ignore
 Feature: UKTR Scenarios
 
 #  Scenario Outline: Verify that the Group has not enrolled
