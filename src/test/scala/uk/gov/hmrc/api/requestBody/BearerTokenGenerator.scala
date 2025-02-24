@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.api.requestBody
 
-object RequestBodyBearerTokenGenerator {
+object BearerTokenGenerator {
 
   def putBodyWithOutEnrolment(affinityGroup: String): String =
     s"""

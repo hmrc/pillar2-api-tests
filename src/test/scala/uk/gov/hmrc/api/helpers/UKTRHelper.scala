@@ -19,7 +19,7 @@ package uk.gov.hmrc.api.helpers
 import com.google.inject.Inject
 import io.cucumber.guice.ScenarioScoped
 import uk.gov.hmrc.api.conf.TestEnvironment
-import uk.gov.hmrc.api.requestBody.RequestBodyUKTR
+import uk.gov.hmrc.api.requestBody.{BTN, UKTR}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
@@ -30,7 +30,7 @@ import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration.DurationInt
 
 @ScenarioScoped
-class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
+class UKTRHelper @Inject()(httpClient: HttpClientV2, state: StateStorage) {
   val authHelper: AuthHelper      = new AuthHelper
   val submissionapiUrl: String    = TestEnvironment.url("pillar2-submission-api")
   val submissionapibtnUrl: String = TestEnvironment.url("pillar2-submission-api-btn")
@@ -48,7 +48,7 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
     val request                    =
       httpClient
         .post(URI.create(submissionapiUrl + "uk-tax-return").toURL)
-        .withBody(RequestBodyUKTR.requestBody(accountingPeriodTo))
+        .withBody(UKTR.requestBody(accountingPeriodTo))
         .withProxy
     val response                   = Await.result(request.execute[HttpResponse], 5.seconds)
     val responseCode               = response.status
@@ -78,27 +78,27 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
     val request                    = requestApi match {
       case "Submission Nil Return Api" =>
-        state.setRequestBody(RequestBodyUKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo).replace("\n", " "))
+        state.setRequestBody(UKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo).replace("\n", " "))
         httpClient
           .post(URI.create(requestApiUrl).toURL)
-          .withBody(RequestBodyUKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo))
+          .withBody(UKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo))
           .withProxy
       case "Submission Api BTN"        =>
-        state.setRequestBody(RequestBodyUKTR.requestSubmissionApiBTNBody(accountingPeriodTo).replace("\n", " "))
+        state.setRequestBody(BTN.requestSubmissionApiBTNBody(accountingPeriodTo).replace("\n", " "))
         httpClient
           .post(URI.create(requestApiUrl).toURL)
-          .withBody(RequestBodyUKTR.requestSubmissionApiBTNBody(accountingPeriodTo))
+          .withBody(BTN.requestSubmissionApiBTNBody(accountingPeriodTo))
           .withProxy
       case "Amend UKTR"                =>
-        state.setRequestBody(RequestBodyUKTR.requestBody(accountingPeriodTo).replace("\n", " "))
+        state.setRequestBody(UKTR.requestBody(accountingPeriodTo).replace("\n", " "))
         httpClient
           .put(URI.create(requestApiUrl).toURL)
-          .withBody(RequestBodyUKTR.requestBody(accountingPeriodTo))
+          .withBody(UKTR.requestBody(accountingPeriodTo))
           .withProxy
 
       case _ =>
-        state.setRequestBody(RequestBodyUKTR.requestBody(accountingPeriodTo).replace("\n", " "))
-        httpClient.post(URI.create(requestApiUrl).toURL).withBody(RequestBodyUKTR.requestBody(accountingPeriodTo))
+        state.setRequestBody(UKTR.requestBody(accountingPeriodTo).replace("\n", " "))
+        httpClient.post(URI.create(requestApiUrl).toURL).withBody(UKTR.requestBody(accountingPeriodTo))
     }
     val response                   = Await.result(request.execute[HttpResponse], 5.seconds)
     val responseCode               = response.status
@@ -112,9 +112,9 @@ class IdentifyGroupHelper @Inject() (httpClient: HttpClientV2, state: StateStora
   def sendPLRUKTRErrorcodeRequest(errorCode: String): Int = {
     val bearerToken         = state.getBearerToken
     val requestBody: String = errorCode match {
-      case "001"         => RequestBodyUKTR.requestErrorCodeGeneratorBody
+      case "001"         => UKTR.requestErrorCodeGeneratorBody
       case "002" | "003" => ""
-      case _             => RequestBodyUKTR.requestBody(accountingPeriodTo)
+      case _             => UKTR.requestBody(accountingPeriodTo)
     }
     val url                 = submissionapiUrl + "uk-tax-return"
 

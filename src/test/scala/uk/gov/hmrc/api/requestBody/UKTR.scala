@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.api.requestBody
 
-object RequestBodyUKTR {
+object UKTR {
   def requestBody(accountingPeriodTo: String): String =
     s"""
       |{
@@ -93,11 +93,4 @@ object RequestBodyUKTR {
       |  }
       |}
       |""".stripMargin
-
-  def requestSubmissionApiBTNBody(accountingPeriodTo: String): String =
-    s"""
-       |{
-       |"accountingPeriodFrom": "2024-01-01",
-       |  "accountingPeriodTo": "$accountingPeriodTo"
-       |}""".stripMargin
 }
