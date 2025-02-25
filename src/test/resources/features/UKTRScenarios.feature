@@ -1,7 +1,7 @@
 @apiTests
 Feature: Validate UKTR Json schemas and Responses
 
-  Scenario Outline: Verify Submit UKTR responses and validate schema
+  Scenario Outline: Verify Submit UKTR responses and validate schema for all user types
     Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
     And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
     Then I validate request json schema for "SubmitUKTR_Request"
@@ -46,3 +46,13 @@ Feature: Validate UKTR Json schemas and Responses
       | Organisation | 400        | XEPLR0000000400 | UKTR_Error_Response | Submission Nil Return Api | uk-tax-return |
       | Organisation | 401        | XEPLR0000000400 | UKTR_Error_Response | Submission Nil Return Api | uk-tax-return |
       | Individual   | 403        | XEPLR0000000400 | UKTR_Error_Response | Submission Nil Return Api | uk-tax-return |
+
+  Scenario Outline: Verify the error code & message for the invalid UKTR requests
+    Given I have generated a bearer token for an <UserType> and <Enrolment> and <StatusCode>
+    And I make API call to PLR UKTR with <ErrorCode>
+    Then I verify the response code is <StatusCode> and <ErrorCode> and <ErrorMessage>
+    Examples:
+      | UserType     | Enrolment         | StatusCode | ErrorCode | ErrorMessage          |
+      | Organisation | with enrolment    | 400        | 001       | Invalid JSON Payload  |
+      | Organisation | with enrolment    | 400        | 002       | Empty body in request |
+      | Organisation | without enrolment | 401        | 003       | Not authorized        |
