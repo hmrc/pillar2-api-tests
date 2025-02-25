@@ -55,9 +55,15 @@ class AuthHelper {
       .build()
 
     val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-
-    println(s"Response Code: ${response.statusCode()}")
+    val actualResponseCode = response.statusCode()
+    println(s"Response Code: $actualResponseCode")
     println(s"Response Body: ${response.body()}")
+
+    assert(
+      statusCode == actualResponseCode.toString,
+      s"Expected Error code $statusCode but got $actualResponseCode"
+    )
+
     val bearerTokenHeader = response
       .headers()
       .firstValue("authorization")
