@@ -18,7 +18,7 @@ package uk.gov.hmrc.api.helpers
 
 import io.cucumber.guice.ScenarioScoped
 import uk.gov.hmrc.api.conf.TestEnvironment
-import uk.gov.hmrc.api.requestBody.RequestBodyBearerTokenGenerator.{putAgentBodyWithPlrid, putBodyWithEnrolment, putBodyWithOutEnrolment, putBodyWithPlrid}
+import uk.gov.hmrc.api.requestBody.BearerTokenGenerator.{putAgentBodyWithPlrid, putBodyWithEnrolment, putBodyWithOutEnrolment, putBodyWithPlrid}
 
 import java.net.URI
 import java.net.http.HttpRequest.BodyPublishers

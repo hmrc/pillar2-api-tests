@@ -1,15 +1,53 @@
-@apiTests @idGroup @ignore
-Feature: UKTR Scenarios
+@apiTests
+Feature: Validate UKTR Json schemas and Responses
 
-#  Scenario Outline: Verify that the Group has not enrolled
-#    And I make API call to PLR UKTR
-#    Then I verify the response code is <StatusCode>
-#    Examples:
-#     | UserType     | Enrolment         | StatusCode |
-#     | Organisation | with enrolment    | 201        |
-#     | Organisation | without enrolment | 401        |
+  Scenario Outline: Verify Submit UKTR responses and validate schema for all user types
+    Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
+    And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
+    Then I validate request json schema for "SubmitUKTR_Request"
+    When I verify response code is <StatusCode>
+    Then I validate response json schema for "<JsonSchema>"
+    Examples:
+      | UserType     | StatusCode | PLRID           | JsonSchema          | RequestUrl     | Endpoint      |
+      | Organisation | 201        | XMPLR0000000012 | UKTR_201            | Submission Api | uk-tax-return |
+      | Organisation | 500        | XEPLR0123456500 | UKTR_Error_Response | Submission Api | uk-tax-return |
+      | Organisation | 400        | XEPLR0000000400 | UKTR_Error_Response | Submission Api | uk-tax-return |
+      | Organisation | 401        | XEPLR0000000400 | UKTR_Error_Response | Submission Api | uk-tax-return |
+      | Agent        | 201        | XEPLR5555551126 | UKTR_201            | Submission Api | uk-tax-return |
+      | Agent        | 500        | XEPLR0123456400 | UKTR_Error_Response | Submission Api | uk-tax-return |
+      | Agent        | 400        | XEPLR0000000400 | UKTR_Error_Response | Submission Api | uk-tax-return |
+      | Agent        | 401        | XEPLR0000000400 | UKTR_Error_Response | Submission Api | uk-tax-return |
+      | Individual   | 403        | XEPLR0000000400 | UKTR_Error_Response | Submission Api | uk-tax-return |
 
-  Scenario Outline: Verify the error code and error message for the invalid UKTR requests
+  Scenario Outline: Verify Amend UKTR responses and validate schema
+    Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
+    And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
+    Then I validate request json schema for "SubmitUKTR_Request"
+    When I verify response code is <StatusCode>
+    Then I validate response json schema for "<JsonSchema>"
+    Examples:
+      | UserType     | StatusCode | PLRID           | JsonSchema          | RequestUrl | Endpoint      |
+      | Organisation | 200        | XMPLR0000000012 | AmendUKTR_200       | Amend UKTR | uk-tax-return |
+      | Organisation | 500        | XEPLR0500000000 | UKTR_Error_Response | Amend UKTR | uk-tax-return |
+      | Organisation | 400        | XEPLR0000000400 | UKTR_Error_Response | Amend UKTR | uk-tax-return |
+      | Organisation | 401        | XEPLR0000000400 | UKTR_Error_Response | Amend UKTR | uk-tax-return |
+      | Individual   | 403        | XEPLR0000000400 | UKTR_Error_Response | Amend UKTR | uk-tax-return |
+
+  Scenario Outline: Verify Submit UKTR Nil Return responses and validate schema
+    Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
+    And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
+    Then I validate request json schema for "SubmitUKTRNilReturn_Request"
+    When I verify response code is <StatusCode>
+    Then I validate response json schema for "<JsonSchema>"
+    Examples:
+      | UserType     | StatusCode | PLRID           | JsonSchema          | RequestUrl                | Endpoint      |
+      | Organisation | 201        | XMPLR0000000012 | UKTR_201            | Submission Nil Return Api | uk-tax-return |
+      | Organisation | 500        | XEPLR0123456500 | UKTR_Error_Response | Submission Nil Return Api | uk-tax-return |
+      | Organisation | 400        | XEPLR0000000400 | UKTR_Error_Response | Submission Nil Return Api | uk-tax-return |
+      | Organisation | 401        | XEPLR0000000400 | UKTR_Error_Response | Submission Nil Return Api | uk-tax-return |
+      | Individual   | 403        | XEPLR0000000400 | UKTR_Error_Response | Submission Nil Return Api | uk-tax-return |
+
+  Scenario Outline: Verify the error code & message for the invalid UKTR requests
     Given I have generated a bearer token for an <UserType> and <Enrolment> and <StatusCode>
     And I make API call to PLR UKTR with <ErrorCode>
     Then I verify the response code is <StatusCode> and <ErrorCode> and <ErrorMessage>
@@ -18,33 +56,3 @@ Feature: UKTR Scenarios
       | Organisation | with enrolment    | 400        | 001       | Invalid JSON Payload  |
       | Organisation | with enrolment    | 400        | 002       | Empty body in request |
       | Organisation | without enrolment | 401        | 003       | Not authorized        |
-
-  ##TODO: Prashant to confirm weather to remove 400,500 status codes
-  Scenario Outline: Verify the response for the external stub requests
-    Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
-    And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
-    Then I verify the response code is <StatusCode>
-    Examples:
-      | UserType     | PLRID           | StatusCode | RequestUrl    | Endpoint    |
-      | Organisation | XEPLR5555555555 | 201        | External stub | UKTaxReturn |
-  #    | Organisation | XEPLR0000000400 | 400        | External stub | UKTaxReturn |
-  #    | Organisation | XEPLR5000000000 | 500        | External stub | UKTaxReturn |
-  #    | Organisation | XEPLR0000000422 | 422        | External stub | UKTaxReturn |
-
-  Scenario Outline: Verify the response for the stub requests
-    Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
-    And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
-    Then I verify the response code is <StatusCode>
-    Examples:
-      | UserType     | PLRID           | StatusCode | RequestUrl | Endpoint    |
-      | Organisation | XEPLR5555555555 | 201        | Stub       | UKTaxReturn |
-      | Organisation | XEPLR0123456400 | 400        | Stub       | UKTaxReturn |
-
-  Scenario Outline: Verify the response for the backend requests
-    Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
-    And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
-    Then I verify the response code is <StatusCode>
-    Examples:
-      | UserType     | PLRID           | StatusCode | RequestUrl | Endpoint             |
-      | Organisation | XMPLR0000000012 | 201        | Backend    | submit-uk-tax-return |
- #     | Organisation | XEPLR1066196422 | 422        | Backend    | submit-uk-tax-return |

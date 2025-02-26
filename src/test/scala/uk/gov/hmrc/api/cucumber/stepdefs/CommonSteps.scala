@@ -22,48 +22,21 @@ import io.circe.parser
 import io.circe.schema.Schema
 import io.cucumber.guice.ScenarioScoped
 import io.cucumber.scala.{EN, ScalaDsl}
-import uk.gov.hmrc.api.helpers.{AuthHelper, IdentifyGroupHelper, StateStorage}
+import uk.gov.hmrc.api.helpers.{StateStorage}
 
 import scala.io.Source
 
 @ScenarioScoped
-class IdentifyGroupsSteps @Inject() (
-  authHelper: AuthHelper,
-  identifyGroupHelper: IdentifyGroupHelper,
+class CommonSteps @Inject() (
   state: StateStorage
 ) extends ScalaDsl
     with EN {
 
-  Given("""^I have generated a bearer token for an (.*) and (.*) and (.*)$""") {
-    (affinity: String, value: String, statusCode: String) =>
-      val bearerToken = value match {
-        case "with enrolment" | "without enrolment" | "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" |
-            "XEPLR0123456422" | "XEPLR0123456500" | "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" |
-            "XEPLR0000000400" | "XEPLR0000000500" | "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR5555551126" |
-            "XEPLR0500000000" =>
-          authHelper.getBearerLocal(affinity, value, statusCode)
-        case _ =>
-          throw new IllegalArgumentException(s"Invalid value: $value")
-      }
-      state.setBearerToken(bearerToken)
-  }
-
-  Given("""I make API call to PLR UKTR""") { () =>
-    state.setResponseCode(identifyGroupHelper.sendPLRUKTRRequest())
-  }
-
-  Given("""I make API call to (.*) and (.*) and (.*) and (.*)$""") {
-    (requestApi: String, endpoint: String, pillarID: String, statusCode: String) =>
-      state.setResponseCode(identifyGroupHelper.sendUKTRRequest(requestApi, endpoint, pillarID, statusCode))
-  }
-
-  Given("""I make API call to PLR UKTR with (.*)$""") { (errorCode: String) =>
-    state.setResponseCode(identifyGroupHelper.sendPLRUKTRErrorcodeRequest(errorCode))
-  }
+  val path = "jsonSchema/uktrSchema/Requests/"
 
   Then("""I validate request json schema for {string}""") { (schemaFilePath: String) =>
     val body                  = state.getRequestBody
-    val schemaContent: String = Source.fromResource(schemaFilePath).getLines().mkString
+    val schemaContent: String = Source.fromResource(path+schemaFilePath+".json").getLines().mkString
 
     val parsedSchema  = parser
       .parse(schemaContent)
@@ -80,7 +53,7 @@ class IdentifyGroupsSteps @Inject() (
 
     schema.validate(parsedRequest) match {
       case Valid(_) =>
-        println(s"Validation successful: JSON request matches $schemaFilePath!")
+        println(s"Validation successful: JSON request matches $path+$schemaFilePath.json!")
 
       case Invalid(errors) =>
         val errorMessages = errors.toList.map(_.getMessage).mkString(", ")
@@ -91,8 +64,9 @@ class IdentifyGroupsSteps @Inject() (
 
   Then("""I validate response json schema for {string}""") { (schemaFilePath: String) =>
     val body = state.getResponseBody
+    val path = "jsonSchema/uktrSchema/Response/"
 
-    val schemaContent: String = Source.fromResource(schemaFilePath).getLines().mkString
+    val schemaContent: String = Source.fromResource(path+schemaFilePath+".json").getLines().mkString
 
     val parsedSchema   = parser
       .parse(schemaContent)
@@ -109,7 +83,7 @@ class IdentifyGroupsSteps @Inject() (
 
     schema.validate(parsedResponse) match {
       case Valid(_) =>
-        println(s"Validation successful: JSON response matches $schemaFilePath!")
+        println(s"Validation successful: JSON response matches $path+$schemaFilePath.json!")
 
       case Invalid(errors) =>
         val errorMessages = errors.toList.map(_.getMessage).mkString(", ")

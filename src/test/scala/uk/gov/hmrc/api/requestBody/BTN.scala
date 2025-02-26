@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.specs
+package uk.gov.hmrc.api.requestBody
 
-import org.scalatest.GivenWhenThen
-import org.scalatest.featurespec.AnyFeatureSpec
-import org.scalatest.matchers.should.Matchers
-import uk.gov.hmrc.api.helpers.AuthHelper
-
-trait BaseSpec extends AnyFeatureSpec with GivenWhenThen with Matchers {
-  val authHelper = new AuthHelper
+object BTN {
+  def requestSubmissionApiBTNBody(accountingPeriodTo: String): String =
+    s"""
+       |{
+       |"accountingPeriodFrom": "2024-01-01",
+       |  "accountingPeriodTo": "$accountingPeriodTo"
+       |}""".stripMargin
 }
