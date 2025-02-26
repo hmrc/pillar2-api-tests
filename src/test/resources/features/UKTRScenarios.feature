@@ -5,7 +5,7 @@ Feature: Validate UKTR Json schemas and Responses
     Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
     And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
     Then I validate "UKTR" request json schema for "SubmitUKTR"
-    When I verify response code is <StatusCode>
+    When I verify the response code is <StatusCode>
     Then I validate "UKTR" response json schema for "<JsonSchema>"
     Examples:
       | UserType     | StatusCode | PLRID           | JsonSchema     | RequestUrl     | Endpoint      |
@@ -23,7 +23,7 @@ Feature: Validate UKTR Json schemas and Responses
     Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
     And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
     Then I validate "UKTR" request json schema for "SubmitUKTR"
-    When I verify response code is <StatusCode>
+    When I verify the response code is <StatusCode>
     Then I validate "UKTR" response json schema for "<JsonSchema>"
     Examples:
       | UserType     | StatusCode | PLRID           | JsonSchema     | RequestUrl | Endpoint      |
@@ -37,7 +37,7 @@ Feature: Validate UKTR Json schemas and Responses
     Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
     And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
     Then I validate "UKTR" request json schema for "SubmitUKTRNilReturn"
-    When I verify response code is <StatusCode>
+    When I verify the response code is <StatusCode>
     Then I validate "UKTR" response json schema for "<JsonSchema>"
     Examples:
       | UserType     | StatusCode | PLRID           | JsonSchema     | RequestUrl                | Endpoint      |

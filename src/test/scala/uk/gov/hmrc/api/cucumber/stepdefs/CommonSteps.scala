@@ -54,13 +54,6 @@ class CommonSteps @Inject() (
     commonHelper.validateJsonSchema(path, body, "Response")
   }
 
-  Then("""I verify response code is {int}""") { (expectedResponseStatusCode: Int) =>
-    assert(
-      state.getResponseCode == expectedResponseStatusCode,
-      s"Expected response code $expectedResponseStatusCode but got ${state.getResponseCode}"
-    )
-  }
-
   Then("""I verify the response code is {int}""") { (expectedResponseStatusCode: Int) =>
     assert(
       state.getResponseCode == expectedResponseStatusCode,

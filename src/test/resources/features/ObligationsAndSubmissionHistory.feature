@@ -4,7 +4,7 @@ Feature: Validate Obligations & Submission History Json schema and Responses
   Scenario Outline: Verify Obligations & Submission History responses and validate schema
     Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
     And I make get API call to URL <RequestUrl> and <Parameters> and <PLRID>
-    When I verify response code is <StatusCode>
+    When I verify the response code is <StatusCode>
     Then I validate "Obligation" response json schema for "<JsonSchema>"
     Examples:
       | UserType     | StatusCode | PLRID           | JsonSchema                              | RequestUrl                     | Parameters            |
