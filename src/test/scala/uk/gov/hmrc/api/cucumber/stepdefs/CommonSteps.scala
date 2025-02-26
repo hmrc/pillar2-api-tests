@@ -16,80 +16,42 @@
 
 package uk.gov.hmrc.api.cucumber.stepdefs
 
-import cats.data.Validated.{Invalid, Valid}
 import com.google.inject.Inject
-import io.circe.parser
-import io.circe.schema.Schema
 import io.cucumber.guice.ScenarioScoped
 import io.cucumber.scala.{EN, ScalaDsl}
-import uk.gov.hmrc.api.helpers.{StateStorage}
+import uk.gov.hmrc.api.helpers.{CommonHelper, StateStorage}
 
-import scala.io.Source
+import java.io.File
 
 @ScenarioScoped
 class CommonSteps @Inject() (
+  commonHelper: CommonHelper,
   state: StateStorage
 ) extends ScalaDsl
     with EN {
 
-  val path = "jsonSchema/uktrSchema/Requests/"
-
-  Then("""I validate request json schema for {string}""") { (schemaFilePath: String) =>
-    val body                  = state.getRequestBody
-    val schemaContent: String = Source.fromResource(path+schemaFilePath+".json").getLines().mkString
-
-    val parsedSchema  = parser
-      .parse(schemaContent)
-      .getOrElse(
-        throw new RuntimeException("Invalid Request schema JSON")
-      )
-    val parsedRequest = parser
-      .parse(body)
-      .getOrElse(
-        throw new RuntimeException("Invalid request JSON")
-      )
-
-    val schema = Schema.load(parsedSchema)
-
-    schema.validate(parsedRequest) match {
-      case Valid(_) =>
-        println(s"Validation successful: JSON request matches $path+$schemaFilePath.json!")
-
-      case Invalid(errors) =>
-        val errorMessages = errors.toList.map(_.getMessage).mkString(", ")
-        throw new AssertionError(s"JSON schema validation failed: $errorMessages")
+  Then("""I validate {string} request json schema for {string}""") { (endPoint: String, schemaFileName: String) =>
+    val body             = state.getRequestBody
+    val basePath: String = "src/test/resources/jsonSchema/uktrSchema/Requests/"
+    var path             = s"$basePath$endPoint/$schemaFileName.json"
+    print("path: " + path)
+    if (!new File(path).exists()) {
+      println(s"Schema not found in $path, using fallback path")
+      path = basePath + schemaFileName + ".json"
     }
-
+    commonHelper.validateJsonSchema(path, body, "Request")
   }
 
-  Then("""I validate response json schema for {string}""") { (schemaFilePath: String) =>
-    val body = state.getResponseBody
-    val path = "jsonSchema/uktrSchema/Response/"
-
-    val schemaContent: String = Source.fromResource(path+schemaFilePath+".json").getLines().mkString
-
-    val parsedSchema   = parser
-      .parse(schemaContent)
-      .getOrElse(
-        throw new RuntimeException("Invalid Response schema JSON")
-      )
-    val parsedResponse = parser
-      .parse(body)
-      .getOrElse(
-        throw new RuntimeException("Invalid response JSON")
-      )
-
-    val schema = Schema.load(parsedSchema)
-
-    schema.validate(parsedResponse) match {
-      case Valid(_) =>
-        println(s"Validation successful: JSON response matches $path+$schemaFilePath.json!")
-
-      case Invalid(errors) =>
-        val errorMessages = errors.toList.map(_.getMessage).mkString(", ")
-        throw new AssertionError(s"JSON schema validation failed: $errorMessages")
+  Then("""I validate {string} response json schema for {string}""") { (endPoint: String, schemaFileName: String) =>
+    val body             = state.getResponseBody
+    val basePath: String = "src/test/resources/jsonSchema/uktrSchema/Response/"
+    var path: String     = s"$basePath$endPoint/$schemaFileName.json"
+    print("path: " + path)
+    if (!new File(path).exists()) {
+      println(s"Schema not found in $path, using fallback path")
+      path = basePath + schemaFileName + ".json"
     }
-
+    commonHelper.validateJsonSchema(path, body, "Response")
   }
 
   Then("""I verify response code is {int}""") { (expectedResponseStatusCode: Int) =>
