@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Welcome10",
+  "definitions": {
+    "Welcome10": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "orgDetails": {
+          "$ref": "#/definitions/OrgDetails"
+        },
+        "accountingPeriod": {
+          "$ref": "#/definitions/AccountingPeriod"
+        }
+      },
+      "required": [
+        "accountingPeriod",
+        "orgDetails"
+      ],
+      "title": "Welcome10"
+    },
+    "AccountingPeriod": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "startDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "endDate",
+        "startDate"
+      ],
+      "title": "AccountingPeriod"
+    },
+    "OrgDetails": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domesticOnly": {
+          "type": "boolean"
+        },
+        "organisationName": {
+          "type": "string"
+        },
+        "registrationDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "domesticOnly",
+        "organisationName",
+        "registrationDate"
+      ],
+      "title": "OrgDetails"
+    }
+  }
+}
