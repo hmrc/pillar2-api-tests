@@ -31,7 +31,7 @@ class CommonSteps @Inject() (
     with EN {
 
     Then("""I validate {string} {string} json schema for {string}""") { (endPoint: String, validationType: String, schemaFileName: String) =>
-      val basePath: String = s"src/test/resources/jsonSchema/uktrSchema/$validationType/"
+      val basePath: String = s"src/test/resources/jsonSchema/$validationType/"
       val body = if (validationType == "Requests") state.getRequestBody else state.getResponseBody
       var path: String     = s"$basePath$endPoint/$schemaFileName.json"
       print("path: " + path)
