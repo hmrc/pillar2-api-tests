@@ -30,29 +30,17 @@ class CommonSteps @Inject() (
 ) extends ScalaDsl
     with EN {
 
-  Then("""I validate {string} request json schema for {string}""") { (endPoint: String, schemaFileName: String) =>
-    val body             = state.getRequestBody
-    val basePath: String = "src/test/resources/jsonSchema/uktrSchema/Requests/"
-    var path             = s"$basePath$endPoint/$schemaFileName.json"
-    print("path: " + path)
-    if (!new File(path).exists()) {
-      println(s"Schema not found in $path, using fallback path")
-      path = basePath + schemaFileName + ".json"
+    Then("""I validate {string} {string} json schema for {string}""") { (endPoint: String, validationType: String, schemaFileName: String) =>
+      val basePath: String = s"src/test/resources/jsonSchema/uktrSchema/$validationType/"
+      val body = if (validationType == "Requests") state.getRequestBody else state.getResponseBody
+      var path: String     = s"$basePath$endPoint/$schemaFileName.json"
+      print("path: " + path)
+      if (!new File(path).exists()) {
+        println(s"Schema not found in $path, using fallback path")
+        path = basePath + schemaFileName + ".json"
+      }
+      commonHelper.validateJsonSchema(path, body, validationType)
     }
-    commonHelper.validateJsonSchema(path, body, "Request")
-  }
-
-  Then("""I validate {string} response json schema for {string}""") { (endPoint: String, schemaFileName: String) =>
-    val body             = state.getResponseBody
-    val basePath: String = "src/test/resources/jsonSchema/uktrSchema/Response/"
-    var path: String     = s"$basePath$endPoint/$schemaFileName.json"
-    print("path: " + path)
-    if (!new File(path).exists()) {
-      println(s"Schema not found in $path, using fallback path")
-      path = basePath + schemaFileName + ".json"
-    }
-    commonHelper.validateJsonSchema(path, body, "Response")
-  }
 
   Then("""I verify the response code is {int}""") { (expectedResponseStatusCode: Int) =>
     assert(

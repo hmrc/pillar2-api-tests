@@ -4,9 +4,9 @@ Feature: Validate BTN Json schema and Responses
   Scenario Outline: Verify Submit BTN responses and validate schema
     Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
     And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
-    Then I validate "BTN" request json schema for "SubmissionApiBTN"
+    Then I validate "BTN" "Requests" json schema for "SubmissionApiBTN"
     When I verify the response code is <StatusCode>
-    Then I validate "BTN" response json schema for "<JsonSchema>"
+    Then I validate "BTN" "Response" json schema for "<JsonSchema>"
     Examples:
       | UserType     | StatusCode | PLRID           | JsonSchema     | RequestUrl         | Endpoint                     |
       | Organisation | 201        | XMPLR0000000012 | BTN_201        | Submission Api BTN | below-threshold-notification |

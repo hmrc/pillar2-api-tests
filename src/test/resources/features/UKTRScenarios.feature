@@ -4,9 +4,9 @@ Feature: Validate UKTR Json schemas and Responses
   Scenario Outline: Verify Submit UKTR responses and validate schema for all user types
     Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
     And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
-    Then I validate "UKTR" request json schema for "SubmitUKTR"
+    Then I validate "UKTR" "Requests" json schema for "SubmitUKTR"
     When I verify the response code is <StatusCode>
-    Then I validate "UKTR" response json schema for "<JsonSchema>"
+    Then I validate "UKTR" "Response" json schema for "<JsonSchema>"
     Examples:
       | UserType     | StatusCode | PLRID           | JsonSchema     | RequestUrl     | Endpoint      |
       | Organisation | 201        | XMPLR0000000012 | UKTR_201       | Submission Api | uk-tax-return |
@@ -22,9 +22,9 @@ Feature: Validate UKTR Json schemas and Responses
   Scenario Outline: Verify Amend UKTR responses and validate schema
     Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
     And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
-    Then I validate "UKTR" request json schema for "SubmitUKTR"
+    Then I validate "UKTR" "Requests" json schema for "SubmitUKTR"
     When I verify the response code is <StatusCode>
-    Then I validate "UKTR" response json schema for "<JsonSchema>"
+    Then I validate "UKTR" "Response" json schema for "<JsonSchema>"
     Examples:
       | UserType     | StatusCode | PLRID           | JsonSchema     | RequestUrl | Endpoint      |
       | Organisation | 200        | XMPLR0000000012 | AmendUKTR_200  | Amend UKTR | uk-tax-return |
@@ -36,9 +36,9 @@ Feature: Validate UKTR Json schemas and Responses
   Scenario Outline: Verify Submit UKTR Nil Return responses and validate schema
     Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
     And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
-    Then I validate "UKTR" request json schema for "SubmitUKTRNilReturn"
+    Then I validate "UKTR" "Requests" json schema for "SubmitUKTRNilReturn"
     When I verify the response code is <StatusCode>
-    Then I validate "UKTR" response json schema for "<JsonSchema>"
+    Then I validate "UKTR" "Response" json schema for "<JsonSchema>"
     Examples:
       | UserType     | StatusCode | PLRID           | JsonSchema     | RequestUrl                | Endpoint      |
       | Organisation | 201        | XMPLR0000000012 | UKTR_201       | Submission Nil Return Api | uk-tax-return |
