@@ -14,7 +14,7 @@ class TestOrganisationSteps @Inject() (
 ) extends ScalaDsl
     with EN {
 
-  When("""I do post call to create {string} using {string}""") { (orgName: String, endPoint: String) =>
+  When("""I make API call to create {string} using {string}""") { (orgName: String, endPoint: String) =>
     state.setResponseCode(testOrganisationHelper.createTestOrganisation(orgName, endPoint))
   }
 
@@ -34,14 +34,15 @@ class TestOrganisationSteps @Inject() (
     testOrganisationHelper.verifyValueInResponseBody(expectedValue)
   }
 
-  When("""I do get call using {string}""") { (endPoint: String) =>
+  When("""I make API call to get organisation details using {string}""") { (endPoint: String) =>
     state.setResponseCode(testOrganisationHelper.getTestOrganisationDetails(endPoint))
   }
-  When("""I do delete call using {string}""") { (endPoint: String) =>
+
+  When("""I make API call to delete organisation using {string}""") { (endPoint: String) =>
     state.setResponseCode(testOrganisationHelper.deleteTestOrganisation(endPoint))
   }
 
-  When("""I do put call to update {string} using {string}""") { (orgName: String, endPoint: String) =>
+  When("""I make API call to update {string} using {string}""") { (orgName: String, endPoint: String) =>
     state.setResponseCode(testOrganisationHelper.updateTestOrganisation(orgName, endPoint))
   }
 }
