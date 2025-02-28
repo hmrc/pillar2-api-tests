@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Welcome3",
+  "definitions": {
+    "Welcome3": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pillar2Id": {
+          "type": "string"
+        },
+        "organisation": {
+          "$ref": "#/definitions/Organisation"
+        }
+      },
+      "required": [
+        "organisation",
+        "pillar2Id"
+      ],
+      "title": "Welcome3"
+    },
+    "Organisation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "orgDetails": {
+          "$ref": "#/definitions/OrgDetails"
+        },
+        "accountingPeriod": {
+          "$ref": "#/definitions/AccountingPeriod"
+        },
+        "lastUpdated": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "accountingPeriod",
+        "lastUpdated",
+        "orgDetails"
+      ],
+      "title": "Organisation"
+    },
+    "AccountingPeriod": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "startDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "endDate",
+        "startDate"
+      ],
+      "title": "AccountingPeriod"
+    },
+    "OrgDetails": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domesticOnly": {
+          "type": "boolean"
+        },
+        "organisationName": {
+          "type": "string"
+        },
+        "registrationDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "domesticOnly",
+        "organisationName",
+        "registrationDate"
+      ],
+      "title": "OrgDetails"
+    }
+  }
+}
