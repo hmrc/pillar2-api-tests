@@ -1,21 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "$ref": "#/definitions/Welcome1",
+  "$ref": "#/definitions/Welcome7",
   "definitions": {
-    "Welcome1": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "success": {
-          "$ref": "#/definitions/Success"
-        }
-      },
-      "required": [
-        "success"
-      ],
-      "title": "Welcome1"
-    },
-    "Success": {
+    "Welcome7": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -34,7 +21,7 @@
         "accountingPeriodDetails",
         "processingDate"
       ],
-      "title": "Success"
+      "title": "Welcome7"
     },
     "AccountingPeriodDetail": {
       "type": "object",

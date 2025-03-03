@@ -32,9 +32,9 @@ import scala.concurrent.duration.DurationInt
 @ScenarioScoped
 class UKTRHelper @Inject()(httpClient: HttpClientV2, state: StateStorage) {
   val authHelper: AuthHelper      = new AuthHelper
-  val submissionapiUrl: String    = TestEnvironment.url("pillar2-submission-api")
-  val submissionapibtnUrl: String = TestEnvironment.url("pillar2-submission-api-btn")
-  val externalstubUrl: String     = TestEnvironment.url("pillar2-external-test-stub")
+  val submissionApiUrl: String    = TestEnvironment.url("pillar2-submission-api")
+  val submissionApiBtnUrl: String = TestEnvironment.url("pillar2-submission-api-btn")
+  val externalStubUrl: String     = TestEnvironment.url("pillar2-external-test-stub")
   val stubUrl: String             = TestEnvironment.url("pillar2-stub")
   val backendUrl: String          = TestEnvironment.url("pillar2-backend")
 
@@ -47,7 +47,7 @@ class UKTRHelper @Inject()(httpClient: HttpClientV2, state: StateStorage) {
       .withExtraHeaders("Content-Type" -> "application/json")
     val request                    =
       httpClient
-        .post(URI.create(submissionapiUrl + "uk-tax-return").toURL)
+        .post(URI.create(submissionApiUrl + "uk-tax-return").toURL)
         .withBody(UKTR.requestBody(accountingPeriodTo))
         .withProxy
     val response                   = Await.result(request.execute[HttpResponse], 5.seconds)
@@ -60,11 +60,11 @@ class UKTRHelper @Inject()(httpClient: HttpClientV2, state: StateStorage) {
   def sendUKTRRequest(requestApi: String, endpoint: String, pillarID: String, statusCode: String): Int = {
     val bearerToken           = state.getBearerToken
     val requestApiUrl: String = requestApi match {
-      case "External stub"             => externalstubUrl + endpoint
-      case "Submission Api"            => submissionapiUrl + endpoint
-      case "Amend UKTR"                => submissionapiUrl + endpoint
-      case "Submission Nil Return Api" => submissionapiUrl + endpoint
-      case "Submission Api BTN"        => submissionapibtnUrl + endpoint
+      case "External stub"             => externalStubUrl + endpoint
+      case "Submission Api"            => submissionApiUrl + endpoint
+      case "Amend UKTR"                => submissionApiUrl + endpoint
+      case "Submission Nil Return Api" => submissionApiUrl + endpoint
+      case "Submission Api BTN"        => submissionApiBtnUrl + endpoint
       case "Stub"                      => stubUrl + endpoint
       case "Backend"                   => backendUrl + endpoint
     }
@@ -116,7 +116,7 @@ class UKTRHelper @Inject()(httpClient: HttpClientV2, state: StateStorage) {
       case "002" | "003" => ""
       case _             => UKTR.requestBody(accountingPeriodTo)
     }
-    val url                 = submissionapiUrl + "uk-tax-return"
+    val url                 = submissionApiUrl + "uk-tax-return"
 
     implicit val hc: HeaderCarrier = HeaderCarrier
       .apply(authorization = Option(Authorization(bearerToken)))

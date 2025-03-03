@@ -29,15 +29,17 @@ import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration.DurationInt
 
 @ScenarioScoped
-class ObligationsAndSubmissionHelper @Inject()(httpClient: HttpClientV2, state: StateStorage) {
-  val backendUrl: String          = TestEnvironment.url("pillar2-backend")
+class ObligationsAndSubmissionHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
+  val backendUrl: String       = TestEnvironment.url("pillar2-backend")
+  val submissionApiUrl: String = TestEnvironment.url("pillar2-submission-api")
 
   def sendGetRequest(requestUrl: String, parameters: String, pillarID: String): Int = {
     val bearerToken = state.getBearerToken
 
     val requestApiUrl: String = requestUrl match {
 
-      case "Obligations and Submission Api" => backendUrl + "obligations-and-submissions/" + parameters
+      case "Obligations and Submission Api backend" => backendUrl + "obligations-and-submissions/" + parameters
+      case "Obligations and Submission Api"         => submissionApiUrl + "obligations-and-submissions?" + parameters
 
     }
 
@@ -48,28 +50,12 @@ class ObligationsAndSubmissionHelper @Inject()(httpClient: HttpClientV2, state: 
     val request =
       httpClient.get(URI.create(requestApiUrl).toURL)
 
-    val response = Await.result(request.execute[HttpResponse], 5.seconds)
+    val response     = Await.result(request.execute[HttpResponse], 5.seconds)
     state.setResponseBody(response.body)
     val responseCode = response.status
-
+    println(backendUrl + "obligations-and-submissions/" + parameters)
     println(s"Response Code: $responseCode")
     println(s"Response Body: ${state.getResponseBody}")
     responseCode
   }
-
-  def handleResponse(response: HttpResponse): Int = {
-    val responseCode = response.status
-
-    val responseBody = response.json
-
-    state.setResponseErrorCodeVal((responseBody \ "code").as[String])
-    state.setResponseErrorMessage((responseBody \ "message").as[String])
-
-    println(s"Response Code: $responseCode")
-    println(s"Response Body: $responseBody")
-
-    responseCode
-  }
-
-
 }
