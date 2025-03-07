@@ -41,7 +41,7 @@ Feature: Validate UKTR Json schemas and Responses
     Then I validate "UKTR" "Response" json schema for "<JsonSchema>"
     Examples:
       | UserType     | StatusCode | PLRID           | JsonSchema     | RequestUrl                | Endpoint      |
-      | Organisation | 201        | XMPLR0000000012 | UKTR_201       | Submission Nil Return Api | uk-tax-return |
+      | Organisation | 201        | XMPLR0000000012 | NilReturn_201  | Submission Nil Return Api | uk-tax-return |
       | Organisation | 500        | XEPLR0123456500 | Error_Response | Submission Nil Return Api | uk-tax-return |
       | Organisation | 400        | XEPLR0000000400 | Error_Response | Submission Nil Return Api | uk-tax-return |
       | Organisation | 401        | XEPLR0000000400 | Error_Response | Submission Nil Return Api | uk-tax-return |

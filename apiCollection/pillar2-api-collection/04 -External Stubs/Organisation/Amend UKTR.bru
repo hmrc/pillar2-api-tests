@@ -1,11 +1,11 @@
 meta {
   name: Amend UKTR
   type: http
-  seq: 1
+  seq: 2
 }
 
 put {
-  url: http://localhost:10055/RESTAdapter/PLR/UKTaxReturn
+  url: {{externalStubsBaseUrl}}/UKTaxReturn
   body: json
   auth: none
 }
@@ -13,7 +13,7 @@ put {
 headers {
   Authorization: validBearerToken
   Content-Type: application/json
-  X-Pillar2-Id: {{domesticOnlyPlrId}}
+  X-Pillar2-Id: XMPLR0000000012
 }
 
 body:json {

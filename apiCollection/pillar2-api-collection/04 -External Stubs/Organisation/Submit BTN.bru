@@ -1,11 +1,11 @@
 meta {
   name: Submit BTN
   type: http
-  seq: 2
+  seq: 5
 }
 
 post {
-  url: {{externalStubsBaseUrl}}/below-threshold-notification
+  url: http://localhost:10055/RESTAdapter/PLR/below-threshold-notification
   body: json
   auth: none
 }
@@ -13,13 +13,13 @@ post {
 headers {
   Authorization: {{bearerToken}}
   Content-Type: application/json
-  X-Pillar2-Id: {{testPlrId}}
-  content-type: application/json
+  X-Pillar2-Id: XMPLR0012345689
 }
 
 body:json {
   {
-    "accountingPeriodFrom": "2024-01-01",
+    "accountingPeriodFrom": "2024-02-02",
     "accountingPeriodTo": "2024-12-31"
   }
+  
 }

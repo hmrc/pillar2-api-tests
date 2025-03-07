@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: {{subAPIBaseUri}}/uk-tax-return
+  url: {{externalStubsBaseUrl}}/UKTaxReturn
   body: json
   auth: none
 }
@@ -16,6 +16,7 @@ headers {
   X-Receipt-Date: 2024-01-01T01:01:01Z
   X-Transmitting-System: HIP
   Authorization: {{bearerToken}}
+  X-Pillar2-Id: XMPLR0000000012
 }
 
 body:json {
