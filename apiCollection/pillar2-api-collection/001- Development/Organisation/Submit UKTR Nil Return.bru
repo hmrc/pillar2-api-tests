@@ -1,11 +1,11 @@
 meta {
   name: Submit UKTR Nil Return
   type: http
-  seq: 4
+  seq: 3
 }
 
 post {
-  url: https://api.development.tax.service.gov.uk/organisations/pillar-two/uk-tax-return
+  url: {{devBaseUrl}}/uk-tax-return
   body: json
   auth: none
 }
