@@ -1,17 +1,17 @@
 meta {
-  name: Amend UKTR
+  name: Submit UKTR
   type: http
-  seq: 3
+  seq: 1
 }
 
-put {
-  url: https://api.development.tax.service.gov.uk/organisations/pillar-two/uk-tax-return
+post {
+  url: {{devBaseUrl}}/uk-tax-return
   body: json
   auth: none
 }
 
 headers {
-  Authorization: Bearer 469e4849a97d10eccc238dad9fbe7d0d
+  Authorization: Bearer {{devBearerToken}}
 }
 
 body:json {
