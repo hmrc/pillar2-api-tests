@@ -12,23 +12,25 @@ post {
 
 headers {
   Authorization: Bearer {{devBearerToken}}
+  Accept: application/vnd.hmrc.1.0+json
+  Content-Type: application/json
 }
 
 body:json {
   {
-    "accountingPeriodFrom": "2024-08-14",
-    "accountingPeriodTo": "2024-12-14",
-    "obligationMTT": true,
+    "accountingPeriodFrom": "2024-01-01",
+    "accountingPeriodTo": "2024-12-31",
+    "obligationMTT": false,
     "electionUKGAAP": true,
     "liabilities": {
       "electionDTTSingleMember": false,
       "electionUTPRSingleMember": false,
-      "numberSubGroupDTT": 4,
-      "numberSubGroupUTPR": 5,
-      "totalLiability": 10000.99,
-      "totalLiabilityDTT": 5000.99,
-      "totalLiabilityIIR": 4000,
-      "totalLiabilityUTPR": 10000.99,
+      "numberSubGroupDTT": 1,
+      "numberSubGroupUTPR": 1,
+      "totalLiability": 14400.5,
+      "totalLiabilityDTT": 5000,
+      "totalLiabilityIIR": 3400,
+      "totalLiabilityUTPR": 6000.5,
       "liableEntities": [
         {
           "ukChargeableEntityName": "Newco PLC",
@@ -41,6 +43,4 @@ body:json {
       ]
     }
   }
-  
-  
 }

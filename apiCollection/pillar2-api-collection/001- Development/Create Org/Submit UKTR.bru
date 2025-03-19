@@ -1,17 +1,19 @@
 meta {
-  name: Amend UKTR
+  name: Submit UKTR
   type: http
-  seq: 2
+  seq: 6
 }
 
-put {
+post {
   url: {{devBaseUrl}}/uk-tax-return
   body: json
   auth: none
 }
 
 headers {
-  Authorization: Bearer {{devBearerToken}}
+  accept: application/vnd.hmrc.1.0+json
+  authorization: Bearer {{devBearerToken}}
+  content-type: application/json
 }
 
 body:json {
@@ -25,22 +27,20 @@ body:json {
       "electionUTPRSingleMember": false,
       "numberSubGroupDTT": 1,
       "numberSubGroupUTPR": 1,
-      "totalLiability": 10000,
+      "totalLiability": 14400.5,
       "totalLiabilityDTT": 5000,
-      "totalLiabilityIIR": 4000,
-      "totalLiabilityUTPR": 1000,
+      "totalLiabilityIIR": 3400,
+      "totalLiabilityUTPR": 6000.5,
       "liableEntities": [
         {
           "ukChargeableEntityName": "Newco PLC",
           "idType": "CRN",
           "idValue": "12345678",
           "amountOwedDTT": 5000,
-          "amountOwedIIR": 4000,
-          "amountOwedUTPR": 1000
+          "amountOwedIIR": 3400,
+          "amountOwedUTPR": 6000.5
         }
       ]
     }
   }
-  
-  
 }
