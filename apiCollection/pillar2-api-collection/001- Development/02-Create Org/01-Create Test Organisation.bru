@@ -1,11 +1,11 @@
 meta {
-  name: Delete Test Organisation
+  name: 01-Create Test Organisation
   type: http
-  seq: 7
+  seq: 1
 }
 
-delete {
-  url: {{devBaseUrl}}/setup/organisation
+post {
+  url: {{devBaseUrl}}/organisations/pillar-two/setup/organisation
   body: json
   auth: none
 }
