@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "$ref": "#/definitions/Welcome3",
+  "$ref": "#/definitions/Welcome10",
   "definitions": {
-    "Welcome3": {
+    "Welcome10": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -31,7 +31,7 @@
         "liabilities",
         "obligationMTT"
       ],
-      "title": "Welcome3"
+      "title": "Welcome10"
     },
     "Liabilities": {
       "type": "object",
@@ -47,10 +47,10 @@
           "type": "integer"
         },
         "totalLiabilityDTT": {
-          "type": "integer"
+          "type": "number"
         },
         "totalLiabilityUTPR": {
-          "type": "integer"
+          "type": "number"
         },
         "numberSubGroupUTPR": {
           "type": "integer"
@@ -62,10 +62,10 @@
           }
         },
         "totalLiabilityIIR": {
-          "type": "integer"
+          "type": "number"
         },
         "totalLiability": {
-          "type": "integer"
+          "type": "number"
         }
       },
       "required": [
@@ -95,13 +95,13 @@
           "type": "string"
         },
         "amountOwedUTPR": {
-          "type": "integer"
+          "type": "number"
         },
         "amountOwedIIR": {
-          "type": "integer"
+          "type": "number"
         },
         "amountOwedDTT": {
-          "type": "integer"
+          "type": "number"
         }
       },
       "required": [
