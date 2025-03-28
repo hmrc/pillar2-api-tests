@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "$ref": "#/definitions/Welcome8",
+  "$ref": "#/definitions/Welcome9",
   "definitions": {
-    "Welcome8": {
+    "Welcome9": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -31,7 +31,7 @@
         "liabilities",
         "obligationMTT"
       ],
-      "title": "Welcome8"
+      "title": "Welcome9"
     },
     "Liabilities": {
       "type": "object",
@@ -56,7 +56,7 @@
           "type": "number"
         },
         "totalLiabilityIIR": {
-          "type": "integer"
+          "type": "number"
         },
         "totalLiabilityUTPR": {
           "type": "number"
@@ -96,27 +96,19 @@
           "format": "integer"
         },
         "amountOwedDTT": {
-          "type": "integer"
-        },
-        "electedDTT": {
-          "type": "boolean"
+          "type": "number"
         },
         "amountOwedIIR": {
-          "type": "integer"
+          "type": "number"
         },
         "amountOwedUTPR": {
           "type": "number"
-        },
-        "electedUTPR": {
-          "type": "boolean"
         }
       },
       "required": [
         "amountOwedDTT",
         "amountOwedIIR",
         "amountOwedUTPR",
-        "electedDTT",
-        "electedUTPR",
         "idType",
         "idValue",
         "ukChargeableEntityName"
