@@ -49,10 +49,10 @@ Feature: Validate UKTR Json schemas and Responses
 
   Scenario Outline: Verify the error code & message for the invalid UKTR requests
     Given I have generated a bearer token for an <UserType> and <Enrolment> and <StatusCode>
-    And I make API call to PLR UKTR with <ErrorCode>
+    And I make API call to PLR UKTR with "<PLRID>" for "<ErrorCode>"
     Then I verify the response code is <StatusCode> and <ErrorCode> and <ErrorMessage>
     Examples:
-      | UserType     | Enrolment         | StatusCode | ErrorCode | ErrorMessage          |
-      | Organisation | with enrolment    | 400        | 001       | Invalid JSON Payload  |
-      | Organisation | with enrolment    | 400        | 002       | Empty body in request |
-      | Organisation | without enrolment | 401        | 003       | Not authorized        |
+      | UserType     | Enrolment         | StatusCode | ErrorCode | ErrorMessage          | PLRID           |
+      | Organisation | with enrolment    | 400        | 001       | Invalid JSON Payload  | XEPLR0000000400 |
+      | Organisation | with enrolment    | 400        | 002       | Empty body in request | XEPLR0000000400 |
+      | Organisation | without enrolment | 401        | 003       | Not authorized        | XEPLR0000000400 |
