@@ -37,7 +37,7 @@ class UKTRSteps @Inject() (
       state.setResponseCode(uktrHelper.sendUKTRRequest(requestApi, endpoint, pillarID, statusCode))
   }
 
-  Given("""I make API call to PLR UKTR with (.*)$""") { (errorCode: String) =>
-    state.setResponseCode(uktrHelper.sendPLRUKTRErrorcodeRequest(errorCode))
+  Given("""I make API call to PLR UKTR with {string} for {string}""") { (pillarID: String, errorCode: String) =>
+    state.setResponseCode(uktrHelper.sendPLRUKTRErrorCodeRequest(pillarID, errorCode))
   }
 }

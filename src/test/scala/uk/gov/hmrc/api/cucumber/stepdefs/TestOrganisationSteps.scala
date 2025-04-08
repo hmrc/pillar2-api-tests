@@ -14,8 +14,8 @@ class TestOrganisationSteps @Inject() (
 ) extends ScalaDsl
     with EN {
 
-  When("""I make API call to create {string} using {string}""") { (orgName: String, endPoint: String) =>
-    state.setResponseCode(testOrganisationHelper.createTestOrganisation(orgName, endPoint))
+  When("""I make API call to create {string} using {string} with {string}""") { (orgName: String, endPoint: String, pillarID: String) =>
+    state.setResponseCode(testOrganisationHelper.createTestOrganisation(orgName, endPoint,pillarID))
   }
 
   Then("""I verify the response contains the following values:""") { (dataTable: DataTable) =>
@@ -34,15 +34,15 @@ class TestOrganisationSteps @Inject() (
     testOrganisationHelper.verifyValueInResponseBody(expectedValue)
   }
 
-  When("""I make API call to get organisation details using {string}""") { (endPoint: String) =>
-    state.setResponseCode(testOrganisationHelper.getTestOrganisationDetails(endPoint))
+  When("""I make API call to get organisation details using {string} with {string}""") { (endPoint: String,pillarID:String) =>
+    state.setResponseCode(testOrganisationHelper.getTestOrganisationDetails(endPoint,pillarID))
   }
 
-  When("""I make API call to delete organisation using {string}""") { (endPoint: String) =>
-    state.setResponseCode(testOrganisationHelper.deleteTestOrganisation(endPoint))
+  When("""I make API call to delete organisation using {string} with {string}""") { (endPoint: String, pillarID: String) =>
+    state.setResponseCode(testOrganisationHelper.deleteTestOrganisation(endPoint,pillarID))
   }
 
-  When("""I make API call to update {string} using {string}""") { (orgName: String, endPoint: String) =>
-    state.setResponseCode(testOrganisationHelper.updateTestOrganisation(orgName, endPoint))
+  When("""I make API call to update {string} using {string} with {string}""") { (orgName: String, endPoint: String,pillarID:String) =>
+    state.setResponseCode(testOrganisationHelper.updateTestOrganisation(orgName, endPoint,pillarID))
   }
 }

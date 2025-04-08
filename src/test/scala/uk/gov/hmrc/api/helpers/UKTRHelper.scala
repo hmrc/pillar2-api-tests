@@ -30,7 +30,7 @@ import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration.DurationInt
 
 @ScenarioScoped
-class UKTRHelper @Inject()(httpClient: HttpClientV2, state: StateStorage) {
+class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
   val authHelper: AuthHelper      = new AuthHelper
   val submissionApiUrl: String    = TestEnvironment.url("pillar2-submission-api")
   val submissionApiBtnUrl: String = TestEnvironment.url("pillar2-submission-api-btn")
@@ -109,7 +109,7 @@ class UKTRHelper @Inject()(httpClient: HttpClientV2, state: StateStorage) {
     responseCode
   }
 
-  def sendPLRUKTRErrorcodeRequest(errorCode: String): Int = {
+  def sendPLRUKTRErrorCodeRequest(pillarID: String, errorCode: String): Int = {
     val bearerToken         = state.getBearerToken
     val requestBody: String = errorCode match {
       case "001"         => UKTR.requestErrorCodeGeneratorBody
@@ -120,7 +120,7 @@ class UKTRHelper @Inject()(httpClient: HttpClientV2, state: StateStorage) {
 
     implicit val hc: HeaderCarrier = HeaderCarrier
       .apply(authorization = Option(Authorization(bearerToken)))
-      .withExtraHeaders("Content-Type" -> "application/json")
+      .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
     val request                    =
       httpClient.post(URI.create(url).toURL).withBody(requestBody).withProxy
 

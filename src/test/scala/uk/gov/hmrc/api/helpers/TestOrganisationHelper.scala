@@ -18,12 +18,12 @@ import scala.concurrent.duration.DurationInt
 class TestOrganisationHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
   val submissionApiUrl: String = TestEnvironment.url("pillar2-submission-api")
 
-  def createTestOrganisation(orgName: String, endPoint: String): Int = {
+  def createTestOrganisation(orgName: String, endPoint: String,pillarID: String): Int = {
     val bearerToken = state.getBearerToken
 
     implicit val hc: HeaderCarrier = HeaderCarrier
       .apply(authorization = Option(Authorization(bearerToken)))
-      .withExtraHeaders("Content-Type" -> "application/json")
+      .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request = {
       state.setRequestBody(TestOrganisation.testOrganisationBody(orgName).replace("\n", " "))
@@ -43,12 +43,12 @@ class TestOrganisationHelper @Inject() (httpClient: HttpClientV2, state: StateSt
     responseCode
   }
 
-  def getTestOrganisationDetails(endPoint: String): Int = {
+  def getTestOrganisationDetails(endPoint: String,pillarID:String): Int = {
     val bearerToken = state.getBearerToken
 
     implicit val hc: HeaderCarrier = HeaderCarrier
       .apply(authorization = Option(Authorization(bearerToken)))
-      .withExtraHeaders("Content-Type" -> "application/json")
+      .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request      =
       httpClient
@@ -64,12 +64,12 @@ class TestOrganisationHelper @Inject() (httpClient: HttpClientV2, state: StateSt
     responseCode
   }
 
-  def updateTestOrganisation(orgName: String, endPoint: String): Int = {
+  def updateTestOrganisation(orgName: String, endPoint: String,pillarID:String): Int = {
     val bearerToken = state.getBearerToken
 
     implicit val hc: HeaderCarrier = HeaderCarrier
       .apply(authorization = Option(Authorization(bearerToken)))
-      .withExtraHeaders("Content-Type" -> "application/json")
+      .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request = {
       state.setRequestBody(TestOrganisation.testOrganisationBody(orgName).replace("\n", " "))
@@ -89,12 +89,12 @@ class TestOrganisationHelper @Inject() (httpClient: HttpClientV2, state: StateSt
     responseCode
   }
 
-  def deleteTestOrganisation(endPoint: String): Int = {
+  def deleteTestOrganisation(endPoint: String,pillarID:String): Int = {
     val bearerToken = state.getBearerToken
 
     implicit val hc: HeaderCarrier = HeaderCarrier
       .apply(authorization = Option(Authorization(bearerToken)))
-      .withExtraHeaders("Content-Type" -> "application/json")
+      .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request      =
       httpClient
