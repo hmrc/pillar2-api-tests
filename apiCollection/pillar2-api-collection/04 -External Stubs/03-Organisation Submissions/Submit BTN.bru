@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://localhost:10055/RESTAdapter/PLR/below-threshold-notification
+  url: http://localhost:10055/RESTAdapter/plr/below-threshold-notification
   body: json
   auth: none
 }
@@ -13,12 +13,12 @@ post {
 headers {
   Authorization: {{bearerToken}}
   Content-Type: application/json
-  X-Pillar2-Id: XMPLR0012345689
+  X-Pillar2-Id: {{testPlrId}}
 }
 
 body:json {
   {
-    "accountingPeriodFrom": "2024-02-02",
+    "accountingPeriodFrom": "2024-01-01",
     "accountingPeriodTo": "2024-12-31"
   }
   

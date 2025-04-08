@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: {{externalStubsBaseUrl}}/UKTaxReturn
+  url: {{externalStubsBaseUrl}}/RESTAdapter/plr/uk-tax-return
   body: json
   auth: none
 }
@@ -13,39 +13,32 @@ post {
 headers {
   Authorization: {{bearerToken}}
   Content-Type: application/json
-  X-Pillar2-Id: XMPLR0000000012
-  ~X-Pillar2-Id: XEPLR0000000400
-  ~X-Pillar2-Id: XEPLR0000000500
-  ~X-Pillar2-Id: XEPLR0000000422
-  ~X-Pillar2-Id: XEPLR5555555555
-  ~X-Pillar2-Id: XEPLR1234567890
-  ~X-Pillar2-Id: XEPLR0123456500
-  ~X-Pillar2-Id: XEPLR0123456503
+  X-Pillar2-Id: {{testPlrId}}
 }
 
 body:json {
   {
-    "accountingPeriodFrom": "2024-08-14",
-    "accountingPeriodTo": "2024-12-14",
-    "obligationMTT": false,
-    "electionUKGAAP": true,
+    "accountingPeriodFrom": "2024-01-01",
+    "accountingPeriodTo": "2024-12-31",
+    "obligationMTT": true,
+    "electionUKGAAP": false,
     "liabilities": {
       "electionDTTSingleMember": false,
       "electionUTPRSingleMember": false,
       "numberSubGroupDTT": 4,
       "numberSubGroupUTPR": 5,
-      "totalLiability": 0,
-      "totalLiabilityDTT": 5000.99,
-      "totalLiabilityIIR": 4000,
-      "totalLiabilityUTPR": 10000.99,
+      "totalLiability": 3000,
+      "totalLiabilityDTT": 3000,
+      "totalLiabilityIIR": 0,
+      "totalLiabilityUTPR": 0,
       "liableEntities": [
         {
           "ukChargeableEntityName": "Newco PLC",
           "idType": "CRN",
           "idValue": "12345678",
-          "amountOwedDTT": 5000.33,
-          "amountOwedIIR": 3400.66,
-          "amountOwedUTPR": 6000.58
+          "amountOwedDTT": 3000,
+          "amountOwedIIR": 0,
+          "amountOwedUTPR": 0
         }
       ]
     }

@@ -5,14 +5,14 @@ meta {
 }
 
 put {
-  url: {{baseUrl}}/RESTAdapter/plr/overseas-return-notification
+  url: {{externalStubsBaseUrl}}/RESTAdapter/plr/overseas-return-notification
   body: json
   auth: none
 }
 
 headers {
   Content-Type: application/json
-  X-Pillar2-Id: {{nonDomesticPlrId}}
+  X-Pillar2-Id: {{testPlrId}}
   Authorization: validBearerToken
 }
 
