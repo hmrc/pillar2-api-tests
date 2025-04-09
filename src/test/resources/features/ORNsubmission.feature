@@ -5,14 +5,15 @@ Feature: Submit ORN and validate json schema
   Scenario Outline: Submit ORN in submission api
     Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
     When I make API call to create "<DomesticFlag>" "Test Organisation Ltd" using "setup/organisation" with "<PLRID>"
+    And I verify the response code is <StatusCode>
     Then I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
-
     And I validate "ORN" "Requests" json schema for "SubmitORN"
     Then I verify the response code is <StatusCode>
-    And I validate "ORN" "Response" json schema for "ResponseORN"
+    And I validate "ORN" "Response" json schema for "SubmitORN"
 
     Then I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
     And I verify the response code is 422
+    And I validate "ORN" "Response" json schema for "ValidationORN"
     Then I verify the response contains the following values:
       | Key     | ExpectedValue                    |
       | code    | 044                              |
