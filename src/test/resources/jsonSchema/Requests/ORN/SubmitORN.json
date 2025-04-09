@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Welcome8",
+  "definitions": {
+    "Welcome8": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "accountingPeriodFrom": {
+          "type": "string",
+          "format": "date"
+        },
+        "accountingPeriodTo": {
+          "type": "string",
+          "format": "date"
+        },
+        "filedDateGIR": {
+          "type": "string",
+          "format": "date"
+        },
+        "countryGIR": {
+          "type": "string"
+        },
+        "reportingEntityName": {
+          "type": "string"
+        },
+        "TIN": {
+          "type": "string"
+        },
+        "issuingCountryTIN": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "TIN",
+        "accountingPeriodFrom",
+        "accountingPeriodTo",
+        "countryGIR",
+        "filedDateGIR",
+        "issuingCountryTIN",
+        "reportingEntityName"
+      ],
+      "title": "Welcome8"
+    }
+  }
+}
