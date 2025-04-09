@@ -5,15 +5,16 @@ meta {
 }
 
 post {
-  url: {{devBaseUrl}}/organisations/pillar-two/setup/organisation
+  url: {{devBaseUrl}}/setup/organisation
   body: json
   auth: none
 }
 
 headers {
   accept: application/vnd.hmrc.1.0+json
-  authorization: Bearer {{devBearerToken}}
+  authorization: Bearer {{bearer_token}}
   content-type: application/json
+  X-Pillar2-Id: 
 }
 
 body:json {
