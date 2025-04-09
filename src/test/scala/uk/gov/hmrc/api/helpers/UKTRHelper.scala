@@ -19,7 +19,7 @@ package uk.gov.hmrc.api.helpers
 import com.google.inject.Inject
 import io.cucumber.guice.ScenarioScoped
 import uk.gov.hmrc.api.conf.TestEnvironment
-import uk.gov.hmrc.api.requestBody.{BTN, UKTR}
+import uk.gov.hmrc.api.requestBody.{BTN, ORN, UKTR}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
@@ -65,6 +65,7 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
       case "Amend UKTR"                => submissionApiUrl + endpoint
       case "Submission Nil Return Api" => submissionApiUrl + endpoint
       case "Submission Api BTN"        => submissionApiBtnUrl + endpoint
+      case "Submission Api ORN"        => submissionApiUrl + endpoint
       case "Stub"                      => stubUrl + endpoint
       case "Backend"                   => backendUrl + endpoint
     }
@@ -95,8 +96,13 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
           .put(URI.create(requestApiUrl).toURL)
           .withBody(UKTR.requestBody(accountingPeriodTo))
           .withProxy
-
-      case _ =>
+      case "Submission Api ORN"        =>
+        state.setRequestBody(ORN.requestBody().replace("\n", " "))
+        httpClient
+          .post(URI.create(requestApiUrl).toURL)
+          .withBody(ORN.requestBody())
+          .withProxy
+      case _                           =>
         state.setRequestBody(UKTR.requestBody(accountingPeriodTo).replace("\n", " "))
         httpClient.post(URI.create(requestApiUrl).toURL).withBody(UKTR.requestBody(accountingPeriodTo))
     }

@@ -18,18 +18,18 @@ import scala.concurrent.duration.DurationInt
 class TestOrganisationHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
   val submissionApiUrl: String = TestEnvironment.url("pillar2-submission-api")
 
-  def createTestOrganisation(orgName: String, endPoint: String,pillarID: String): Int = {
-    val bearerToken = state.getBearerToken
-
+  def createTestOrganisation(domesticFlag: String, orgName: String, endPoint: String, pillarID: String): Int = {
+    val bearerToken                = state.getBearerToken
+    val setDomesticFlag            = if (domesticFlag == "Domestic") "true" else "false"
     implicit val hc: HeaderCarrier = HeaderCarrier
       .apply(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request = {
-      state.setRequestBody(TestOrganisation.testOrganisationBody(orgName).replace("\n", " "))
+      state.setRequestBody(TestOrganisation.testOrganisationBody(setDomesticFlag, orgName).replace("\n", " "))
       httpClient
         .post(URI.create(submissionApiUrl + endPoint).toURL)
-        .withBody(TestOrganisation.testOrganisationBody(orgName))
+        .withBody(TestOrganisation.testOrganisationBody(setDomesticFlag, orgName))
         .withProxy
     }
 
@@ -43,7 +43,7 @@ class TestOrganisationHelper @Inject() (httpClient: HttpClientV2, state: StateSt
     responseCode
   }
 
-  def getTestOrganisationDetails(endPoint: String,pillarID:String): Int = {
+  def getTestOrganisationDetails(endPoint: String, pillarID: String): Int = {
     val bearerToken = state.getBearerToken
 
     implicit val hc: HeaderCarrier = HeaderCarrier
@@ -64,18 +64,18 @@ class TestOrganisationHelper @Inject() (httpClient: HttpClientV2, state: StateSt
     responseCode
   }
 
-  def updateTestOrganisation(orgName: String, endPoint: String,pillarID:String): Int = {
-    val bearerToken = state.getBearerToken
-
+  def updateTestOrganisation(domesticFlag: String, orgName: String, endPoint: String, pillarID: String): Int = {
+    val bearerToken                = state.getBearerToken
+    val setDomesticFlag            = if (domesticFlag == "Domestic") "true" else "false"
     implicit val hc: HeaderCarrier = HeaderCarrier
       .apply(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request = {
-      state.setRequestBody(TestOrganisation.testOrganisationBody(orgName).replace("\n", " "))
+      state.setRequestBody(TestOrganisation.testOrganisationBody(setDomesticFlag, orgName).replace("\n", " "))
       httpClient
         .put(URI.create(submissionApiUrl + endPoint).toURL)
-        .withBody(TestOrganisation.testOrganisationBody(orgName))
+        .withBody(TestOrganisation.testOrganisationBody(setDomesticFlag, orgName))
         .withProxy
     }
 
@@ -89,7 +89,7 @@ class TestOrganisationHelper @Inject() (httpClient: HttpClientV2, state: StateSt
     responseCode
   }
 
-  def deleteTestOrganisation(endPoint: String,pillarID:String): Int = {
+  def deleteTestOrganisation(endPoint: String, pillarID: String): Int = {
     val bearerToken = state.getBearerToken
 
     implicit val hc: HeaderCarrier = HeaderCarrier

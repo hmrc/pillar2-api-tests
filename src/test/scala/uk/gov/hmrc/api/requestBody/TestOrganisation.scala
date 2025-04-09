@@ -2,11 +2,11 @@ package uk.gov.hmrc.api.requestBody
 
 object TestOrganisation {
 
-  def testOrganisationBody(orgName: String): String =
+  def testOrganisationBody(domesticFlag: String, orgName: String): String =
     s"""
      |{
      |  "orgDetails": {
-     |    "domesticOnly": true,
+     |    "domesticOnly": $domesticFlag,
      |    "organisationName": "$orgName",
      |    "registrationDate": "2024-01-01"
      |  },
@@ -16,5 +16,4 @@ object TestOrganisation {
      |  }
      |}
      |""".stripMargin
-
 }
