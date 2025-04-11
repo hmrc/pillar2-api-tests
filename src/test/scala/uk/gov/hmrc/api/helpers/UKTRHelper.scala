@@ -18,6 +18,7 @@ package uk.gov.hmrc.api.helpers
 
 import com.google.inject.Inject
 import io.cucumber.guice.ScenarioScoped
+import play.api.libs.json.Json
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.{BTN, ORN, UKTR}
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -118,9 +119,9 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
   def sendPLRUKTRErrorCodeRequest(pillarID: String, errorCode: String): Int = {
     val bearerToken         = state.getBearerToken
     val requestBody: String = errorCode match {
-      case "001"         => UKTR.requestErrorCodeGeneratorBody
-      case "002" | "003" => ""
-      case _             => UKTR.requestBody(accountingPeriodTo)
+      case "001"                                => UKTR.requestErrorCodeGeneratorBody
+      case "002" | "003" | "EMPTY_REQUEST_BODY" => ""
+      case _                                    => UKTR.requestBody(accountingPeriodTo)
     }
     val url                 = submissionApiUrl + "uk-tax-return"
 
