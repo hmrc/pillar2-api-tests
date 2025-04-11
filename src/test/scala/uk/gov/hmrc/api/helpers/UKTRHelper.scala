@@ -134,6 +134,7 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
     val response = Await.result(request.execute[HttpResponse], 5.seconds)
     state.setResponseBody(response.body)
     handleResponse(response)
+
   }
 
   def handleResponse(response: HttpResponse): Int = {
