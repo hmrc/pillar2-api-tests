@@ -52,7 +52,7 @@ Feature: Validate UKTR Json schemas and Responses
     And I make API call to PLR UKTR with "<PLRID>" for "<ErrorCode>"
     Then I verify the response code is <StatusCode> and <ErrorCode> and <ErrorMessage>
     Examples:
-      | UserType     | Enrolment         | StatusCode | ErrorCode | ErrorMessage          | PLRID           |
-      | Organisation | with enrolment    | 400        | 001       | Invalid JSON Payload  | XEPLR0000000400 |
-      | Organisation | with enrolment    | 400        | 002       | Empty body in request | XEPLR0000000400 |
-      | Organisation | without enrolment | 401        | 003       | Not authorized        | XEPLR0000000400 |
+      | UserType     | Enrolment         | StatusCode | ErrorCode          | ErrorMessage          | PLRID           |
+      | Organisation | with enrolment    | 400        | INVALID_JSON       | Invalid JSON Payload  | XEPLR0000000400 |
+      | Organisation | with enrolment    | 400        | EMPTY_REQUEST_BODY | Empty body in request | XEPLR0000000400 |
+      | Organisation | without enrolment | 401        | 003                | Not authorized        | XEPLR0000000400 |
