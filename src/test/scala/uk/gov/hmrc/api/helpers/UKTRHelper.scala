@@ -119,9 +119,9 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
   def sendPLRUKTRErrorCodeRequest(pillarID: String, errorCode: String): Int = {
     val bearerToken         = state.getBearerToken
     val requestBody: String = errorCode match {
-      case "001"                                => UKTR.requestErrorCodeGeneratorBody
-      case "002" | "003" | "EMPTY_REQUEST_BODY" => ""
-      case _                                    => UKTR.requestBody(accountingPeriodTo)
+      case "INVALID_JSON"       => UKTR.requestErrorCodeGeneratorBody
+      case "EMPTY_REQUEST_BODY" => ""
+      case _                    => UKTR.requestBody(accountingPeriodTo)
     }
     val url                 = submissionApiUrl + "uk-tax-return"
 
@@ -134,6 +134,7 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
     val response = Await.result(request.execute[HttpResponse], 5.seconds)
     state.setResponseBody(response.body)
     handleResponse(response)
+
   }
 
   def handleResponse(response: HttpResponse): Int = {
