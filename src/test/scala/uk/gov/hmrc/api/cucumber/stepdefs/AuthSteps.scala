@@ -21,8 +21,6 @@ import io.cucumber.guice.ScenarioScoped
 import io.cucumber.scala.{EN, ScalaDsl}
 import uk.gov.hmrc.api.helpers.{AuthHelper, StateStorage}
 
-import scala.io.Source
-
 @ScenarioScoped
 class AuthSteps @Inject() (
   authHelper: AuthHelper,
