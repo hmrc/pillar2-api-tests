@@ -67,6 +67,7 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
       case "Submission Nil Return Api" => submissionApiUrl + endpoint
       case "Submission Api BTN"        => submissionApiBtnUrl + endpoint
       case "Submission Api ORN"        => submissionApiUrl + endpoint
+      case "Submission Api Amend ORN"  => submissionApiUrl + endpoint
       case "Stub"                      => stubUrl + endpoint
       case "Backend"                   => backendUrl + endpoint
     }
@@ -102,6 +103,12 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
         httpClient
           .post(URI.create(requestApiUrl).toURL)
           .withBody(ORN.requestBody())
+          .withProxy
+      case "Submission Api Amend ORN"  =>
+        state.setRequestBody(ORN.requestBody().replace("\n", " "))
+        httpClient
+          .put(URI.create(requestApiUrl).toURL)
+          .withBody(ORN.requestBodyAmendORN())
           .withProxy
       case _                           =>
         state.setRequestBody(UKTR.requestBody(accountingPeriodTo).replace("\n", " "))
