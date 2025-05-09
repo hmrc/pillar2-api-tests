@@ -53,5 +53,5 @@ Feature: Validate UKTR Json schemas and Responses
     Then I verify the response code is <StatusCode> and <ErrorCode> and <ErrorMessage>
     Examples:
       | UserType     | Enrolment      | StatusCode | ErrorCode          | ErrorMessage         | PLRID           |
-      | Organisation | with enrolment | 400        | INVALID_JSON       | Invalid JSON payload | XEPLR0000000400 |
-      | Organisation | with enrolment | 400        | EMPTY_REQUEST_BODY | Empty request body   | XEPLR0000000400 |
+      | Organisation | with enrolment | 400        | INVALID_JSON       | Invalid JSON payload | XMPLR0012345674 |
+      | Organisation | with enrolment | 400        | EMPTY_REQUEST_BODY | Empty request body   | XMPLR0012345674 |
