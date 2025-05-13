@@ -9,6 +9,10 @@ Feature: Submit ORN and validate json schema
 
     And I make get API call to URL Get ORN and <Parameters> and <PLRID>
     And I verify the response code is 404
+    Then I verify the response contains the following values:
+      | Key     | ExpectedValue                        |
+      | code    | NOT_FOUND                            |
+      | message | The requested ORN could not be found |
 
     Then I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
     And I validate "ORN" "Requests" json schema for "SubmitAmendORN"
