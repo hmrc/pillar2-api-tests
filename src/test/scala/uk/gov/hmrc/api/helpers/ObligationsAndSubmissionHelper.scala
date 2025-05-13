@@ -40,7 +40,7 @@ class ObligationsAndSubmissionHelper @Inject() (httpClient: HttpClientV2, state:
 
       case "Obligations and Submission Api backend" => backendUrl + "obligations-and-submissions/" + parameters
       case "Obligations and Submission Api"         => submissionApiUrl + "obligations-and-submissions?" + parameters
-
+      case "Get ORN"                                => submissionApiUrl + "overseas-return-notification?" + parameters
     }
 
     implicit val hc: HeaderCarrier = HeaderCarrier
