@@ -59,8 +59,6 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
   }
 
   def sendUKTRRequest(requestApi: String, endpoint: String, pillarID: String, statusCode: String): Int = {
-   // val bearerToken           = state.getBearerToken
-
     val bearerToken = statusCode match {
       case "401" => "BearerToken"
       case _     => state.getBearerToken

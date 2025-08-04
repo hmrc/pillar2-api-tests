@@ -6,7 +6,7 @@ Feature: Validate BTN Json schema and Responses
 
     When I make API call to delete organisation using "setup/organisation" with "<PLRID>"
 
-    When I make API call to create "<DomesticFlag>" "<TestOrganisation>" using "setup/organisation" with "<PLRID>"
+    And I make API call to create "<DomesticFlag>" "<TestOrganisation>" using "setup/organisation" with "<PLRID>"
     And I validate "TestOrganisation" "Requests" json schema for "OrganisationRequest"
     And I verify the response code is 201
     Then I verify the response contains the following values:
@@ -15,14 +15,12 @@ Feature: Validate BTN Json schema and Responses
       | organisation.orgDetails.organisationName | Test Organisation Ltd |
       | organisation.orgDetails.registrationDate | 2024-01-01            |
 
-    Then I validate "TestOrganisation" "Response" json schema for "OrganisationSuccess"
+    And I validate "TestOrganisation" "Response" json schema for "OrganisationSuccess"
 
-    And I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
-    Then I validate "BTN" "Requests" json schema for "SubmissionApiBTN"
-    When I verify the response code is <StatusCode>
-    Then I validate "BTN" "Response" json schema for "<JsonSchema>"
-
-    When I make API call to delete organisation using "setup/organisation" with "<PLRID>"
+    When I make API call to <RequestUrl> and <Endpoint> and <PLRID> and <StatusCode>
+    And I validate "BTN" "Requests" json schema for "SubmissionApiBTN"
+    Then I verify the response code is <StatusCode>
+    And I validate "BTN" "Response" json schema for "<JsonSchema>"
 
     Examples:
       | UserType     | StatusCode | PLRID           | JsonSchema     | RequestUrl         | Endpoint                     | TestOrganisation      |

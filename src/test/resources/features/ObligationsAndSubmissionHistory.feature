@@ -7,7 +7,7 @@ Feature: Validate Obligations & Submission History Json schema and Responses
 
     When I make API call to delete organisation using "setup/organisation" with "<PLRID>"
 
-    When I make API call to create "<DomesticFlag>" "<TestOrganisation>" using "setup/organisation" with "<PLRID>"
+    And I make API call to create "<DomesticFlag>" "<TestOrganisation>" using "setup/organisation" with "<PLRID>"
     And I validate "TestOrganisation" "Requests" json schema for "OrganisationRequest"
     And I verify the response code is 201
     Then I verify the response contains the following values:
@@ -16,10 +16,10 @@ Feature: Validate Obligations & Submission History Json schema and Responses
       | organisation.orgDetails.organisationName | Test Organisation Ltd |
       | organisation.orgDetails.registrationDate | 2024-01-01            |
 
-    Then I validate "TestOrganisation" "Response" json schema for "OrganisationSuccess"
+    And I validate "TestOrganisation" "Response" json schema for "OrganisationSuccess"
 
-    And I make get API call to URL <RequestUrl> and <Parameters> and <PLRID>
-    When I verify the response code is <StatusCode>
+    When I make get API call to URL <RequestUrl> and <Parameters> and <PLRID>
+    And I verify the response code is <StatusCode>
     Then I validate "Obligation" "Response" json schema for "<JsonSchema>"
     Examples:
       | UserType     | StatusCode | PLRID           | JsonSchema                              | RequestUrl                             | Parameters            | TestOrganisation      |
@@ -31,7 +31,7 @@ Feature: Validate Obligations & Submission History Json schema and Responses
     Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
     When I make API call to delete organisation using "setup/organisation" with "<PLRID>"
 
-    When I make API call to create "<DomesticFlag>" "<TestOrganisation>" using "setup/organisation" with "<PLRID>"
+    And I make API call to create "<DomesticFlag>" "<TestOrganisation>" using "setup/organisation" with "<PLRID>"
     And I validate "TestOrganisation" "Requests" json schema for "OrganisationRequest"
     And I verify the response code is 201
     Then I verify the response contains the following values:
@@ -40,10 +40,10 @@ Feature: Validate Obligations & Submission History Json schema and Responses
       | organisation.orgDetails.organisationName | Test Organisation Ltd |
       | organisation.orgDetails.registrationDate | 2024-01-01            |
 
-    Then I validate "TestOrganisation" "Response" json schema for "OrganisationSuccess"
+    And I validate "TestOrganisation" "Response" json schema for "OrganisationSuccess"
 
-    And I make get API call to URL <RequestUrl> and <Parameters> and <PLRID>
-    When I verify the response code is <StatusCode>
+    When I make get API call to URL <RequestUrl> and <Parameters> and <PLRID>
+    And I verify the response code is <StatusCode>
     Then I validate "Obligation" "Response" json schema for "<JsonSchema>"
     Examples:
       | UserType     | StatusCode | PLRID           | JsonSchema                              | RequestUrl                     | Parameters                            | TestOrganisation      |
