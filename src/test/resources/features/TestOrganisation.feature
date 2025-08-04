@@ -4,6 +4,9 @@ Feature: Dynamic stubs scenarios for test organisation
   @testOrganisation
   Scenario Outline: Create, fetch, update and delete dynamic stub in submission api
     Given I have generated a bearer token for an <UserType> and <PLRID> and <StatusCode>
+
+    When I make API call to delete organisation using "<Endpoint>" with "<PLRID>"
+
     When I make API call to create "<DomesticFlag>" "<TestOrganisation>" using "<Endpoint>" with "<PLRID>"
     And I validate "TestOrganisation" "Requests" json schema for "OrganisationRequest"
     And I verify the response code is <StatusCode>
@@ -51,6 +54,7 @@ Feature: Dynamic stubs scenarios for test organisation
       | code    | 404                                           |
       | message | Organisation not found for pillar2Id: <PLRID> |
 
+    When I make API call to delete organisation using "<Endpoint>" with "<PLRID>"
     Examples:
       | UserType     | StatusCode | PLRID           | JsonSchema          | TestOrganisation      | Endpoint           | DomesticFlag |
       | Organisation | 201        | XMPLR0000000012 | OrganisationSuccess | Test Organisation Ltd | setup/organisation | Non-Domestic |

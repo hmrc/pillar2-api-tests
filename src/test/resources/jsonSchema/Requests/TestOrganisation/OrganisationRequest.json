@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "$ref": "#/definitions/Welcome10",
+  "$ref": "#/definitions/Welcome4",
   "definitions": {
-    "Welcome10": {
+    "Welcome4": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -17,7 +17,7 @@
         "accountingPeriod",
         "orgDetails"
       ],
-      "title": "Welcome10"
+      "title": "Welcome4"
     },
     "AccountingPeriod": {
       "type": "object",
@@ -30,6 +30,9 @@
         "endDate": {
           "type": "string",
           "format": "date"
+        },
+        "underEnquiry": {
+          "type": "boolean"
         }
       },
       "required": [

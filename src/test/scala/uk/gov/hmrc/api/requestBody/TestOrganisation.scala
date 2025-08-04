@@ -12,7 +12,8 @@ object TestOrganisation {
      |  },
      |  "accountingPeriod": {
      |    "startDate": "2024-01-01",
-     |    "endDate": "2024-12-31"
+     |    "endDate": "2024-12-31",
+     |    "underEnquiry": false
      |  }
      |}
      |""".stripMargin
