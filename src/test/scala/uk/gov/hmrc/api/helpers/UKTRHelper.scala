@@ -59,7 +59,11 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
   }
 
   def sendUKTRRequest(requestApi: String, endpoint: String, pillarID: String, statusCode: String): Int = {
-    val bearerToken           = state.getBearerToken
+    val bearerToken = statusCode match {
+      case "401" => "BearerToken"
+      case _     => state.getBearerToken
+    }
+
     val requestApiUrl: String = requestApi match {
       case "External stub"             => externalStubUrl + endpoint
       case "Submission Api"            => submissionApiUrl + endpoint
@@ -74,7 +78,7 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
 
     val accountingPeriodTo = statusCode match {
       case "400" => "2024-30-14"
-      case _     => "2024-09-14"
+      case _     => "2024-12-31"
     }
 
     implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Option(Authorization(bearerToken)))

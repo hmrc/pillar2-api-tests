@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "$ref": "#/definitions/Welcome3",
+  "$ref": "#/definitions/Welcome10",
   "definitions": {
-    "Welcome3": {
+    "Welcome10": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -17,7 +17,7 @@
         "organisation",
         "pillar2Id"
       ],
-      "title": "Welcome3"
+      "title": "Welcome10"
     },
     "Organisation": {
       "type": "object",
@@ -52,11 +52,15 @@
         "endDate": {
           "type": "string",
           "format": "date"
+        },
+        "underEnquiry": {
+          "type": "boolean"
         }
       },
       "required": [
         "endDate",
-        "startDate"
+        "startDate",
+        "underEnquiry"
       ],
       "title": "AccountingPeriod"
     },
