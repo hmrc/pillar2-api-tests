@@ -1,0 +1,29 @@
+meta {
+  name: Application Auth Token
+  type: http
+  seq: 1
+}
+
+post {
+  url: https://api.development.tax.service.gov.uk/oauth/token
+  body: formUrlEncoded
+  auth: none
+}
+
+headers {
+  content-type: application/x-www-form-urlencoded
+}
+
+body:form-urlencoded {
+  client_secret: 6660e437-5724-481a-b7a2-7ec95ec76895
+  client_id: fROjDEdHSy7dPo1QUGbF5S4CSYqY
+  grant_type: client_credentials
+}
+
+script:post-response {
+  let responseBody = res.getBody()
+  let token = responseBody.access_token;
+  bru.setEnvVar("applicationBearerToken",token)
+  
+  
+}
