@@ -24,12 +24,12 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 
 import java.net.URI
-import scala.concurrent.Await
-import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.{Await, ExecutionContext}
 import scala.concurrent.duration.DurationInt
 
 @ScenarioScoped
 class ObligationsAndSubmissionHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
+  implicit val ec: ExecutionContext = ExecutionContext.global
   val backendUrl: String       = TestEnvironment.url("pillar2-backend")
   val submissionApiUrl: String = TestEnvironment.url("pillar2-submission-api")
 
@@ -43,8 +43,7 @@ class ObligationsAndSubmissionHelper @Inject() (httpClient: HttpClientV2, state:
       case "Get ORN"                                => submissionApiUrl + "overseas-return-notification?" + parameters
     }
 
-    implicit val hc: HeaderCarrier = HeaderCarrier
-      .apply(authorization = Option(Authorization(bearerToken)))
+    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("x-pillar2-id" -> pillarID)
 
     val request =

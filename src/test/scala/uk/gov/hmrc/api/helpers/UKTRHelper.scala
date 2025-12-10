@@ -18,7 +18,7 @@ package uk.gov.hmrc.api.helpers
 
 import com.google.inject.Inject
 import io.cucumber.guice.ScenarioScoped
-import play.api.libs.json.Json
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.{BTN, ORN, UKTR}
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -26,12 +26,12 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 
 import java.net.URI
-import scala.concurrent.Await
-import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.{Await, ExecutionContext}
 import scala.concurrent.duration.DurationInt
 
 @ScenarioScoped
 class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
+  implicit val ec: ExecutionContext = ExecutionContext.global
   val authHelper: AuthHelper      = new AuthHelper
   val submissionApiUrl: String    = TestEnvironment.url("pillar2-submission-api")
   val submissionApiBtnUrl: String = TestEnvironment.url("pillar2-submission-api-btn")
@@ -43,8 +43,7 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
 
   def sendPLRUKTRRequest(): Int = {
     val bearerToken                = state.getBearerToken
-    implicit val hc: HeaderCarrier = HeaderCarrier
-      .apply(authorization = Option(Authorization(bearerToken)))
+    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("Content-Type" -> "application/json")
     val request                    =
       httpClient
@@ -116,7 +115,10 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
           .withProxy
       case _                           =>
         state.setRequestBody(UKTR.requestBody(accountingPeriodTo).replace("\n", " "))
-        httpClient.post(URI.create(requestApiUrl).toURL).withBody(UKTR.requestBody(accountingPeriodTo))
+        httpClient
+          .post(URI.create(requestApiUrl).toURL)
+          .withBody(UKTR.requestBody(accountingPeriodTo))
+          .withProxy
     }
     val response                   = Await.result(request.execute[HttpResponse], 5.seconds)
     val responseCode               = response.status
@@ -136,8 +138,7 @@ class UKTRHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
     }
     val url                 = submissionApiUrl + "uk-tax-return"
 
-    implicit val hc: HeaderCarrier = HeaderCarrier
-      .apply(authorization = Option(Authorization(bearerToken)))
+    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
     val request                    =
       httpClient.post(URI.create(url).toURL).withBody(requestBody).withProxy

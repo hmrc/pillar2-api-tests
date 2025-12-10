@@ -30,9 +30,10 @@ class CommonSteps @Inject() (
 ) extends ScalaDsl
     with EN {
 
-    Then("""I validate {string} {string} json schema for {string}""") { (endPoint: String, validationType: String, schemaFileName: String) =>
+  Then("""I validate {string} {string} json schema for {string}""") {
+    (endPoint: String, validationType: String, schemaFileName: String) =>
       val basePath: String = s"src/test/resources/jsonSchema/$validationType/"
-      val body = if (validationType == "Requests") state.getRequestBody else state.getResponseBody
+      val body             = if (validationType == "Requests") state.getRequestBody else state.getResponseBody
       var path: String     = s"$basePath$endPoint/$schemaFileName.json"
       print("path: " + path)
       if (!new File(path).exists()) {
@@ -40,7 +41,7 @@ class CommonSteps @Inject() (
         path = basePath + schemaFileName + ".json"
       }
       commonHelper.validateJsonSchema(path, body, validationType)
-    }
+  }
 
   Then("""I verify the response code is {int}""") { (expectedResponseStatusCode: Int) =>
     assert(

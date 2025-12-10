@@ -1,8 +1,25 @@
+/*
+ * Copyright 2025 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package uk.gov.hmrc.api.helpers
 
 import com.google.inject.Inject
 import io.cucumber.guice.ScenarioScoped
 import play.api.libs.json.{JsArray, JsBoolean, JsNumber, JsObject, JsString, JsValue, Json}
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.TestOrganisation
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -10,19 +27,18 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 
 import java.net.URI
-import scala.concurrent.Await
-import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.{Await, ExecutionContext}
 import scala.concurrent.duration.DurationInt
 
 @ScenarioScoped
 class TestOrganisationHelper @Inject() (httpClient: HttpClientV2, state: StateStorage) {
+  implicit val ec: ExecutionContext = ExecutionContext.global
   val submissionApiUrl: String = TestEnvironment.url("pillar2-submission-api")
 
   def createTestOrganisation(domesticFlag: String, orgName: String, endPoint: String, pillarID: String): Int = {
     val bearerToken                = state.getBearerToken
     val setDomesticFlag            = if (domesticFlag == "Domestic") "true" else "false"
-    implicit val hc: HeaderCarrier = HeaderCarrier
-      .apply(authorization = Option(Authorization(bearerToken)))
+    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request = {
@@ -46,8 +62,7 @@ class TestOrganisationHelper @Inject() (httpClient: HttpClientV2, state: StateSt
   def getTestOrganisationDetails(endPoint: String, pillarID: String): Int = {
     val bearerToken = state.getBearerToken
 
-    implicit val hc: HeaderCarrier = HeaderCarrier
-      .apply(authorization = Option(Authorization(bearerToken)))
+    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request      =
@@ -67,8 +82,7 @@ class TestOrganisationHelper @Inject() (httpClient: HttpClientV2, state: StateSt
   def updateTestOrganisation(domesticFlag: String, orgName: String, endPoint: String, pillarID: String): Int = {
     val bearerToken                = state.getBearerToken
     val setDomesticFlag            = if (domesticFlag == "Domestic") "true" else "false"
-    implicit val hc: HeaderCarrier = HeaderCarrier
-      .apply(authorization = Option(Authorization(bearerToken)))
+    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request = {
@@ -92,8 +106,7 @@ class TestOrganisationHelper @Inject() (httpClient: HttpClientV2, state: StateSt
   def deleteTestOrganisation(endPoint: String, pillarID: String): Int = {
     val bearerToken = state.getBearerToken
 
-    implicit val hc: HeaderCarrier = HeaderCarrier
-      .apply(authorization = Option(Authorization(bearerToken)))
+    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request      =

@@ -19,10 +19,10 @@ package uk.gov.hmrc.api.cucumber.stepdefs
 import com.google.inject.Inject
 import io.cucumber.guice.ScenarioScoped
 import io.cucumber.scala.{EN, ScalaDsl}
-import uk.gov.hmrc.api.helpers.{StateStorage, ObligationsAndSubmissionHelper}
+import uk.gov.hmrc.api.helpers.{ObligationsAndSubmissionHelper, StateStorage}
 
 @ScenarioScoped
-class ObligationsAndSubmissionSteps @Inject()(
+class ObligationsAndSubmissionSteps @Inject() (
   ObligationsAndSubmissionHelper: ObligationsAndSubmissionHelper,
   state: StateStorage
 ) extends ScalaDsl
