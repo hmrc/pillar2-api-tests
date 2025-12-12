@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.api.steps
 
+import org.scalatest.Assertions.intercept
 import uk.gov.hmrc.api.conf.TestEnvironment
-import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{Authorization, BadRequestException, HeaderCarrier, HttpResponse, UpstreamErrorResponse}
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.pages.StateStoragePage
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -88,7 +89,9 @@ object ObligationsAndSubmissionPage {
     val request = httpClient.get(URI.create(requestApiUrl).toURL)
 
     println(s" GET ")
-    val response = Await.result(request.execute[HttpResponse], 5.seconds)
+    val response = intercept[BadRequestException] {
+      Await.result(request.execute[HttpResponse], 5.seconds)
+    }
     println(s" complete ")
 
 //    val request =
@@ -125,14 +128,14 @@ object ObligationsAndSubmissionPage {
 //
 //    }
 
-    val responseCode = response.status
+    val responseCode = response.responseCode
     println(s"Response Code1: $responseCode")
 
-    state.setResponseBody(response.body)
+    state.setResponseBody(response.message)
 
 
     println(s"Response Code: $responseCode")
-    println(s"Response Body: ${response.body}")
+    println(s"Response Body: ${response.message}")
 
     responseCode
   }
