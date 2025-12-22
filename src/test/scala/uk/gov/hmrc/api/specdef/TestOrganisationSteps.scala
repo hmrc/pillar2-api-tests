@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.api.specdef
 
-import io.cucumber.datatable.DataTable
-
 import uk.gov.hmrc.api.pages._
 import uk.gov.hmrc.api.pages.TestOrganisationPage
 

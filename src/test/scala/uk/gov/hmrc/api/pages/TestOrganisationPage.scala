@@ -22,17 +22,16 @@ import org.scalatest.matchers.should.Matchers
 import play.api.libs.json._
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
-import uk.gov.hmrc.api.pages.StateStoragePage
 import uk.gov.hmrc.api.requestBody.TestOrganisation
 import uk.gov.hmrc.http.HttpReadsInstances.readFromJson
-import uk.gov.hmrc.http.{Authorization, HeaderCarrier}
+import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpException, HttpResponse}
 import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{Await, ExecutionContext}
 import scala.concurrent.duration._
 import scala.util.Try
-import java.net.URI // Make sure this is imported
-import uk.gov.hmrc.http.HttpResponse
+import java.net.URI
 
 
 
@@ -53,7 +52,7 @@ object TestOrganisationPage extends Matchers {
   def createTestOrganisation(domesticFlag: String, orgName: String, endPoint: String, pillarID: String): Int = {
     val bearerToken = state.getBearerToken
     implicit val hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
-    val setDomesticFlag            = if (domesticFlag == "Domestic") "true" else "false"
+    val setDomesticFlag = if (domesticFlag == "Domestic") "true" else "false"
 
     //val isDomestic = domesticFlag.equalsIgnoreCase("Domestic")
     //val requestBody: JsValue = TestOrganisation.testOrganisationBody(setDomesticFlag, orgName).replace("\n", " ") // Assuming this returns JsValue
@@ -66,19 +65,24 @@ object TestOrganisationPage extends Matchers {
     val fullUrl = s"$submissionApiUrl$endPoint"
     println(s"POST to: $fullUrl")
 
-//    val response = Await.result(
-//      httpClient.post(url"$fullUrl").withBody(requestBody).execute[HttpResponse],
-//      10.seconds
-//    )
-  val response = Await.result(
-    httpClient
-    .post(URI.create(fullUrl).toURL) // Changed from url"$fullUrl"
-    .withBody(requestBody)
-    .execute, 10.seconds
-  )
+    //    val response = Await.result(
+    //      httpClient.post(url"$fullUrl").withBody(requestBody).execute[HttpResponse],
+    //      10.seconds
+    //    )
+
+    val response: HttpResponse = Await.result(
+      httpClient
+        .post(URI.create(fullUrl).toURL) // Changed from url"$fullUrl"
+        .withBody(requestBody)
+        .execute[HttpResponse],
+      10.seconds
+    )
     state.setResponseBody(response.body)
     println(s"Response Code: ${response.status}\nResponse Body: ${response.body}")
     response.status
+
+    // attempt1 end
+
   }
 
   def getTestOrganisationDetails(endPoint: String, pillarID: String): Int = {

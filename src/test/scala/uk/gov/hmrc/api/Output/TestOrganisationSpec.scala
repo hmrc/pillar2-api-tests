@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.api.Output
 
+import uk.gov.hmrc.api.Output.tags.ApiAcceptanceTests
 import uk.gov.hmrc.api.specdef.AuthSteps.generateBearerToken
 import uk.gov.hmrc.api.specdef.CommonSteps.{assertStatusCode, validateJsonSchemaFor}
 import uk.gov.hmrc.api.specdef.TestOrganisationSteps.{thenIVerifyTheResponseContainsTheFollowingValues, whenIMakeAPICallToCreate, whenIMakeAPICallToDeleteOrganisationUsing, whenIMakeAPICallToGetOrganisationDetailsUsing, whenIMakeAPICallToUpdate}
@@ -25,7 +26,8 @@ class TestOrganisationSpec extends BaseSpec {
   Feature("Dynamic stubs scenarios for test organisation") {
 
     Scenario(
-      "Create, fetch, update and delete dynamic stub in submission api [UserType=Organisation, StatusCode=201, PLRID=XMPLR0000000012, JsonSchema=OrganisationSuccess, TestOrganisation=Test Organisation Ltd, Endpoint=setup/organisation, DomesticFlag=Non-Domestic]"
+      "Create, fetch, update and delete dynamic stub in submission api",
+      ApiAcceptanceTests
     ) {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 201")
       generateBearerToken("Organisation", "XMPLR0000000012", "201")
@@ -48,7 +50,6 @@ class TestOrganisationSpec extends BaseSpec {
         "organisation.orgDetails.organisationName" -> "Test Organisation Ltd",
         "organisation.orgDetails.registrationDate" -> "2024-01-01"
       )
-
       thenIVerifyTheResponseContainsTheFollowingValues(expectedResponseData)
 
       Then("I validate TestOrganisation Response json schema for OrganisationSuccess")
@@ -66,9 +67,8 @@ class TestOrganisationSpec extends BaseSpec {
       Then("I verify the response contains the following values:")
       val expectedConflictError: Map[String, String] = Map(
         "code"    -> "409",
-        "message" -> "Organisation with pillar2Id: <PLRID> already exists"
+        "message" -> "Organisation with pillar2Id: XMPLR0000000012 already exists"
       )
-
       thenIVerifyTheResponseContainsTheFollowingValues(expectedConflictError)
 
       When("I make API call to get organisation details using setup/organisation with XMPLR0000000012")
@@ -92,7 +92,7 @@ class TestOrganisationSpec extends BaseSpec {
       validateJsonSchemaFor("TestOrganisation", "Response", "OrganisationSuccess")
 
       When("I make API call to update Non-Domestic New Organisation Ltd using setup/organisation with XMPLR0000000012")
-      whenIMakeAPICallToUpdate("Non-Domestic","New Organisation Ltd","setup/organisation","XMPLR0000000012")
+      whenIMakeAPICallToUpdate("Non-Domestic", "New Organisation Ltd", "setup/organisation", "XMPLR0000000012")
 
       Then("I verify the response code is 200")
       assertStatusCode(200)
@@ -106,7 +106,6 @@ class TestOrganisationSpec extends BaseSpec {
         "pillar2Id"                                -> "XMPLR0000000012",
         "organisation.orgDetails.registrationDate" -> "2024-01-01"
       )
-
       thenIVerifyTheResponseContainsTheFollowingValues(expectednewResponse)
 
       When("I make API call to delete organisation using setup/organisation with XMPLR0000000012")
@@ -127,7 +126,7 @@ class TestOrganisationSpec extends BaseSpec {
       Then("I verify the response contains the following values:")
       val expectedNotFoundError: Map[String, String] = Map(
         "code"    -> "404",
-        "message" -> "Organisation not found for pillar2Id: <PLRID>"
+        "message" -> "Organisation not found for pillar2Id: XMPLR0000000012"
       )
       thenIVerifyTheResponseContainsTheFollowingValues(expectedNotFoundError)
 

@@ -24,45 +24,34 @@ class Pillar2APIScenariosSpec extends BaseSpec {
 
   Feature("Validate Pillar2 & Pillar2 Stubs responses") {
 
-    Scenario(
-      "Verify the response for the stub requests [UserType=Organisation, PLRID=XEPLR5555555555, StatusCode=201, RequestUrl=Stub, Endpoint=UKTaxReturn]"
-    ) {
+    Scenario("Verify the response for the stub requests") {
       Given("I have generated a bearer token for an Organisation and XEPLR5555555555 and 201")
       generateBearerToken("Organisation", "XEPLR5555555555", "201")
 
       And("I make API call to Stub and UKTaxReturn and XEPLR5555555555 and 201")
-      givenIMakeAPICallTo("Stub", "UKTaxReturn", "XEPLR5555555555", "201")
+      givenIMakeAPICallTo("Stub", "uk-tax-return", "XEPLR5555555555", "201")
 
       Then("I verify the response code is 201")
       assertStatusCode(201)
     }
 
-    Scenario(
-      "Verify the response for the stub requests [UserType=Organisation, PLRID=XEPLR0123456400, StatusCode=400, RequestUrl=Stub, Endpoint=UKTaxReturn]"
-    ) {
+    Scenario("Verify the response for the stub requests1") {
       Given("I have generated a bearer token for an Organisation and XEPLR0123456400 and 400")
       generateBearerToken("Organisation", "XEPLR0123456400", "400")
 
       And("I make API call to Stub and UKTaxReturn and XEPLR0123456400 and 400")
-      givenIMakeAPICallTo("Stub", "UKTaxReturn", "XEPLR0123456400", "400")
+      givenIMakeAPICallTo("Stub", "uk-tax-return", "XEPLR0123456400", "400")
 
       Then("I verify the response code is 400")
       assertStatusCode(400)
     }
 
-    Scenario(
-      "Verify the response for the backend requests [UserType=Organisation, PLRID=XMPLR0000000012, StatusCode=201, RequestUrl=Backend, Endpoint=submit-uk-tax-return]"
-    ) {
+    Scenario("Verify the response for the backend requests") {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 201")
       generateBearerToken("Organisation", "XMPLR0000000012", "201")
 
       And("I make API call to Backend and submit-uk-tax-return and XMPLR0000000012 and 201")
-      givenIMakeAPICallTo(
-        "Backend",
-        "submit-uk-tax-return",
-        "XMPLR0000000012",
-        "201"
-      )
+      givenIMakeAPICallTo("Backend", "submit-uk-tax-return", "XMPLR0000000012", "201")
 
       Then("I verify the response code is 201")
       assertStatusCode(201)

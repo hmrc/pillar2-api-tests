@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.steps
+package uk.gov.hmrc.api.pages
 
-import org.scalatest.Assertions.intercept
+import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.http.{Authorization, BadRequestException, HeaderCarrier, HttpResponse, UpstreamErrorResponse}
 import uk.gov.hmrc.api.client.TestClient
-import uk.gov.hmrc.api.pages.StateStoragePage
+import uk.gov.hmrc.api.pages.StateStoragePage.setResponseCode
 import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import java.net.URI
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
-//import scala.sys.process.processInternal.URL
-//import scala.util.Success
+import scala.util.{Either, Left, Right, Try}
+import scala.util.{Failure, Success, Try}
+import play.api.libs.json.{JsDefined,JsString, JsNumber}
+
 
 //class ObligationsAndSubmissionPage @Inject()(httpClient: HttpClientV2, state: StateStoragePage) {
 ////class ObligationsAndSubmissionPage @Inject() () extends HttpClient(state: StateStoragePage){
@@ -62,22 +65,21 @@ import scala.concurrent.duration._
 //  }
 //}
 
-
 object ObligationsAndSubmissionPage {
 
-  private val httpClient: HttpClientV2 = TestClient.get
+  private val httpClient: HttpClientV2     = TestClient.get
   private val state: StateStoragePage.type = StateStoragePage
-  private val backendUrl: String       = TestEnvironment.url("pillar2-backend")
-  private val submissionApiUrl: String = TestEnvironment.url("pillar2-submission-api")
+  private val backendUrl: String           = TestEnvironment.url("pillar2-backend")
+  private val submissionApiUrl: String     = TestEnvironment.url("pillar2-submission-api")
 
   def sendGetRequest(requestType: String, parameters: String, pillarID: String): Int = {
     val bearerToken = state.getBearerToken
 
     val requestApiUrl: String = requestType match {
-      case "Obligations and Submission Api backend" => s"$backendUrl/obligations-and-submissions/$parameters"
-      case "Obligations and Submission Api"         => s"$submissionApiUrl"+ s"obligations-and-submissions?$parameters"
-      case "Get ORN"                                => s"$submissionApiUrl"+ s"overseas-return-notification?$parameters"
-      case _ => throw new IllegalArgumentException(s"Unknown request type provided: '$requestType'")
+      case "Obligations and Submission Api backend" => s"$backendUrl"+s"obligations-and-submissions/$parameters"
+      case "Obligations and Submission Api"         => s"$submissionApiUrl" + s"obligations-and-submissions?$parameters"
+      case "Get ORN"                                => s"$submissionApiUrl" + s"overseas-return-notification?$parameters"
+      case _                                        => throw new IllegalArgumentException(s"Unknown request type provided: '$requestType'")
     }
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -88,55 +90,113 @@ object ObligationsAndSubmissionPage {
 
     val request = httpClient.get(URI.create(requestApiUrl).toURL)
 
-    println(s" GET ")
-    val response = intercept[BadRequestException] {
-      Await.result(request.execute[HttpResponse], 5.seconds)
-    }
-    println(s" complete ")
-
-//    val request =
-//      //      httpClient.get(URI.create(requestApiUrl).toURL)
-//      //
-//          val response     = Await.result(request.execute[HttpResponse], 5.seconds)
-
-//    try {
-//      // Attempt to execute the request
-//      val response = Await.result(request.execute, 5.seconds)
-//
-//      // This block only runs for 2xx (successful) responses
-//      state.setResponseBody(response.body)
-//      val responseCode = response.status
-//      println(s"Response Code: $responseCode")
-//      println(s"Response Body: ${response.body}")
-//      responseCode
-//
-//    } catch {
-//      // This block catches the 4xx/5xx exceptions thrown by hmrc-http
-//      case exception: UpstreamErrorResponse =>
-//        val responseCode = exception.statusCode
-//        // The raw response body is in the 'message' field of the exception
-//        val responseBody = exception.message
-//        state.setResponseBody(responseBody)
-//        println(s"Caught expected API error. Response Code: $responseCode")
-//        println(s"Response Body: $responseBody")
-//        responseCode // Return the error code so the test can assert it
-//
-//      case other: Throwable =>
-//        // Catch any other unexpected exceptions (e.g., timeout, connection refused)
-//        println(s"An unexpected error occurred: ${other.getMessage}")
-//        throw other // Re-throw the exception to fail the test, as it's not the error we're testing for
-//
-//    }
-
-    val responseCode = response.responseCode
-    println(s"Response Code1: $responseCode")
-
-    state.setResponseBody(response.message)
-
+    val HttpResponse = {
+          Await.result(request.execute[HttpResponse], 5.seconds)
+        }
+    state.setResponseBody(HttpResponse.body)
+    val responseCode = HttpResponse.status
 
     println(s"Response Code: $responseCode")
-    println(s"Response Body: ${response.message}")
+    println(s"Response Body: ${HttpResponse.body}")
 
     responseCode
+
+//        val response: Either[Throwable, HttpResponse] =
+//          try {
+//            Right(Await.result(request.execute[HttpResponse], 5.seconds))
+//          } catch {
+//            case e: BadRequestException            => Left(e)
+//            case e: InternalServerErrorException   => Left(e)
+//          }
+
+    // attempt1
+    //    val responseEither: Either[UpstreamErrorResponse, HttpResponse] =
+    //      try {
+    //        Right(Await.result(request.execute[HttpResponse], 5.seconds))
+    //      } catch {
+    //        //case e: UpstreamErrorResponse => Left(e)
+    //        case e: UpstreamErrorResponse =>
+    //          println(s"Caught an UpstreamErrorResponse with status: ${e.statusCode}")
+    //          Left(e)
+    //      }
+    // attempt1 end
+
+    // attempt2
+//    val responseEither: Either[UpstreamErrorResponse, HttpResponse] =
+//      Await.result(
+//        request.execute[Either[UpstreamErrorResponse, HttpResponse]],
+//        5.seconds
+//      )
+//
+//    responseEither match {
+//      case Right(successResponse) =>
+//        val responseCode = successResponse.status
+//        val responseBody = successResponse.body
+//
+//        state.setResponseBody(responseBody)
+//        setResponseCode(responseCode)
+//
+//        println(s"SUCCESS - Response Code: $responseCode")
+//        println(s"SUCCESS - Response Body: $responseBody")
+//        responseCode
+//
+//      case Left(errorResponse) =>
+//
+//        val errorResponsestring = errorResponse.toString
+//        val jsonStartIndex      = errorResponsestring.indexOf("{")
+//        val jsonBodyString      = errorResponsestring.substring(jsonStartIndex, errorResponsestring.length - 1)
+//
+//          Try(Json.parse(jsonBodyString)) match {
+//            case Success(json) =>
+//              //val responseCodeOpt    = (json \ "code").asOpt[String]
+////              val responseCodeOpt: Option[String] =
+////                (json \ "code").asOpt[String]
+////                  .orElse((json \ "code").asOpt[Int].map(_.toString))
+//              val responseCodeOpt: Option[Int] =
+//                (json \ "code") match {
+//                  case JsDefined(JsNumber(value)) => Some(value.toInt)
+//                  case JsDefined(JsString(value)) => value.toIntOption
+//                  case _                          => None
+//                }
+//
+//              val responseMessageOpt = (json \ "message").asOpt[String]
+//
+//              (responseCodeOpt, responseMessageOpt) match {
+//                case (Some(code), Some(message)) =>
+//                  setResponseCode(code)
+//                  state.setResponseBody(message)
+//                  code
+//
+//                case _ =>
+//                  throw new RuntimeException("Error response JSON missing code or message")
+//              }
+//          }
+//
+//    }
+    /*
+        case Left(errorResponse) =>
+          val responseCode = errorResponse.statusCode
+          val responseBody = errorResponse.message
+
+          state.setResponseBody(responseBody)
+          state.setResponseCode(responseCode)
+
+          println(s"FAILURE - Response Code: $responseCode")
+          println(s"FAILURE - Response Body: $responseBody")
+
+          responseCode
+     */
+
+
+//    state.setResponseBody(response.message)
+//    val responseCode = response.responseCode
+//
+//    println(s"Response Code: $responseCode")
+//    println(s"Response Body: ${response.message}")
+//
+//    responseCode
+
+
   }
+
 }

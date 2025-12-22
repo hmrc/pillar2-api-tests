@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.api.specdef
 
-import uk.gov.hmrc.api.pages.StateStoragePage
-import uk.gov.hmrc.api.steps.ObligationsAndSubmissionPage
+import uk.gov.hmrc.api.pages.{ObligationsAndSubmissionPage, StateStoragePage}
 
 //object ObligationsAndSubmissionSteps {
 //
