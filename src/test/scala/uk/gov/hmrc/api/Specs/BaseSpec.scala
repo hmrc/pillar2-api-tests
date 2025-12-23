@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.requestBody
+package uk.gov.hmrc.api.Specs
 
-object TestOrganisation {
+import org.scalatest.featurespec.AnyFeatureSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.GivenWhenThen
 
-  def testOrganisationBody(domesticFlag: String, orgName: String): String =
-    s"""
-     |{
-     |  "orgDetails": {
-     |    "domesticOnly": $domesticFlag,
-     |    "organisationName": "$orgName",
-     |    "registrationDate": "2024-01-01"
-     |  },
-     |  "accountingPeriod": {
-     |    "startDate": "2024-01-01",
-     |    "endDate": "2024-12-31",
-     |    "underEnquiry": false
-     |  }
-     |}
-     |""".stripMargin
+trait BaseSpec extends AnyFeatureSpec with GivenWhenThen with Matchers {
+
 }

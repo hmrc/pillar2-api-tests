@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.requestBody
+package uk.gov.hmrc.api.specdef
 
-object TestOrganisation {
+import uk.gov.hmrc.api.pages.{ObligationsAndSubmissionPage, StateStoragePage}
 
-  def testOrganisationBody(domesticFlag: String, orgName: String): String =
-    s"""
-     |{
-     |  "orgDetails": {
-     |    "domesticOnly": $domesticFlag,
-     |    "organisationName": "$orgName",
-     |    "registrationDate": "2024-01-01"
-     |  },
-     |  "accountingPeriod": {
-     |    "startDate": "2024-01-01",
-     |    "endDate": "2024-12-31",
-     |    "underEnquiry": false
-     |  }
-     |}
-     |""".stripMargin
+object ObligationsAndSubmissionSteps {
+
+  def getObligationsAndStoreResult(requestType: String, parameters: String, pillarID: String): Int = {
+
+    val responseCode = ObligationsAndSubmissionPage.sendGetRequest(requestType, parameters, pillarID)
+
+    StateStoragePage.setResponseCode(responseCode)
+
+    println(s"API call made to '$requestType' for Pillar ID '$pillarID'. Response code '$responseCode' stored.")
+    responseCode
+  }
 }

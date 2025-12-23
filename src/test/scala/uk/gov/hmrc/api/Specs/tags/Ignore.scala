@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.cucumber
+package uk.gov.hmrc.api.Specs.tags
 
-import com.google.inject.{Guice, Injector, Stage}
-import io.cucumber.guice.{CucumberModules, InjectorSource}
+import org.scalatest.Tag
 
-class Pillar2InjectorSource extends InjectorSource {
-
-  override def getInjector: Injector =
-    Guice.createInjector(Stage.PRODUCTION, CucumberModules.createScenarioModule(), new Pillar2Module());
-}
+object Ignore extends Tag("Ignore")

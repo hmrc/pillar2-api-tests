@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.helpers
+package uk.gov.hmrc.api.pages
 
-import io.cucumber.guice.ScenarioScoped
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.BearerTokenGenerator.{putAgentBodyWithPlrid, putBodyWithEnrolment, putBodyWithOutEnrolment, putBodyWithPlrid}
 
@@ -25,8 +24,7 @@ import java.net.http.HttpRequest.BodyPublishers
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import java.nio.charset.StandardCharsets
 
-@ScenarioScoped
-class AuthHelper {
+object AuthPage {
   val authSessionsUrl: String = TestEnvironment.url("auth-login-api")
   val trimToken               = ""
 
@@ -39,7 +37,7 @@ class AuthHelper {
         putBodyWithOutEnrolment(affinityGroup)
       case "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" | "XEPLR0123456422" | "XEPLR0123456500" |
           "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" | "XEPLR0000000400" | "XEPLR0000000500" |
-          "XEPLR0000000422" | "XEPLR1066196400" |"XEPLR5555551126"| "XEPLR0500000000" =>
+          "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR5555551126" | "XEPLR0500000000" =>
         putBodyWithPlrid(affinityGroup, value)
       case _                   => throw new IllegalArgumentException(s"Unexpected value: $value")
     }

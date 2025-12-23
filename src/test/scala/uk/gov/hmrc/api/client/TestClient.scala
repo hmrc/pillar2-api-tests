@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.requestBody
+package uk.gov.hmrc.api.client
 
-object TestOrganisation {
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.test.HttpClientV2Support
 
-  def testOrganisationBody(domesticFlag: String, orgName: String): String =
-    s"""
-     |{
-     |  "orgDetails": {
-     |    "domesticOnly": $domesticFlag,
-     |    "organisationName": "$orgName",
-     |    "registrationDate": "2024-01-01"
-     |  },
-     |  "accountingPeriod": {
-     |    "startDate": "2024-01-01",
-     |    "endDate": "2024-12-31",
-     |    "underEnquiry": false
-     |  }
-     |}
-     |""".stripMargin
+object TestClient extends HttpClientV2Support {
+
+  def get: HttpClientV2 = httpClientV2
 }

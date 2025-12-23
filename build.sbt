@@ -14,8 +14,6 @@ lazy val testSuite = (project in file("."))
     scalaVersion := "2.13.12",
     scalacOptions ++= Seq("-feature"),
     libraryDependencies ++= Dependencies.test,
-    // The testOptions from SbtAutoBuildPlugin supports only ScalaTest. Resetting testOptions for Cucumber Tests.
-    Test / testOptions := Seq.empty,
     resolvers += MavenRepository("HMRC-open-artefacts-maven2", "https://open.artefacts.tax.service.gov.uk/maven2"),
     scalafixSettings
   )

@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.helpers
-
-import io.cucumber.guice.ScenarioScoped
+package uk.gov.hmrc.api.pages
 
 import scala.io.Source
 import io.circe.parser
@@ -25,8 +23,7 @@ import cats.data.Validated.{Invalid, Valid}
 
 import java.io.File
 
-@ScenarioScoped
-class CommonHelper {
+object CommonPage {
   def validateJsonSchema(path: String, body: String, validationType: String): Unit = {
     val schemaFile = new File(path)
 
@@ -37,21 +34,24 @@ class CommonHelper {
     println(s"Reading schema from: $path")
 
     val schemaContent: String = Source.fromFile(schemaFile).getLines().mkString
-    val parsedSchema = parser.parse(schemaContent).getOrElse(
-      throw new RuntimeException(s"Invalid $validationType schema JSON in $path")
-    )
-    val parsedJson = parser.parse(body).getOrElse(
-      throw new RuntimeException(s"Invalid $validationType JSON")
-    )
+    val parsedSchema          = parser
+      .parse(schemaContent)
+      .getOrElse(
+        throw new RuntimeException(s"Invalid $validationType schema JSON in $path")
+      )
+    val parsedJson            = parser
+      .parse(body)
+      .getOrElse(
+        throw new RuntimeException(s"Invalid $validationType JSON")
+      )
 
     val schema = Schema.load(parsedSchema)
     schema.validate(parsedJson) match {
-      case Valid(_) =>
+      case Valid(_)        =>
         println(s"Validation successful: JSON $validationType matches schema at $path")
       case Invalid(errors) =>
         val errorMessages = errors.toList.map(_.getMessage).mkString(", ")
         throw new AssertionError(s"JSON schema validation failed: $errorMessages")
     }
   }
-
 }
