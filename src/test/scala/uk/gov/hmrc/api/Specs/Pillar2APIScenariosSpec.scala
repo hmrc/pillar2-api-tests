@@ -25,7 +25,7 @@ class Pillar2APIScenariosSpec extends BaseSpec {
 
   Feature("Validate Pillar2 & Pillar2 Stubs responses") {
 
-    Scenario("Verify the successful response for the stub request",ApiAcceptanceTests) {
+    Scenario("Verify the successful response for the stub request", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR5555555555 and 201")
       generateBearerToken("Organisation", "XEPLR5555555555", "201")
 
@@ -36,7 +36,7 @@ class Pillar2APIScenariosSpec extends BaseSpec {
       assertStatusCode(201)
     }
 
-    Scenario("Verify stub request for 400 response",ApiAcceptanceTests) {
+    Scenario("Verify stub request for 400 response", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0123456400 and 400")
       generateBearerToken("Organisation", "XEPLR0123456400", "400")
 
@@ -47,7 +47,7 @@ class Pillar2APIScenariosSpec extends BaseSpec {
       assertStatusCode(400)
     }
 
-    Scenario("Verify the successful response for the backend request",ApiAcceptanceTests) {
+    Scenario("Verify the successful response for the backend request", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 201")
       generateBearerToken("Organisation", "XMPLR0000000012", "201")
 
