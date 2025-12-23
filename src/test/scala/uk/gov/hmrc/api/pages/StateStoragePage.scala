@@ -25,31 +25,31 @@ object StateStoragePage {
   private var responseErrorCodeVal: Option[String] = None
   private var responseErrorMessage: Option[String] = None
 
-  def setResponseErrorMessage(str: String): Unit = responseErrorMessage = Some(str)
-
   def getResponseErrorMessage: String =
     responseErrorMessage.getOrElse(throw new RuntimeException("ResponseErrorMessage not set"))
 
-  def setResponseErrorCodeVal(str: String): Unit = responseErrorCodeVal = Some(str)
+  def setResponseErrorMessage(str: String): Unit = responseErrorMessage = Some(str)
 
   def getResponseErrorCodeVal: String =
     responseErrorCodeVal.getOrElse(throw new RuntimeException("No responseErrorCodeVal has been set"))
 
-  def setResponseCode(i: Int): Unit = responseCode = Some(i)
+  def setResponseErrorCodeVal(str: String): Unit = responseErrorCodeVal = Some(str)
 
   def getResponseCode: Int = responseCode.getOrElse(throw new RuntimeException("No response code set"))
 
-  def setRequestBody(str: String): Unit = requestBody = Some(str)
+  def setResponseCode(i: Int): Unit = responseCode = Some(i)
 
   def getRequestBody: String = requestBody.getOrElse(throw new RuntimeException("No request body set"))
 
-  def setBearerToken(str: String): Unit = bearerToken = Some(str)
+  def setRequestBody(str: String): Unit = requestBody = Some(str)
 
   def getBearerToken: String = bearerToken.getOrElse(throw new RuntimeException("No bearertoken set"))
 
-  def setResponseBody(str: String): Unit =
-    responseBody = Some(str)
+  def setBearerToken(str: String): Unit = bearerToken = Some(str)
 
   def getResponseBody: String =
     responseBody.getOrElse(throw new RuntimeException("No response body set"))
+
+  def setResponseBody(str: String): Unit =
+    responseBody = Some(str)
 }

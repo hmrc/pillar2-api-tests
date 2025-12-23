@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.Output
+package uk.gov.hmrc.api.Specs
 
-import uk.gov.hmrc.api.Output.tags.ApiAcceptanceTests
+import uk.gov.hmrc.api.Specs.tags.ApiAcceptanceTests
 import uk.gov.hmrc.api.specdef.AuthSteps.generateBearerToken
 import uk.gov.hmrc.api.specdef.CommonSteps.{assertStatusCode, validateJsonSchemaFor}
 import uk.gov.hmrc.api.specdef.TestOrganisationSteps.{thenIVerifyTheResponseContainsTheFollowingValues, whenIMakeAPICallToCreate, whenIMakeAPICallToDeleteOrganisationUsing}
@@ -26,7 +26,7 @@ class BTNScenariosSpec extends BaseSpec {
 
   Feature("Validate BTN Json schema and Responses") {
 
-    Scenario("Verify Submit BTN responses and validate schema", ApiAcceptanceTests) {
+    Scenario("Verify Submit BTN successful response and validate schema", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 201")
       generateBearerToken("Organisation", "XMPLR0000000012", "201")
 
@@ -68,7 +68,7 @@ class BTNScenariosSpec extends BaseSpec {
       whenIMakeAPICallToDeleteOrganisationUsing("setup/organisation", "XMPLR0000000012")
     }
 
-    Scenario("Verify Submit BTN responses and validate schema1", ApiAcceptanceTests) {
+    Scenario("Verify Submit BTN response for 500 and validate schema", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0123456500 and 201")
       generateBearerToken("Organisation", "XEPLR0123456500", "201")
 
@@ -102,7 +102,7 @@ class BTNScenariosSpec extends BaseSpec {
 
     }
 
-    Scenario("Verify Submit BTN responses and validate schema2", ApiAcceptanceTests) {
+    Scenario("Verify Submit BTN response for 400 and validate schema", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0000000400 and 201")
       generateBearerToken("Organisation", "XEPLR0000000400", "201")
 
@@ -135,7 +135,7 @@ class BTNScenariosSpec extends BaseSpec {
       whenIMakeAPICallToDeleteOrganisationUsing("setup/organisation", "XEPLR0000000400")
     }
 
-    Scenario("Verify Submit BTN responses and validate schema3", ApiAcceptanceTests) {
+    Scenario("Verify Submit BTN response for 401 and validate schema", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0000000400 and 201")
       generateBearerToken("Organisation", "XEPLR0000000400", "201")
 

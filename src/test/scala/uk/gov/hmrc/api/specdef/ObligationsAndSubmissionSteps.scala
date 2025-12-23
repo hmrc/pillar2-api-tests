@@ -18,23 +18,12 @@ package uk.gov.hmrc.api.specdef
 
 import uk.gov.hmrc.api.pages.{ObligationsAndSubmissionPage, StateStoragePage}
 
-//object ObligationsAndSubmissionSteps {
-//
-//  // I make get API call to URL (.*) and (.*) and (.*)$
-//  def givenIMakeGetAPICallToURL(requestUrl: String, parameters: String, pillarID: String): Unit = {
-//    state.setResponseCode(ObligationsAndSubmissionPage.sendGetRequest(requestUrl, parameters, pillarID))
-//  }
-//
-//}
-
-object ObligationsAndSubmissionSteps{
-  // I make get API call to URL (.*) and (.*) and (.*)$
+object ObligationsAndSubmissionSteps {
 
   def getObligationsAndStoreResult(requestType: String, parameters: String, pillarID: String): Int = {
-    // 1. Delegate the actual HTTP call to the dedicated API client object.
+
     val responseCode = ObligationsAndSubmissionPage.sendGetRequest(requestType, parameters, pillarID)
 
-    // 2. Store the result in the shared state for subsequent assertion steps.
     StateStoragePage.setResponseCode(responseCode)
 
     println(s"API call made to '$requestType' for Pillar ID '$pillarID'. Response code '$responseCode' stored.")

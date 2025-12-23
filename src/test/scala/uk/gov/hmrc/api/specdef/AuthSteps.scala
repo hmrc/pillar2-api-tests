@@ -16,53 +16,20 @@
 
 package uk.gov.hmrc.api.specdef
 
-
-//import uk.gov.hmrc.api.pages._
-//
-//object AuthSteps {
-//
-//  // ^I have generated a bearer token for an (.*) and (.*) and (.*)$
-//  def givenIHaveGeneratedABearerTokenFor(affinity: String, value: String, statusCode: String): Unit = {
-//    val bearerToken = value match {
-//            case "with enrolment" | "without enrolment" | "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" |
-//                "XEPLR0123456422" | "XEPLR0123456500" | "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" |
-//                "XEPLR0000000400" | "XEPLR0000000500" | "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR5555551126" |
-//                "XEPLR0500000000" =>
-//              AuthPage.getBearerLocal(affinity, value, statusCode)
-//            case _ =>
-//              throw new IllegalArgumentException(s"Invalid value: $value")
-//          }
-//          state.setBearerToken(bearerToken)
-//  }
-//
-//}
-
-
 import uk.gov.hmrc.api.pages.{AuthPage, StateStoragePage}
-
 
 object AuthSteps {
 
-  // ^I have generated a bearer token for an (.*) and (.*) and (.*)$
-//          def generateBearerToken(affinity: String, userProfile: String, statusCode: String): Unit = {
-//
-//            val bearerToken = AuthPage.getBearerLocal(affinity, userProfile, statusCode)
-//
-//            StateStoragePage.setBearerToken(bearerToken)
-//
-//            println(s"Bearer token generated and stored for profile: '$userProfile'")
-//          }
-
   def generateBearerToken(affinity: String, value: String, statusCode: String): Unit = {
-        val bearerToken = value match {
-                case "with enrolment" | "without enrolment" | "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" |
-                    "XEPLR0123456422" | "XEPLR0123456500" | "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" |
-                    "XEPLR0000000400" | "XEPLR0000000500" | "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR5555551126" |
-                    "XEPLR0500000000" =>
-                  AuthPage.getBearerLocal(affinity, value, statusCode)
-                case _ =>
-                  throw new IllegalArgumentException(s"Invalid value: $value")
-              }
-          StateStoragePage.setBearerToken(bearerToken)
-      }
+    val bearerToken = value match {
+      case "with enrolment" | "without enrolment" | "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" |
+          "XEPLR0123456422" | "XEPLR0123456500" | "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" |
+          "XEPLR0000000400" | "XEPLR0000000500" | "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR5555551126" |
+          "XEPLR0500000000" =>
+        AuthPage.getBearerLocal(affinity, value, statusCode)
+      case _ =>
+        throw new IllegalArgumentException(s"Invalid value: $value")
+    }
+    StateStoragePage.setBearerToken(bearerToken)
+  }
 }

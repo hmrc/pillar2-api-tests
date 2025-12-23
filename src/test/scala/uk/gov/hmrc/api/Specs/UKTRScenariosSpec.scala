@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.Output
-import uk.gov.hmrc.api.Output.tags.ApiAcceptanceTests
+package uk.gov.hmrc.api.Specs
+import uk.gov.hmrc.api.Specs.tags.ApiAcceptanceTests
 import uk.gov.hmrc.api.specdef.AuthSteps.generateBearerToken
 import uk.gov.hmrc.api.specdef.CommonSteps.{assertErrorResponse, assertStatusCode, validateJsonSchemaFor}
 import uk.gov.hmrc.api.specdef.UKTRSteps.{givenIMakeAPICallTo, givenIMakeAPICallToPLRUKTRWith}
@@ -24,7 +24,7 @@ class UKTRScenariosSpec extends BaseSpec {
 
   Feature("Validate UKTR Json schemas and Responses") {
 
-    Scenario("Verify Submit UKTR responses and validate schema for all user types1", ApiAcceptanceTests) {
+    Scenario("Verify Submit UKTR Successful response and validate schema", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 201")
       generateBearerToken("Organisation", "XMPLR0000000012", "201")
 
@@ -41,7 +41,7 @@ class UKTRScenariosSpec extends BaseSpec {
       validateJsonSchemaFor("UKTR", "Response", "UKTR_201")
     }
 
-    Scenario("Verify Submit UKTR responses and validate schema for all user types2", ApiAcceptanceTests) {
+    Scenario("Verify Submit UKTR response 500 and validate schema", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0123456500 and 500")
       generateBearerToken("Organisation", "XEPLR0123456500", "500")
 
@@ -56,7 +56,7 @@ class UKTRScenariosSpec extends BaseSpec {
 
     }
 
-    Scenario("Verify Submit UKTR responses and validate schema for all user types3", ApiAcceptanceTests) {
+    Scenario("Verify Submit UKTR response 400", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0000000400 and 400")
       generateBearerToken("Organisation", "XEPLR0000000400", "400")
 
@@ -65,12 +65,9 @@ class UKTRScenariosSpec extends BaseSpec {
 
       When("I verify the response code is 400")
       assertStatusCode(400)
-
-//      Then("I validate UKTR Response json schema for Error_Response")
-//      validateJsonSchema("UKTR", "Response", "Error_Response")
     }
 
-    Scenario("Verify Submit UKTR responses and validate schema for all user types4", ApiAcceptanceTests) {
+    Scenario("Verify Submit UKTR response 401", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0000000400 and 401")
       generateBearerToken("Organisation", "XEPLR0000000400", "401")
 
@@ -79,13 +76,9 @@ class UKTRScenariosSpec extends BaseSpec {
 
       When("I verify the response code is 401")
       assertStatusCode(401)
-
-//      Then("I validate UKTR Response json schema for Error_Response")
-//      validateJsonSchema("UKTR", "Response", "Error_Response")
-
     }
 
-    Scenario("Verify Submit UKTR responses and validate schema for all user types5", ApiAcceptanceTests) {
+    Scenario("Verify Submit UKTR response 201 for Agent", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Agent and XEPLR5555551126 and 201")
       generateBearerToken("Agent", "XEPLR5555551126", "201")
 
@@ -96,7 +89,7 @@ class UKTRScenariosSpec extends BaseSpec {
       assertStatusCode(201)
     }
 
-    Scenario("Verify Submit UKTR responses and validate schema for all user types6", ApiAcceptanceTests) {
+    Scenario("Verify Submit UKTR response 500 for Agent", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Agent and XEPLR0123456400 and 500")
       generateBearerToken("Agent", "XEPLR0123456400", "500")
 
@@ -107,7 +100,7 @@ class UKTRScenariosSpec extends BaseSpec {
       assertStatusCode(500)
     }
 
-    Scenario("Verify Submit UKTR responses and validate schema for all user types7", ApiAcceptanceTests) {
+    Scenario("Verify Submit UKTR response 400 for Agent", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Agent and XEPLR0000000400 and 400")
       generateBearerToken("Agent", "XEPLR0000000400", "400")
 
@@ -118,7 +111,7 @@ class UKTRScenariosSpec extends BaseSpec {
       assertStatusCode(400)
     }
 
-    Scenario("Verify Submit UKTR responses and validate schema for all user types8", ApiAcceptanceTests) {
+    Scenario("Verify Submit UKTR response 401 for Agent", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Agent and XEPLR0000000400 and 401")
       generateBearerToken("Agent", "XEPLR0000000400", "401")
 
@@ -129,7 +122,7 @@ class UKTRScenariosSpec extends BaseSpec {
       assertStatusCode(401)
     }
 
-    Scenario("Verify Submit UKTR responses and validate schema for all user types9", ApiAcceptanceTests) {
+    Scenario("VVerify Submit UKTR response 403 for Individual", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Individual and XEPLR0000000400 and 403")
       generateBearerToken("Individual", "XEPLR0000000400", "403")
 
@@ -140,28 +133,21 @@ class UKTRScenariosSpec extends BaseSpec {
       assertStatusCode(403)
     }
 
-    Scenario("Verify Amend UKTR responses and validate schema10", ApiAcceptanceTests) {
+    Scenario("Verify Amend UKTR Successful Response And Validate Schema", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 200")
       generateBearerToken("Organisation", "XMPLR0000000012", "200")
 
       And("I make API call to Amend UKTR and uk-tax-return and XMPLR0000000012 and 200")
       givenIMakeAPICallTo("Amend UKTR", "uk-tax-return", "XMPLR0000000012", "200")
 
-//      Then("I validate UKTR Requests json schema for SubmitUKTR")
-//      validateJsonSchemaFor(
-//        "UKTR",
-//        "Requests",
-//        "SubmitUKTR"
-//      )
+      Then("I validate UKTR Requests json schema for SubmitUKTR")
+      validateJsonSchemaFor("UKTR", "Requests", "SubmitUKTR")
 
       When("I verify the response code is 200")
       assertStatusCode(200)
-
-//      Then("I validate UKTR Response json schema for AmendUKTR_200")
-//      validateJsonSchemaFor("UKTR", "Response", "AmendUKTR_200")
     }
 
-    Scenario("Verify Amend UKTR responses and validate schema11", ApiAcceptanceTests) {
+    Scenario("Verify Amend UKTR For 500 Response And Validate Schema", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0500000000 and 500")
       generateBearerToken("Organisation", "XEPLR0500000000", "500")
 
@@ -171,11 +157,11 @@ class UKTRScenariosSpec extends BaseSpec {
       When("I verify the response code is 500")
       assertStatusCode(500)
 
-//      Then("I validate UKTR Response json schema for Error_Response")
-//      validateJsonSchema("UKTR", "Response", "Error_Response")
+      Then("I validate UKTR Response json schema for Error_Response")
+      validateJsonSchemaFor("UKTR", "Response", "Error_Response")
     }
 
-    Scenario("Verify Amend UKTR responses and validate schema12", ApiAcceptanceTests) {
+    Scenario("Verify Amend UKTR For 400 Response", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0000000400 and 400")
       generateBearerToken("Organisation", "XEPLR0000000400", "400")
 
@@ -184,12 +170,9 @@ class UKTRScenariosSpec extends BaseSpec {
 
       When("I verify the response code is 400")
       assertStatusCode(400)
-
-//      Then("I validate UKTR Response json schema for Error_Response")
-//      validateJsonSchema("UKTR", "Response", "Error_Response")
     }
 
-    Scenario("Verify Amend UKTR responses and validate schema13", ApiAcceptanceTests) {
+    Scenario("Verify Amend UKTR For 401 Response", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0000000400 and 401")
       generateBearerToken("Organisation", "XEPLR0000000400", "401")
 
@@ -198,53 +181,37 @@ class UKTRScenariosSpec extends BaseSpec {
 
       When("I verify the response code is 401")
       assertStatusCode(401)
-
-//      Then("I validate UKTR Response json schema for Error_Response")
-//      validateJsonSchema("UKTR", "Response", "Error_Response")
     }
 
-    Scenario("Verify Amend UKTR responses and validate schema14", ApiAcceptanceTests) {
+    Scenario("Verify Amend UKTR responses For 403 Response for Individual", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Individual and XEPLR0000000400 and 403")
       generateBearerToken("Individual", "XEPLR0000000400", "403")
 
       And("I make API call to Amend UKTR and uk-tax-return and XEPLR0000000400 and 403")
-      givenIMakeAPICallTo(
-        "Amend UKTR",
-        "uk-tax-return",
-        "XEPLR0000000400",
-        "403"
-      )
+      givenIMakeAPICallTo("Amend UKTR", "uk-tax-return", "XEPLR0000000400", "403")
 
       When("I verify the response code is 403")
       assertStatusCode(403)
-
-//      Then("I validate UKTR Response json schema for Error_Response")
-//      validateJsonSchema("UKTR", "Response", "Error_Response")
     }
 
-    Scenario("Verify Submit UKTR Nil Return responses and validate schema15", ApiAcceptanceTests) {
+    Scenario("Verify Submission Nil Return Successful Responses And Validate Schema", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 201")
       generateBearerToken("Organisation", "XMPLR0000000012", "201")
 
       And("I make API call to Submission Nil Return Api and uk-tax-return and XMPLR0000000012 and 201")
-      givenIMakeAPICallTo(
-        "Submission Nil Return Api",
-        "uk-tax-return",
-        "XMPLR0000000012",
-        "201"
-      )
+      givenIMakeAPICallTo("Submission Nil Return Api", "uk-tax-return", "XMPLR0000000012", "201")
 
-//      Then("I validate UKTR Requests json schema for SubmitUKTRNilReturn")
-//      validateJsonSchema("UKTR", "Requests", "SubmitUKTRNilReturn")
+      Then("I validate UKTR Requests json schema for SubmitUKTRNilReturn")
+      validateJsonSchemaFor("UKTR", "Requests", "SubmitUKTRNilReturn")
 
       When("I verify the response code is 201")
       assertStatusCode(201)
 
-//      Then("I validate UKTR Response json schema for NilReturn_201")
-//      validateJsonSchema("UKTR", "Response", "Submission Nil Return Api")
+      Then("I validate UKTR Response json schema for NilReturn_201")
+      validateJsonSchemaFor("UKTR", "Response", "NilReturn_201")
     }
 
-    Scenario("Verify Submit UKTR Nil Return responses and validate schema16", ApiAcceptanceTests) {
+    Scenario("Verify Submission Nil Return For 500 Response", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0123456500 and 500")
       generateBearerToken("Organisation", "XEPLR0123456500", "500")
 
@@ -255,7 +222,7 @@ class UKTRScenariosSpec extends BaseSpec {
       assertStatusCode(500)
     }
 
-    Scenario("Verify Submit UKTR Nil Return responses and validate schema17", ApiAcceptanceTests) {
+    Scenario("Verify Submission Nil Return For 400 Response", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0000000400 and 400")
       generateBearerToken("Organisation", "XEPLR0000000400", "400")
 
@@ -264,12 +231,9 @@ class UKTRScenariosSpec extends BaseSpec {
 
       When("I verify the response code is 400")
       assertStatusCode(400)
-
-//      Then("I validate UKTR Response json schema for Error_Response")
-//      validateJsonSchema("UKTR", "Response", "Error_Response")
     }
 
-    Scenario("Verify Submit UKTR Nil Return responses and validate schema18", ApiAcceptanceTests) {
+    Scenario("Verify Submission Nil Return For 401 Response", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0000000400 and 401")
       generateBearerToken("Organisation", "XEPLR0000000400", "401")
 
@@ -280,26 +244,18 @@ class UKTRScenariosSpec extends BaseSpec {
       assertStatusCode(401)
     }
 
-    Scenario("Verify Submit UKTR Nil Return responses and validate schema19", ApiAcceptanceTests) {
+    Scenario("Verify Submit UKTR Nil Return  For 40 response For Individual", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Individual and XEPLR0000000400 and 403")
       generateBearerToken("Individual", "XEPLR0000000400", "403")
 
       And("I make API call to Submission Nil Return Api and uk-tax-return and XEPLR0000000400 and 403")
-      givenIMakeAPICallTo(
-        "Submission Nil Return Api",
-        "uk-tax-return",
-        "XEPLR0000000400",
-        "403"
-      )
+      givenIMakeAPICallTo("Submission Nil Return Api", "uk-tax-return", "XEPLR0000000400", "403")
 
       When("I verify the response code is 403")
       assertStatusCode(403)
-
-//      Then("I validate UKTR Response json schema for Error_Response")
-//      validateJsonSchema("UKTR", "Response", "Error_Response")
     }
 
-    Scenario("Verify the error code & message for the invalid UKTR requests", ApiAcceptanceTests) {
+    Scenario("Verify Invalid Json Payload", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and with enrolment and 400")
       generateBearerToken("Organisation", "with enrolment", "400")
 
@@ -311,7 +267,7 @@ class UKTRScenariosSpec extends BaseSpec {
 
     }
 
-    Scenario("Verify the error code & message for the invalid UKTR request", ApiAcceptanceTests) {
+    Scenario("Verify Empty Request Body", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and with enrolment and 400")
       generateBearerToken("Organisation", "with enrolment", "400")
 

@@ -17,21 +17,14 @@
 package uk.gov.hmrc.api.specdef
 import uk.gov.hmrc.api.pages.{StateStoragePage, UKTRPage}
 
-
 object UKTRSteps {
 
-  // I make API call to PLR UKTR
-  def givenIMakeAPICallToPLRUKTR(): Unit = {
+  def givenIMakeAPICallToPLRUKTR(): Unit =
     StateStoragePage.setResponseCode(UKTRPage.sendPLRUKTRRequest())
-  }
 
-  // I make API call to (.*) and (.*) and (.*) and (.*)$
-  def givenIMakeAPICallTo(requestApi: String, endpoint: String, pillarID: String, statusCode: String): Unit = {
+  def givenIMakeAPICallTo(requestApi: String, endpoint: String, pillarID: String, statusCode: String): Unit =
     StateStoragePage.setResponseCode(UKTRPage.sendUKTRRequest(requestApi, endpoint, pillarID, statusCode))
-  }
 
-  // I make API call to PLR UKTR with {string} for {string}
-  def givenIMakeAPICallToPLRUKTRWith(pillarID: String, errorCode: String): Unit = {
+  def givenIMakeAPICallToPLRUKTRWith(pillarID: String, errorCode: String): Unit =
     StateStoragePage.setResponseCode(UKTRPage.sendPLRUKTRErrorCodeRequest(pillarID, errorCode))
-  }
 }

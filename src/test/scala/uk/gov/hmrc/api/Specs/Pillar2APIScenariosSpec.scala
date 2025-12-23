@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.Output
+package uk.gov.hmrc.api.Specs
 
 import uk.gov.hmrc.api.specdef.AuthSteps.generateBearerToken
 import uk.gov.hmrc.api.specdef.CommonSteps.assertStatusCode
@@ -24,7 +24,7 @@ class Pillar2APIScenariosSpec extends BaseSpec {
 
   Feature("Validate Pillar2 & Pillar2 Stubs responses") {
 
-    Scenario("Verify the response for the stub requests") {
+    Scenario("Verify the successful response for the stub request") {
       Given("I have generated a bearer token for an Organisation and XEPLR5555555555 and 201")
       generateBearerToken("Organisation", "XEPLR5555555555", "201")
 
@@ -35,7 +35,7 @@ class Pillar2APIScenariosSpec extends BaseSpec {
       assertStatusCode(201)
     }
 
-    Scenario("Verify the response for the stub requests1") {
+    Scenario("Verify stub request for 400 response") {
       Given("I have generated a bearer token for an Organisation and XEPLR0123456400 and 400")
       generateBearerToken("Organisation", "XEPLR0123456400", "400")
 
@@ -46,7 +46,7 @@ class Pillar2APIScenariosSpec extends BaseSpec {
       assertStatusCode(400)
     }
 
-    Scenario("Verify the response for the backend requests") {
+    Scenario("Verify the successful response for the backend request") {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 201")
       generateBearerToken("Organisation", "XMPLR0000000012", "201")
 

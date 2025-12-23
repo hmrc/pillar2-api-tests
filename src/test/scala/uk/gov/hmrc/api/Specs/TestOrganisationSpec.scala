@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.Output
+package uk.gov.hmrc.api.Specs
 
-import uk.gov.hmrc.api.Output.tags.ApiAcceptanceTests
+import uk.gov.hmrc.api.Specs.tags.ApiAcceptanceTests
 import uk.gov.hmrc.api.specdef.AuthSteps.generateBearerToken
 import uk.gov.hmrc.api.specdef.CommonSteps.{assertStatusCode, validateJsonSchemaFor}
 import uk.gov.hmrc.api.specdef.TestOrganisationSteps.{thenIVerifyTheResponseContainsTheFollowingValues, whenIMakeAPICallToCreate, whenIMakeAPICallToDeleteOrganisationUsing, whenIMakeAPICallToGetOrganisationDetailsUsing, whenIMakeAPICallToUpdate}

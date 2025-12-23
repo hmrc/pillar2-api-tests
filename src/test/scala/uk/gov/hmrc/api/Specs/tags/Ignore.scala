@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.Output.tags
+package uk.gov.hmrc.api.Specs.tags
 
 import org.scalatest.Tag
 

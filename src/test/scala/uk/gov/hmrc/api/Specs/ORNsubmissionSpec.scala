@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.Output
+package uk.gov.hmrc.api.Specs
 
-import uk.gov.hmrc.api.Output.tags.ApiAcceptanceTests
+import uk.gov.hmrc.api.Specs.tags.ApiAcceptanceTests
 import uk.gov.hmrc.api.specdef.AuthSteps.generateBearerToken
 import uk.gov.hmrc.api.specdef.CommonSteps.{assertStatusCode, validateJsonSchemaFor}
 import uk.gov.hmrc.api.specdef.ObligationsAndSubmissionSteps.getObligationsAndStoreResult
@@ -121,7 +121,7 @@ class ORNsubmissionSpec extends BaseSpec {
       assertStatusCode(204)
     }
 
-    Scenario("Validation error for Submit ORN in submission api for domestic organization", ApiAcceptanceTests) {
+    Scenario("Error validation for Submit ORN in submission api for domestic organization", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR5555551126 and 422")
       generateBearerToken("Organisation", "XEPLR5555551126", "422")
 
