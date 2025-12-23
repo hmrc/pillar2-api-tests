@@ -26,11 +26,16 @@ class ObligationsAndSubmissionHistorySpec extends BaseSpec {
 
   Feature("Validate Obligations & Submission History Json schema and Responses") {
 
-    Scenario("Verify Obligations & Submission History Successful response and validate schema for backend", ApiAcceptanceTests) {
+    Scenario(
+      "Verify Obligations & Submission History Successful response and validate schema for backend",
+      ApiAcceptanceTests
+    ) {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 200")
       generateBearerToken("Organisation", "XMPLR0000000012", "200")
 
-      And("I make API call to create <DomesticFlag> Test Organisation Ltd using setup/organisation with XMPLR0000000012")
+      And(
+        "I make API call to create <DomesticFlag> Test Organisation Ltd using setup/organisation with XMPLR0000000012"
+      )
       whenIMakeAPICallToCreate("NonDomestic", "Test Organisation Ltd", "setup/organisation", "XMPLR0000000012")
 
       And("I validate TestOrganisation Requests json schema for OrganisationRequest")
@@ -67,7 +72,10 @@ class ObligationsAndSubmissionHistorySpec extends BaseSpec {
 
     }
 
-    Scenario("Verify Obligations & Submission History for 500 response and validate schema for backend", ApiAcceptanceTests) {
+    Scenario(
+      "Verify Obligations & Submission History for 500 response and validate schema for backend",
+      ApiAcceptanceTests
+    ) {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 500")
       generateBearerToken("Organisation", "XMPLR0000000012", "500")
 
@@ -104,7 +112,10 @@ class ObligationsAndSubmissionHistorySpec extends BaseSpec {
 
     }
 
-    Scenario("Verify Obligations & Submission History successful response and validate schema for submission api", ApiAcceptanceTests) {
+    Scenario(
+      "Verify Obligations & Submission History successful response and validate schema for submission api",
+      ApiAcceptanceTests
+    ) {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 200")
       generateBearerToken("Organisation", "XMPLR0000000012", "200")
 
@@ -140,7 +151,10 @@ class ObligationsAndSubmissionHistorySpec extends BaseSpec {
       whenIMakeAPICallToDeleteOrganisationUsing("setup/organisation", "XMPLR0000000012")
     }
 
-    Scenario("Verify Obligations & Submission History 400 response and validate schema for submission api", ApiAcceptanceTests) {
+    Scenario(
+      "Verify Obligations & Submission History 400 response and validate schema for submission api",
+      ApiAcceptanceTests
+    ) {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 400")
       generateBearerToken("Organisation", "XMPLR0000000012", "400")
 

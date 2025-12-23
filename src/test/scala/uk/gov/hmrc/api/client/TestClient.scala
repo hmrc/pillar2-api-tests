@@ -21,13 +21,5 @@ import uk.gov.hmrc.http.test.HttpClientV2Support
 
 object TestClient extends HttpClientV2Support {
 
-//  private var _httpClient: Option[HttpClientV2] = None
-
-//  def set(client: HttpClientV2): Unit = { _httpClient = Some(client) }
-
   def get: HttpClientV2 = httpClientV2
-
-//  def get: HttpClientV2 = _httpClient.getOrElse(
-//    throw new IllegalStateException("HttpClient has not been initialized by BaseSpec.")
-//  )
 }

@@ -35,7 +35,7 @@ class BTNScenariosSpec extends BaseSpec {
       )
       whenIMakeAPICallToCreate("True", "Test Organisation Ltd", "setup/organisation", "XMPLR0000000012")
 
-      And("I validate TestOrganisation Requests json schema for OrganisationRequest")
+      And("I validate TestOrganisation requests json schema for OrganisationRequest")
       validateJsonSchemaFor("TestOrganisation", "Requests", "OrganisationRequest")
 
       And("I verify the response code is 201")
