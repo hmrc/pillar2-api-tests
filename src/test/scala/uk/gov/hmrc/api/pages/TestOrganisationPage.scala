@@ -18,7 +18,6 @@ package uk.gov.hmrc.api.pages
 
 import org.scalatest.matchers.should.Matchers
 import play.api.libs.json._
-import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
