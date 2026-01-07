@@ -159,7 +159,7 @@ object TestOrganisationPage extends Matchers {
 
       withClue(s"Verification failed for key '$key':") {
         actualValueAsString should be(expectedValue)
-      }
+      }: Unit
     }
   }
 
