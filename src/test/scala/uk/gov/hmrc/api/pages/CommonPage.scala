@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.helpers
-
-import io.cucumber.guice.ScenarioScoped
+package uk.gov.hmrc.api.pages
 
 import scala.io.Source
 import io.circe.parser
@@ -25,8 +23,7 @@ import cats.data.Validated.{Invalid, Valid}
 
 import java.io.File
 
-@ScenarioScoped
-class CommonHelper {
+object CommonPage {
   def validateJsonSchema(path: String, body: String, validationType: String): Unit = {
     val schemaFile = new File(path)
 
@@ -57,5 +54,4 @@ class CommonHelper {
         throw new AssertionError(s"JSON schema validation failed: $errorMessages")
     }
   }
-
 }

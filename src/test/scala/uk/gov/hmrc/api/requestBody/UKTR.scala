@@ -20,7 +20,7 @@ object UKTR {
   def requestBody(accountingPeriodTo: String): String =
     s"""
       |{
-      |  "accountingPeriodFrom": "2024-08-14",
+      |  "accountingPeriodFrom": "2024-01-01",
       |  "accountingPeriodTo": "$accountingPeriodTo",
       |  "obligationMTT": false,
       |  "electionUKGAAP": true,
