@@ -19,6 +19,7 @@ package uk.gov.hmrc.api.pages
 import play.api.libs.json.{JsValue, Json}
 import org.scalatest.matchers.should.Matchers
 import play.api.libs.json._
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.TestOrganisation
@@ -165,6 +166,6 @@ object TestOrganisationPage extends Matchers {
 
   def verifyValueInResponseBody(expectedValue: String): Unit = {
     val responseBody = state.getResponseBody
-    responseBody should include(expectedValue)
+    (responseBody should include(expectedValue)): Unit
   }
 }
