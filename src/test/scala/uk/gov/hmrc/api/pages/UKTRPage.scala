@@ -16,17 +16,17 @@
 
 package uk.gov.hmrc.api.pages
 
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
+import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.{BTN, ORN, UKTR}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.api.client.TestClient
-import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
 
 import java.net.URI
-import scala.concurrent.{Await, ExecutionContext}
 import scala.concurrent.duration.DurationInt
+import scala.concurrent.{Await, ExecutionContext}
 
 object UKTRPage {
   implicit val ec: ExecutionContext = ExecutionContext.global

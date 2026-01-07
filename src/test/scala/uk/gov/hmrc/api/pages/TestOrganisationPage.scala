@@ -16,21 +16,21 @@
 
 package uk.gov.hmrc.api.pages
 
-import play.api.libs.json.{JsValue, Json}
 import org.scalatest.matchers.should.Matchers
 import play.api.libs.json._
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.TestOrganisation
-import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 
-import scala.concurrent.{Await, ExecutionContext}
-import scala.concurrent.duration._
-import scala.util.Try
 import java.net.URI
+import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext}
+import scala.util.Try
 
 object TestOrganisationPage extends Matchers {
 

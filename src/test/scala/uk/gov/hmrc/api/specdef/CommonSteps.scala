@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.api.specdef
 
-import uk.gov.hmrc.api.pages.{CommonPage, StateStoragePage}
 import org.scalatest.matchers.should.Matchers
+import uk.gov.hmrc.api.pages.{CommonPage, StateStoragePage}
+
 import java.io.File
 
 object CommonSteps extends Matchers {
