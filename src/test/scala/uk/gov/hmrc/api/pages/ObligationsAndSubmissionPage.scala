@@ -27,7 +27,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext}
 
 object ObligationsAndSubmissionPage {
-  implicit val ec: ExecutionContext = ExecutionContext.global
+  given ExecutionContext = ExecutionContext.global
 
   private val httpClient: HttpClientV2     = TestClient.get
   private val state: StateStoragePage.type = StateStoragePage
@@ -44,7 +44,7 @@ object ObligationsAndSubmissionPage {
       case _                                        => throw new IllegalArgumentException(s"Unknown request type provided: '$requestType'")
     }
 
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    given hc: HeaderCarrier = HeaderCarrier()
       .withExtraHeaders("x-pillar2-id" -> pillarID)
       .copy(authorization = Some(Authorization(bearerToken)))
 

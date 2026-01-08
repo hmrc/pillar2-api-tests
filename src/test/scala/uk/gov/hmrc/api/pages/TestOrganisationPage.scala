@@ -36,11 +36,11 @@ object TestOrganisationPage extends Matchers {
   private val httpClient: HttpClientV2      = TestClient.get
   private val state: StateStoragePage.type  = StateStoragePage
   private val submissionApiUrl: String      = TestEnvironment.url("pillar2-submission-api")
-  private implicit val ec: ExecutionContext = ExecutionContext.global
+  private given ExecutionContext = ExecutionContext.global
 
   def createTestOrganisation(domesticFlag: String, orgName: String, endPoint: String, pillarID: String): Int = {
-    val bearerToken                = state.getBearerToken
-    implicit val hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
+    val bearerToken            = state.getBearerToken
+    given hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
     val setDomesticFlag            = if (domesticFlag == "Domestic") "true" else "false"
 
     val requestBody: JsValue = Json.parse(
@@ -65,8 +65,8 @@ object TestOrganisationPage extends Matchers {
   }
 
   def getTestOrganisationDetails(endPoint: String, pillarID: String): Int = {
-    val bearerToken                = state.getBearerToken
-    implicit val hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
+    val bearerToken            = state.getBearerToken
+    given hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
     val fullUrl                    = s"$submissionApiUrl$endPoint"
     println(s"GET from: $fullUrl")
 
@@ -84,8 +84,8 @@ object TestOrganisationPage extends Matchers {
   }
 
   def updateTestOrganisation(domesticFlag: String, orgName: String, endPoint: String, pillarID: String): Int = {
-    val bearerToken                = state.getBearerToken
-    implicit val hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
+    val bearerToken            = state.getBearerToken
+    given hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
     val setDomesticFlag            = if (domesticFlag == "Domestic") "true" else "false"
 
     val requestBody: JsValue = Json.parse(
@@ -120,7 +120,7 @@ object TestOrganisationPage extends Matchers {
   def deleteTestOrganisation(endPoint: String, pillarID: String): Int = {
     val bearerToken = state.getBearerToken
 
-    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
+    given hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request      =
@@ -159,7 +159,7 @@ object TestOrganisationPage extends Matchers {
 
       withClue(s"Verification failed for key '$key':") {
         actualValueAsString should be(expectedValue)
-      }: Unit
+      }
     }
   }
 

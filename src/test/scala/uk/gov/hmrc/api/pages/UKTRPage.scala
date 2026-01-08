@@ -29,7 +29,7 @@ import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext}
 
 object UKTRPage {
-  implicit val ec: ExecutionContext = ExecutionContext.global
+  given ExecutionContext = ExecutionContext.global
 
   private val submissionApiUrl: String     = TestEnvironment.url("pillar2-submission-api")
   private val submissionApiBtnUrl: String  = TestEnvironment.url("pillar2-submission-api-btn")
@@ -41,8 +41,8 @@ object UKTRPage {
   private val state: StateStoragePage.type = StateStoragePage
 
   def sendPLRUKTRRequest(): Int = {
-    val bearerToken                = state.getBearerToken
-    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
+    val bearerToken            = state.getBearerToken
+    given hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
       .withExtraHeaders("Content-Type" -> "application/json")
 
     val request = httpClient
@@ -80,7 +80,7 @@ object UKTRPage {
       case _     => "2024-12-31"
     }
 
-    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
+    given hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request = requestApi match {
@@ -129,8 +129,8 @@ object UKTRPage {
   }
 
   def sendPLRUKTRErrorCodeRequest(pillarID: String, errorCode: String): Int = {
-    val bearerToken                = state.getBearerToken
-    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
+    val bearerToken            = state.getBearerToken
+    given hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val requestBody: String = errorCode match {
