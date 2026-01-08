@@ -41,6 +41,7 @@ object ObligationsAndSubmissionPage {
       case "Obligations and Submission Api backend" => s"$backendUrl" + s"obligations-and-submissions/$parameters"
       case "Obligations and Submission Api"         => s"$submissionApiUrl" + s"obligations-and-submissions?$parameters"
       case "Get ORN"                                => s"$submissionApiUrl" + s"overseas-return-notification?$parameters"
+      case "Account Activity"                       => s"$submissionApiUrl" + s"account-activity?$parameters"
       case _                                        => throw new IllegalArgumentException(s"Unknown request type provided: '$requestType'")
     }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.api.cucumber
+package uk.gov.hmrc.api.helper
 
 import com.google.inject.AbstractModule
 import uk.gov.hmrc.http.client.HttpClientV2
