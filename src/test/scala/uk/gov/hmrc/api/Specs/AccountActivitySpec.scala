@@ -21,7 +21,6 @@ import uk.gov.hmrc.api.specdef.AuthSteps.generateBearerToken
 import uk.gov.hmrc.api.specdef.CommonSteps.{assertStatusCode, validateJsonSchemaFor}
 import uk.gov.hmrc.api.specdef.ObligationsAndSubmissionSteps.getObligationsAndStoreResult
 import uk.gov.hmrc.api.specdef.TestOrganisationSteps.{thenIVerifyTheResponseContainsTheFollowingValues, whenIMakeAPICallToCreate, whenIMakeAPICallToDeleteOrganisationUsing}
-import uk.gov.hmrc.api.specdef.UKTRSteps.givenIMakeAPICallTo
 
 class AccountActivitySpec extends BaseSpec {
 
