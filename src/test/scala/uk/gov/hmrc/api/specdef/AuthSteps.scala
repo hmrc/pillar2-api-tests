@@ -25,7 +25,7 @@ object AuthSteps {
       case "with enrolment" | "without enrolment" | "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" |
           "XEPLR0123456422" | "XEPLR0123456500" | "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" |
           "XEPLR0000000400" | "XEPLR0000000500" | "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR5555551126" |
-          "XEPLR0500000000" =>
+          "XEPLR0500000000" | "XEPLR0000422003" =>
         AuthPage.getBearerLocal(affinity, value, statusCode)
       case _ =>
         throw new IllegalArgumentException(s"Invalid value: $value")

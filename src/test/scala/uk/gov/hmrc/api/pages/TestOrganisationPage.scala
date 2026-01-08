@@ -19,6 +19,7 @@ package uk.gov.hmrc.api.pages
 import play.api.libs.json.{JsValue, Json}
 import org.scalatest.matchers.should.Matchers
 import play.api.libs.json._
+import uk.gov.hmrc.api.Specs.BaseSpec
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.TestOrganisation
@@ -31,7 +32,7 @@ import scala.concurrent.duration._
 import scala.util.Try
 import java.net.URI
 
-object TestOrganisationPage extends Matchers {
+object TestOrganisationPage extends BaseSpec {
 
   private val httpClient: HttpClientV2      = TestClient.get
   private val state: StateStoragePage.type  = StateStoragePage

@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Welcome9",
+  "definitions": {
+    "Welcome9": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "processingDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "transactionDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TransactionDetail"
+          }
+        }
+      },
+      "required": [
+        "processingDate",
+        "transactionDetails"
+      ],
+      "title": "Welcome9"
+    },
+    "TransactionDetail": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "transactionType": {
+          "$ref": "#/definitions/TransactionType"
+        },
+        "transactionDesc": {
+          "type": "string"
+        },
+        "transactionDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "originalAmount": {
+          "type": "integer"
+        },
+        "outstandingAmount": {
+          "type": "integer"
+        },
+        "clearedAmount": {
+          "type": "integer"
+        },
+        "clearingDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClearingDetail"
+          }
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "chargeRefNo": {
+          "type": "string"
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "accruedInterest": {
+          "type": "integer"
+        },
+        "standOverAmount": {
+          "type": "integer"
+        },
+        "appealFlag": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "originalAmount",
+        "transactionDate",
+        "transactionDesc",
+        "transactionType"
+      ],
+      "title": "TransactionDetail"
+    },
+    "ClearingDetail": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "transactionDesc": {
+          "type": "string"
+        },
+        "chargeRefNo": {
+          "type": "string"
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "amount": {
+          "type": "integer"
+        },
+        "clearingDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "clearingReason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "amount",
+        "clearingDate",
+        "clearingReason",
+        "transactionDesc"
+      ],
+      "title": "ClearingDetail"
+    },
+    "TransactionType": {
+      "type": "string",
+      "enum": [
+        "Payment",
+        "Debit",
+        "Credit"
+      ],
+      "title": "TransactionType"
+    }
+  }
+}

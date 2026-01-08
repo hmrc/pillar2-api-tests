@@ -72,6 +72,8 @@ class BTNScenariosSpec extends BaseSpec {
       Given("I have generated a bearer token for an Organisation and XEPLR0123456500 and 201")
       generateBearerToken("Organisation", "XEPLR0123456500", "201")
 
+      When("I make API call to delete organisation using setup/organisation with XEPLR0123456500")
+      whenIMakeAPICallToDeleteOrganisationUsing("setup/organisation", "XEPLR0123456500")
       And(
         "I make API call to create <DomesticFlag> Test Organisation Ltd using setup/organisation with XEPLR0123456500"
       )
@@ -106,6 +108,9 @@ class BTNScenariosSpec extends BaseSpec {
       Given("I have generated a bearer token for an Organisation and XEPLR0000000400 and 201")
       generateBearerToken("Organisation", "XEPLR0000000400", "201")
 
+      When("I make API call to delete organisation using setup/organisation with XEPLR0123456500")
+      whenIMakeAPICallToDeleteOrganisationUsing("setup/organisation", "XEPLR0000000400")
+
       And(
         "I make API call to create <DomesticFlag> Test Organisation Ltd using setup/organisation with XEPLR0000000400"
       )
@@ -138,6 +143,9 @@ class BTNScenariosSpec extends BaseSpec {
     Scenario("Verify Submit BTN response for 401 and validate schema", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XEPLR0000000400 and 201")
       generateBearerToken("Organisation", "XEPLR0000000400", "201")
+
+      When("I make API call to delete organisation using setup/organisation with XEPLR0123456500")
+      whenIMakeAPICallToDeleteOrganisationUsing("setup/organisation", "XEPLR0000000400")
 
       And(
         "I make API call to create <DomesticFlag> Test Organisation Ltd using setup/organisation with XEPLR0000000400"
