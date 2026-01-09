@@ -25,9 +25,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait HttpClient {
 
-  implicit val actorSystem: ActorSystem = ActorSystem()
+  given actorSystem: ActorSystem = ActorSystem()
   val wsClient: StandaloneAhcWSClient   = StandaloneAhcWSClient()
-  implicit val ec: ExecutionContext     = ExecutionContext.global
+  given ExecutionContext = actorSystem.dispatcher
   lazy val shouldProxyForZap: Boolean   = sys.props.get("security.assessment").exists(_.toBoolean)
 
   def standAloneWsRequestWithProxyIfConfigSet(standAloneWsRequest: StandaloneWSRequest): StandaloneWSRequest =

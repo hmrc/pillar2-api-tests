@@ -16,19 +16,20 @@
 
 package uk.gov.hmrc.api.pages
 
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
+import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.{BTN, ORN, UKTR}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.api.client.TestClient
 
 import java.net.URI
-import scala.concurrent.Await
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
+import scala.concurrent.{Await, ExecutionContext}
 
 object UKTRPage {
+  given ExecutionContext = ExecutionContext.global
 
   private val submissionApiUrl: String     = TestEnvironment.url("pillar2-submission-api")
   private val submissionApiBtnUrl: String  = TestEnvironment.url("pillar2-submission-api-btn")
@@ -40,8 +41,8 @@ object UKTRPage {
   private val state: StateStoragePage.type = StateStoragePage
 
   def sendPLRUKTRRequest(): Int = {
-    val bearerToken                = state.getBearerToken
-    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
+    val bearerToken            = state.getBearerToken
+    given hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
       .withExtraHeaders("Content-Type" -> "application/json")
 
     val request = httpClient
@@ -79,7 +80,7 @@ object UKTRPage {
       case _     => "2024-12-31"
     }
 
-    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
+    given hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request = requestApi match {
@@ -128,8 +129,8 @@ object UKTRPage {
   }
 
   def sendPLRUKTRErrorCodeRequest(pillarID: String, errorCode: String): Int = {
-    val bearerToken                = state.getBearerToken
-    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
+    val bearerToken            = state.getBearerToken
+    given hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val requestBody: String = errorCode match {

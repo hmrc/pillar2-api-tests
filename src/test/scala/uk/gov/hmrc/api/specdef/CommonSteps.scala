@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.api.specdef
 
-import uk.gov.hmrc.api.pages.{CommonPage, StateStoragePage}
 import org.scalatest.matchers.should.Matchers
+import uk.gov.hmrc.api.pages.{CommonPage, StateStoragePage}
+
 import java.io.File
 
 object CommonSteps extends Matchers {
@@ -26,20 +27,20 @@ object CommonSteps extends Matchers {
     assertStatusCode(expectedStatusCode)
 
     val actualErrorCode    = StateStoragePage.getResponseErrorCodeVal
-    withClue("because the business logic error code was incorrect") {
+    (withClue("because the business logic error code was incorrect") {
       actualErrorCode should be(expectedErrorCode)
-    }
+    }): Unit
     val actualErrorMessage = StateStoragePage.getResponseErrorMessage
-    withClue("because the error message was incorrect") {
+    (withClue("because the error message was incorrect") {
       actualErrorMessage should be(expectedErrorMessage)
-    }
+    }): Unit
   }
 
   def assertStatusCode(expectedCode: Int): Unit = {
     val actualCode = StateStoragePage.getResponseCode
-    withClue(s"because the API was expected to return $expectedCode") {
+    (withClue(s"because the API was expected to return $expectedCode") {
       actualCode should be(expectedCode)
-    }
+    }): Unit
   }
 
   def validateJsonSchemaFor(endPoint: String, validationType: String, schemaFileName: String): Unit = {

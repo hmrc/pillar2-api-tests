@@ -37,4 +37,4 @@ class ExternalStubsScenariosSpec extends BaseSpec {
     }
   }
 }
-*/
+ */

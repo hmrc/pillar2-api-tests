@@ -16,32 +16,31 @@
 
 package uk.gov.hmrc.api.pages
 
-import play.api.libs.json.{JsValue, Json}
-import org.scalatest.matchers.should.Matchers
 import play.api.libs.json._
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import uk.gov.hmrc.api.Specs.BaseSpec
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.TestOrganisation
-import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 
-import scala.concurrent.{Await, ExecutionContext}
-import scala.concurrent.duration._
-import scala.util.Try
 import java.net.URI
+import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext}
+import scala.util.Try
 
 object TestOrganisationPage extends BaseSpec {
 
   private val httpClient: HttpClientV2      = TestClient.get
   private val state: StateStoragePage.type  = StateStoragePage
   private val submissionApiUrl: String      = TestEnvironment.url("pillar2-submission-api")
-  private implicit val ec: ExecutionContext = ExecutionContext.global
+  private given ExecutionContext = ExecutionContext.global
 
   def createTestOrganisation(domesticFlag: String, orgName: String, endPoint: String, pillarID: String): Int = {
-    val bearerToken                = state.getBearerToken
-    implicit val hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
+    val bearerToken            = state.getBearerToken
+    given hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
     val setDomesticFlag            = if (domesticFlag == "Domestic") "true" else "false"
 
     val requestBody: JsValue = Json.parse(
@@ -66,8 +65,8 @@ object TestOrganisationPage extends BaseSpec {
   }
 
   def getTestOrganisationDetails(endPoint: String, pillarID: String): Int = {
-    val bearerToken                = state.getBearerToken
-    implicit val hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
+    val bearerToken            = state.getBearerToken
+    given hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
     val fullUrl                    = s"$submissionApiUrl$endPoint"
     println(s"GET from: $fullUrl")
 
@@ -85,8 +84,8 @@ object TestOrganisationPage extends BaseSpec {
   }
 
   def updateTestOrganisation(domesticFlag: String, orgName: String, endPoint: String, pillarID: String): Int = {
-    val bearerToken                = state.getBearerToken
-    implicit val hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
+    val bearerToken            = state.getBearerToken
+    given hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
     val setDomesticFlag            = if (domesticFlag == "Domestic") "true" else "false"
 
     val requestBody: JsValue = Json.parse(
@@ -121,8 +120,7 @@ object TestOrganisationPage extends BaseSpec {
   def deleteTestOrganisation(endPoint: String, pillarID: String): Int = {
     val bearerToken = state.getBearerToken
 
-    implicit val hc: HeaderCarrier = HeaderCarrier
-      .apply(authorization = Option(Authorization(bearerToken)))
+    given hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
     val request      =
@@ -167,6 +165,6 @@ object TestOrganisationPage extends BaseSpec {
 
   def verifyValueInResponseBody(expectedValue: String): Unit = {
     val responseBody = state.getResponseBody
-    responseBody should include(expectedValue)
+    (responseBody should include(expectedValue)): Unit
   }
 }

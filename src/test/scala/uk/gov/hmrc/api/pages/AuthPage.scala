@@ -17,7 +17,7 @@
 package uk.gov.hmrc.api.pages
 
 import uk.gov.hmrc.api.conf.TestEnvironment
-import uk.gov.hmrc.api.requestBody.BearerTokenGenerator.{putAgentBodyWithPlrid, putBodyWithEnrolment, putBodyWithOutEnrolment, putBodyWithPlrid}
+import uk.gov.hmrc.api.requestBody.BearerTokenGenerator._
 
 import java.net.URI
 import java.net.http.HttpRequest.BodyPublishers

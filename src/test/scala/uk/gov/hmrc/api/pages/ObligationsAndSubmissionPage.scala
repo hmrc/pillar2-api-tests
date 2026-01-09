@@ -16,18 +16,18 @@
 
 package uk.gov.hmrc.api.pages
 
-import uk.gov.hmrc.api.conf.TestEnvironment
-import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.api.client.TestClient
-import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 
 import java.net.URI
-import scala.concurrent.Await
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext}
 
 object ObligationsAndSubmissionPage {
+  given ExecutionContext = ExecutionContext.global
 
   private val httpClient: HttpClientV2     = TestClient.get
   private val state: StateStoragePage.type = StateStoragePage
@@ -45,7 +45,7 @@ object ObligationsAndSubmissionPage {
       case _                                        => throw new IllegalArgumentException(s"Unknown request type provided: '$requestType'")
     }
 
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    given hc: HeaderCarrier = HeaderCarrier()
       .withExtraHeaders("x-pillar2-id" -> pillarID)
       .copy(authorization = Some(Authorization(bearerToken)))
 
