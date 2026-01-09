@@ -18,4 +18,4 @@ package uk.gov.hmrc.api.Specs.tags
 
 import org.scalatest.Tag
 
-object Ignore extends Tag("Ignore")
+object IgnoreTests extends Tag("IgnoreTests")
