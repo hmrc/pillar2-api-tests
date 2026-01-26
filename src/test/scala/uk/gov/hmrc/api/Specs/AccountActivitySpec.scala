@@ -37,7 +37,7 @@ class AccountActivitySpec extends BaseSpec {
       )
       getObligationsAndStoreResult(
         "Account Activity",
-        "activityFromDate=2024-01-01&activityToDate=2025-12-30",
+        "fromDate=2024-01-01&toDate=2025-12-30",
         "XMPLR0000000012"
       )
 
@@ -57,7 +57,7 @@ class AccountActivitySpec extends BaseSpec {
       )
       getObligationsAndStoreResult(
         "Account Activity",
-        "activityFromDate=2024-01-01&activityToDate=2025-12-35",
+        "fromDate=2024-01-01&toDate=2025-12-35",
         "XMPLR0000000012"
       )
 
@@ -77,7 +77,7 @@ class AccountActivitySpec extends BaseSpec {
       )
       getObligationsAndStoreResult(
         "Account Activity",
-        "activityFromDate=2024-01-01&activityToDate=2025-12-30",
+        "fromDate=2024-01-01&toDate=2025-12-30",
         "XEPLR0000422003"
       )
 
@@ -97,7 +97,7 @@ class AccountActivitySpec extends BaseSpec {
       )
       getObligationsAndStoreResult(
         "Account Activity",
-        "activityFromDate=2024-01-01&activityToDate=2025-12-30",
+        "fromDate=2024-01-01&toDate=2025-12-30",
         "XEPLR0000000500"
       )
 
