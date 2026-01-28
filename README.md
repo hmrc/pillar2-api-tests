@@ -23,10 +23,8 @@ sm2 --start PILLAR_2_ALL
 
 Run tests as follows:
 
-* Argument `<local>` must be `local`, `dev`, `qa` or `staging`.
-
 ```bash
-./run_tests.sh <environment>
+/usr/bin/env bash /Users/prsat/Desktop/Project/pillar2-api-tests/run_tests_local.sh
 ```
 
 ## Scalafmt
