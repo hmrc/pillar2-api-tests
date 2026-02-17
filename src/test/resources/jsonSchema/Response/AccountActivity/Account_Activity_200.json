@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "$ref": "#/definitions/Welcome9",
+  "$ref": "#/definitions/Welcome7",
   "definitions": {
-    "Welcome9": {
+    "Welcome7": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -21,7 +21,7 @@
         "processingDate",
         "transactionDetails"
       ],
-      "title": "Welcome9"
+      "title": "Welcome7"
     },
     "TransactionDetail": {
       "type": "object",
@@ -107,7 +107,7 @@
           "format": "date"
         },
         "clearingReason": {
-          "type": "string"
+          "$ref": "#/definitions/ClearingReason"
         }
       },
       "required": [
@@ -118,12 +118,21 @@
       ],
       "title": "ClearingDetail"
     },
+    "ClearingReason": {
+      "type": "string",
+      "enum": [
+        "Allocated to Charge",
+        "Outgoing payment - Paid",
+        "Cleared by Payment"
+      ],
+      "title": "ClearingReason"
+    },
     "TransactionType": {
       "type": "string",
       "enum": [
-        "Payment",
-        "Debit",
-        "Credit"
+        "PAYMENT",
+        "CREDIT",
+        "DEBIT"
       ],
       "title": "TransactionType"
     }
