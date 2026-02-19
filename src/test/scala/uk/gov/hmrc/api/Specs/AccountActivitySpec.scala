@@ -29,36 +29,36 @@ class AccountActivitySpec extends BaseSpec {
       "Verify account activity successful response and validate schema for backend",
       ApiAcceptanceTests
     ) {
-      Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 200")
-      generateBearerToken("Organisation", "XMPLR0000000012", "200")
+      Given("I have generated a bearer token for an Organisation and XEPLR2000000000 and 200")
+      generateBearerToken("Organisation", "XEPLR2000000000", "200")
 
       When(
-        "I make get API call to URL Account Activity Api and 2024-01-30/2024-12-31 and XMPLR0000000012"
+        "I make get API call to URL Account Activity Api and 2024-01-30/2024-12-31 and XEPLR2000000000"
       )
       getObligationsAndStoreResult(
         "Account Activity",
         "fromDate=2024-01-01&toDate=2025-12-30",
-        "XMPLR0000000012"
+        "XEPLR2000000000"
       )
 
       And("I verify the response code is 200")
       assertStatusCode(200)
 
-      Then("I validate Obligation Response json schema for Obligations_And_Submission_200")
+      Then("I validate Account Activity Response json schema for Account_Activity_200")
       validateJsonSchemaFor("AccountActivity", "Response", "Account_Activity_200")
     }
 
     Scenario("Verify Account Activity response for 400 and validate schema", ApiAcceptanceTests) {
-      Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 201")
-      generateBearerToken("Organisation", "XMPLR0000000012", "201")
+      Given("I have generated a bearer token for an Organisation and XEPLR2000000000 and 201")
+      generateBearerToken("Organisation", "XEPLR2000000000", "201")
 
       When(
-        "I make get API call to URL Account Activity Api and 2024-01-30/2024-12-35 and XMPLR0000000012"
+        "I make get API call to URL Account Activity Api and 2024-01-30/2024-12-35 and XEPLR2000000000"
       )
       getObligationsAndStoreResult(
         "Account Activity",
         "fromDate=2024-01-01&toDate=2025-12-35",
-        "XMPLR0000000012"
+        "XEPLR2000000000"
       )
 
       Then("I verify the response code is 400")
