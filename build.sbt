@@ -11,7 +11,7 @@ lazy val testSuite = (project in file("."))
   .settings(
     name := "pillar2-api-tests",
     version := "0.1.0",
-    scalaVersion := "2.13.12",
+    scalaVersion := "2.13.16",
     scalacOptions ++= Seq("-feature"),
     libraryDependencies ++= Dependencies.test,
     resolvers += MavenRepository("HMRC-open-artefacts-maven2", "https://open.artefacts.tax.service.gov.uk/maven2"),
