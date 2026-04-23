@@ -1,5 +1,3 @@
-**This is the template README. Please update this with project specific content.**
-
 # pillar2-api-tests
 
 

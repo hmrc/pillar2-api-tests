@@ -18,8 +18,5 @@ lazy val testSuite = (project in file("."))
     scalafixSettings
   )
 
-addCommandAlias(
-  "prePrChecks",
-  ";scalafmtCheckAll;scalafmtSbtCheck;scalafixAll --check"
-)
+addCommandAlias("prePrChecks", ";scalafmtCheckAll;scalafmtSbtCheck;scalafixAll --check")
 addCommandAlias("lint", ";scalafmtAll;scalafmtSbt;scalafixAll")
