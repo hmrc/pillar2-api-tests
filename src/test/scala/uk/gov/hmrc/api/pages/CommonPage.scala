@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.api.pages
 
-import scala.io.Source
+import cats.data.Validated.{Invalid, Valid}
 import io.circe.parser
 import io.circe.schema.Schema
-import cats.data.Validated.{Invalid, Valid}
 
 import java.io.File
+import scala.io.Source
 
 object CommonPage {
   def validateJsonSchema(path: String, body: String, validationType: String): Unit = {

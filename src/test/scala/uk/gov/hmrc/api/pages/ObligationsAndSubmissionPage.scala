@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.api.pages
 
-import uk.gov.hmrc.api.conf.TestEnvironment
-import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.api.client.TestClient
-import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 
 import java.net.URI
 import scala.concurrent.Await
