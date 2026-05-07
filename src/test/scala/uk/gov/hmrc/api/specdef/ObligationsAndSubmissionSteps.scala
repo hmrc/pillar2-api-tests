@@ -17,6 +17,7 @@
 package uk.gov.hmrc.api.specdef
 
 import uk.gov.hmrc.api.pages.{ObligationsAndSubmissionPage, StateStoragePage}
+import uk.gov.hmrc.api.utils.ApiLogger
 
 object ObligationsAndSubmissionSteps {
 
@@ -26,7 +27,7 @@ object ObligationsAndSubmissionSteps {
 
     StateStoragePage.setResponseCode(responseCode)
 
-    println(s"API call made to '$requestType' for Pillar ID '$pillarID'. Response code '$responseCode' stored.")
+    ApiLogger.log.info(s"API call made to '$requestType' for Pillar ID '$pillarID'. Response code '$responseCode' stored.")
     responseCode
   }
 }

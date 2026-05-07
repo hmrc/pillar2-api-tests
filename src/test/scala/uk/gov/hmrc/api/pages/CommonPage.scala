@@ -19,6 +19,7 @@ package uk.gov.hmrc.api.pages
 import cats.data.Validated.{Invalid, Valid}
 import io.circe.parser
 import io.circe.schema.Schema
+import uk.gov.hmrc.api.utils.ApiLogger
 
 import java.io.File
 import scala.io.Source
@@ -31,7 +32,7 @@ object CommonPage {
       throw new RuntimeException(s"Schema file not found at: $path")
     }
 
-    println(s"Reading schema from: $path")
+    ApiLogger.log.info(s"Reading schema from: $path")
 
     val schemaContent: String = Source.fromFile(schemaFile).getLines().mkString
     val parsedSchema          = parser
@@ -48,7 +49,7 @@ object CommonPage {
     val schema = Schema.load(parsedSchema)
     schema.validate(parsedJson) match {
       case Valid(_)        =>
-        println(s"Validation successful: JSON $validationType matches schema at $path")
+        ApiLogger.log.info(s"Validation successful: JSON $validationType matches schema at $path")
       case Invalid(errors) =>
         val errorMessages = errors.toList.map(_.getMessage).mkString(", ")
         throw new AssertionError(s"JSON schema validation failed: $errorMessages")
