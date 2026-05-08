@@ -28,7 +28,10 @@ class GIRScenariosSpec extends BaseSpec {
       Then("I verify the response code is 201")
       assertStatusCode(201)
 
-      And("I validate GIR Response json schema for GIRSuccess")
+      And("I validate GIR Request json schema")
+      validateJsonSchemaFor("GIR", "Requests", "SubmitGIR")
+
+      And("I validate GIR Response json schema")
       validateJsonSchemaFor("GIR", "Response", "GIR_200")
 
       And("I make API call to amend GIR using setup/gir with XMPLR0000000012 and 200")
