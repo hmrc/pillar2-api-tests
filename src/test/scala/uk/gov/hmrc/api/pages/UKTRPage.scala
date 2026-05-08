@@ -18,7 +18,7 @@ package uk.gov.hmrc.api.pages
 
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
-import uk.gov.hmrc.api.requestBody.{BTN, ORN, UKTR}
+import uk.gov.hmrc.api.requestBody.{BTN, GIR, ORN, UKTR}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
@@ -70,6 +70,9 @@ object UKTRPage {
       case "Submission Api BTN"        => submissionApiBtnUrl + endpoint
       case "Submission Api ORN"        => submissionApiUrl + endpoint
       case "Submission Api Amend ORN"  => submissionApiUrl + endpoint
+      case "Submission Api GIR"        => submissionApiUrl + endpoint
+      case "Amend GIR"                 => submissionApiUrl + endpoint
+      case "Delete GIR"                => submissionApiUrl + endpoint
       case "Stub"                      => stubUrl + endpoint
       case "Backend"                   => backendUrl + endpoint
     }
@@ -94,6 +97,24 @@ object UKTRPage {
         httpClient
           .post(URI.create(requestApiUrl).toURL)
           .withBody(BTN.requestSubmissionApiBTNBody(accountingPeriodTo))
+          .withProxy
+      case "Submission Api GIR"        =>
+        state.setRequestBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo).replace("\n", " "))
+        httpClient
+          .post(URI.create(requestApiUrl).toURL)
+          .withBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo))
+          .withProxy
+      case "Amend GIR"                 =>
+        state.setRequestBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo).replace("\n", " "))
+        httpClient
+          .put(URI.create(requestApiUrl).toURL)
+          .withBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo))
+          .withProxy
+      case "Delete GIR"                 =>
+        state.setRequestBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo).replace("\n", " "))
+        httpClient
+          .delete(URI.create(requestApiUrl).toURL)
+          .withBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo))
           .withProxy
       case "Amend UKTR"                =>
         state.setRequestBody(UKTR.requestBody(accountingPeriodTo).replace("\n", " "))

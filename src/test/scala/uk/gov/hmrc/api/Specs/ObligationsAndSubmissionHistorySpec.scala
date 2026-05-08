@@ -33,6 +33,9 @@ class ObligationsAndSubmissionHistorySpec extends BaseSpec {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 200")
       generateBearerToken("Organisation", "XMPLR0000000012", "200")
 
+      When("I make API call to delete organisation using setup/organisation with XMPLR0000000012")
+      whenIMakeAPICallToDeleteOrganisationUsing("setup/organisation", "XMPLR0000000012")
+
       And(
         "I make API call to create <DomesticFlag> Test Organisation Ltd using setup/organisation with XMPLR0000000012"
       )
