@@ -8,5 +8,4 @@ object GIR {
        |  "accountingPeriodTo": "$accountingPeriodTo"
        |}
        |""".stripMargin
-
 }
