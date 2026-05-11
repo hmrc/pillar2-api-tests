@@ -59,8 +59,7 @@ object ObligationsAndSubmissionPage {
     state.setResponseBody(HttpResponse.body)
     val responseCode = HttpResponse.status
 
-    ApiLogger.log.info(s"Response Code: $responseCode")
-    ApiLogger.log.info(s"Response Body: ${HttpResponse.body}")
+    ApiLogger.log.info(s"Response Code: $responseCode\nResponse Body: ${HttpResponse.body}")
 
     responseCode
   }
