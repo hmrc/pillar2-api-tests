@@ -133,9 +133,7 @@ object TestOrganisationPage extends BaseSpec {
     val responseCode = response.status
     val responseBody = response.body
     state.setResponseBody(response.body)
-    ApiLogger.log.info(submissionApiUrl + endPoint)
-    ApiLogger.log.info(s" Delete Response Code: $responseCode")
-    ApiLogger.log.info(s" Delete Response Body: $responseBody")
+    ApiLogger.log.info(s"Endpoint: $submissionApiUrl + $endPoint\nDelete Response Code: $responseCode\nDelete Response Body: $responseBody")
     responseCode
   }
 

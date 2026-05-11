@@ -56,8 +56,8 @@ object AuthPage {
 
     val response = client.send(request, HttpResponse.BodyHandlers.ofString())
 
-    ApiLogger.log.info(s"Response Code: ${response.statusCode()}")
-    ApiLogger.log.info(s"Response Body: ${response.body()}")
+    ApiLogger.log.info(s"Response Code: ${response.statusCode()}\nResponse Body: ${response.body()}")
+    
     val bearerTokenHeader = response
       .headers()
       .firstValue("authorization")
