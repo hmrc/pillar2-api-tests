@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "object",
+      "properties": {
+        "processingDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["processingDate"]
+    }
+  },
+  "required": ["success"]
+}

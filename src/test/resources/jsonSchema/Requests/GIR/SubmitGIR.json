@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "accountingPeriodFrom": {
+      "type": "string",
+      "format": "date"
+    },
+    "accountingPeriodTo": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "accountingPeriodFrom",
+    "accountingPeriodTo"
+  ]
+}
