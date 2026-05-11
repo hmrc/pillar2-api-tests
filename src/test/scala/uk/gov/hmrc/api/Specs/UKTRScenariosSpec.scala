@@ -122,7 +122,7 @@ class UKTRScenariosSpec extends BaseSpec {
       assertStatusCode(401)
     }
 
-    Scenario("VVerify Submit UKTR response 403 for Individual", ApiAcceptanceTests) {
+    Scenario("Verify Submit UKTR response 403 for Individual", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Individual and XEPLR0000000400 and 403")
       generateBearerToken("Individual", "XEPLR0000000400", "403")
 
