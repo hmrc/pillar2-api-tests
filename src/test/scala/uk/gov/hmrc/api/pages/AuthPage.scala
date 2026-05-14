@@ -18,6 +18,7 @@ package uk.gov.hmrc.api.pages
 
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.BearerTokenGenerator._
+import uk.gov.hmrc.api.utils.ApiLogger
 
 import java.net.URI
 import java.net.http.HttpRequest.BodyPublishers
@@ -55,8 +56,8 @@ object AuthPage {
 
     val response = client.send(request, HttpResponse.BodyHandlers.ofString())
 
-    println(s"Response Code: ${response.statusCode()}")
-    println(s"Response Body: ${response.body()}")
+    ApiLogger.log.info(s"Response Code: ${response.statusCode()}\nResponse Body: ${response.body()}")
+    
     val bearerTokenHeader = response
       .headers()
       .firstValue("authorization")
@@ -71,7 +72,7 @@ object AuthPage {
           .getOrElse(throw new RuntimeException("BearerToken not found"))
     }
 
-    println(s"Extracted Bearer Token: $bearerToken")
+    ApiLogger.log.info(s"Extracted Bearer Token: $bearerToken")
     bearerToken
   }
 }

@@ -18,6 +18,7 @@ package uk.gov.hmrc.api.specdef
 
 import org.scalatest.matchers.should.Matchers
 import uk.gov.hmrc.api.pages.{CommonPage, StateStoragePage}
+import uk.gov.hmrc.api.utils.ApiLogger
 
 import java.io.File
 
@@ -53,10 +54,10 @@ object CommonSteps extends Matchers {
     val fallbackPath = s"$basePath$schemaFileName.json"
 
     val schemaPath = if (new File(primaryPath).exists()) {
-      println(s"Using schema: $primaryPath")
+      ApiLogger.log.info(s"Using schema: $primaryPath")
       primaryPath
     } else {
-      println(s"Schema not found at primary path, using fallback: $fallbackPath")
+      ApiLogger.log.info(s"Schema not found at primary path, using fallback: $fallbackPath")
       fallbackPath
     }
 

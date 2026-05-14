@@ -22,6 +22,7 @@ import uk.gov.hmrc.api.Specs.BaseSpec
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.TestOrganisation
+import uk.gov.hmrc.api.utils.ApiLogger
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
@@ -49,7 +50,7 @@ object TestOrganisationPage extends BaseSpec {
 
     state.setRequestBody(Json.stringify(requestBody))
     val fullUrl = s"$submissionApiUrl$endPoint"
-    println(s"POST to: $fullUrl")
+    ApiLogger.log.info(s"POST to: $fullUrl")
 
     val response: HttpResponse = Await.result(
       httpClient
@@ -60,7 +61,7 @@ object TestOrganisationPage extends BaseSpec {
       10.seconds
     )
     state.setResponseBody(response.body)
-    println(s"Response Code: ${response.status}\nResponse Body: ${response.body}")
+    ApiLogger.log.info(s"Response Code: ${response.status}\nResponse Body: ${response.body}")
     response.status
   }
 
@@ -68,7 +69,7 @@ object TestOrganisationPage extends BaseSpec {
     val bearerToken                = state.getBearerToken
     implicit val hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
     val fullUrl                    = s"$submissionApiUrl$endPoint"
-    println(s"GET from: $fullUrl")
+    ApiLogger.log.info(s"GET from: $fullUrl")
 
     val response = Await.result(
       httpClient
@@ -79,7 +80,7 @@ object TestOrganisationPage extends BaseSpec {
     )
 
     state.setResponseBody(response.body)
-    println(s"Get Response Code: ${response.status}\nGet Response Body: ${response.body}")
+    ApiLogger.log.info(s"Get Response Code: ${response.status}\nGet Response Body: ${response.body}")
     response.status
   }
 
@@ -93,7 +94,7 @@ object TestOrganisationPage extends BaseSpec {
     )
     state.setRequestBody(Json.stringify(requestBody))
     val fullUrl              = s"$submissionApiUrl$endPoint"
-    println(s"PUT to: $fullUrl")
+    ApiLogger.log.info(s"PUT to: $fullUrl")
 
     val response = Await.result(
       httpClient
@@ -105,7 +106,7 @@ object TestOrganisationPage extends BaseSpec {
     )
 
     state.setResponseBody(response.body)
-    println(s"Response Code: ${response.status}\nUpdated Response Body: ${response.body}")
+    ApiLogger.log.info(s"Response Code: ${response.status}\nUpdated Response Body: ${response.body}")
     response.status
   }
 
@@ -132,9 +133,7 @@ object TestOrganisationPage extends BaseSpec {
     val responseCode = response.status
     val responseBody = response.body
     state.setResponseBody(response.body)
-    println(submissionApiUrl + endPoint)
-    println(s" Delete Response Code: $responseCode")
-    println(s" Delete Response Body: $responseBody")
+    ApiLogger.log.info(s"Endpoint: $submissionApiUrl + $endPoint\nDelete Response Code: $responseCode\nDelete Response Body: $responseBody")
     responseCode
   }
 

@@ -18,6 +18,7 @@ package uk.gov.hmrc.api.pages
 
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
+import uk.gov.hmrc.api.utils.ApiLogger
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
@@ -49,7 +50,7 @@ object ObligationsAndSubmissionPage {
       .withExtraHeaders("x-pillar2-id" -> pillarID)
       .copy(authorization = Some(Authorization(bearerToken)))
 
-    println(s"Sending GET request to: $requestApiUrl")
+    ApiLogger.log.info(s"Sending GET request to: $requestApiUrl")
 
     val request = httpClient.get(URI.create(requestApiUrl).toURL).withProxy
 
@@ -58,8 +59,7 @@ object ObligationsAndSubmissionPage {
     state.setResponseBody(HttpResponse.body)
     val responseCode = HttpResponse.status
 
-    println(s"Response Code: $responseCode")
-    println(s"Response Body: ${HttpResponse.body}")
+    ApiLogger.log.info(s"Response Code: $responseCode\nResponse Body: ${HttpResponse.body}")
 
     responseCode
   }

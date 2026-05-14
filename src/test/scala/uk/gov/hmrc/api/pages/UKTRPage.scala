@@ -19,6 +19,7 @@ package uk.gov.hmrc.api.pages
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.{BTN, GIR, ORN, UKTR}
+import uk.gov.hmrc.api.utils.ApiLogger
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
@@ -50,7 +51,7 @@ object UKTRPage {
       .withProxy
 
     val response = Await.result(request.execute[HttpResponse], 5.seconds)
-    println(s"Response Code: ${response.status}")
+    ApiLogger.log.info(s"Response Code: ${response.status}")
     response.status
   }
 
@@ -143,8 +144,7 @@ object UKTRPage {
     val responseCode = response.status
     state.setResponseBody(response.body)
 
-    println(s"Response Code: $responseCode")
-    println(s"Response Body: ${state.getResponseBody}")
+    ApiLogger.log.info(s"Response Code: $responseCode\nResponse Body: ${state.getResponseBody}")
     responseCode
   }
 
@@ -174,8 +174,7 @@ object UKTRPage {
     val responseBody = response.json
     state.setResponseErrorCodeVal((responseBody \ "code").as[String])
     state.setResponseErrorMessage((responseBody \ "message").as[String])
-    println(s"Response Code: $responseCode")
-    println(s"Response Body: $responseBody")
+    ApiLogger.log.info(s"Response Code: $responseCode\nResponse Body: $responseBody")
     responseCode
   }
 }
