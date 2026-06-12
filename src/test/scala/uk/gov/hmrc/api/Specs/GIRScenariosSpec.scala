@@ -56,11 +56,11 @@ class GIRScenariosSpec extends BaseSpec {
       Then("I verify the response code is 200")
       assertStatusCode(200)
 
-      And("I make API call to amend GIR using setup/gir with XMPLR0000000012 and 200")
-      givenIMakeAPICallTo("Delete GIR", "setup/globe-information-return", "XMPLR0000000012", "200")
+      And("I make API call to delete GIR using setup/gir with XMPLR0000000012 and 204")
+      givenIMakeAPICallTo("Delete GIR", "setup/globe-information-return", "XMPLR0000000012", "204")
 
       Then("I verify the response code is 200")
-      assertStatusCode(200)
+      assertStatusCode(204)
     }
   }
 }
