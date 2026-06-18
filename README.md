@@ -46,14 +46,10 @@ sbt scalafmtAll
 ```
 
 #### Run security tests locally
-To run zap tests for any of the services, download from https://www.zaproxy.org/download/, extract and execute the
-following in the root of the extracted folder:
 
-`./zap.sh -daemon -config api.disablekey=true -port 11000`
+#Clone https://github.com/hmrc/dast-config-manager into workspace and then run
 
-and run below command to run security tests locally:
-
-`./run_zap_tests_local.sh`
+./run_zap_tests_local.sh
 
 #### Run security tests on jenkins
 `./run_tests.sh`
