@@ -37,9 +37,9 @@ object AuthPage {
       case "without enrolment" =>
         putBodyWithOutEnrolment(affinityGroup)
       case "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" | "XEPLR0123456422" | "XEPLR0123456500" |
-           "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" | "XEPLR0000000400" | "XEPLR0000000500" | "XEPLR8888888888" |
-           "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR5555551126" | "XEPLR0500000000" | "XEPLR2000000000" |
-           "XEPLR0000422003" =>
+          "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" | "XEPLR0000000400" | "XEPLR0000000500" |
+          "XEPLR8888888888" | "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR5555551126" | "XEPLR0500000000" |
+          "XEPLR2000000000" | "XEPLR0000422003" =>
         putBodyWithPlrid(affinityGroup, value)
       case _                   => throw new IllegalArgumentException(s"Unexpected value: $value")
     }
@@ -57,7 +57,7 @@ object AuthPage {
     val response = client.send(request, HttpResponse.BodyHandlers.ofString())
 
     ApiLogger.log.info(s"Response Code: ${response.statusCode()}\nResponse Body: ${response.body()}")
-    
+
     val bearerTokenHeader = response
       .headers()
       .firstValue("authorization")

@@ -1,6 +1,5 @@
 # pillar2-api-tests
 
-
 ## Pre-requisites
 
 ### Services
@@ -22,7 +21,7 @@ sm2 --start PILLAR_2_ALL
 Run tests as follows:
 
 ```bash
-/usr/bin/env bash /Users/prsat/Desktop/Project/pillar2-api-tests/run_tests_local.sh
+/usr/bin/env bash ./run_tests_local.sh
 ```
 
 ## Scalafmt
@@ -44,12 +43,6 @@ Format all project files as follows:
 ```bash
 sbt scalafmtAll
 ```
-
-#### Run security tests locally
-
-#Clone https://github.com/hmrc/dast-config-manager into workspace and then run
-
-./run_zap_tests_local.sh
 
 #### Run security tests on jenkins
 `./run_tests.sh`
