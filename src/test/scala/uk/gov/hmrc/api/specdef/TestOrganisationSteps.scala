@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.api.specdef
 
-import uk.gov.hmrc.api.pages.TestOrganisationPage
-import uk.gov.hmrc.api.pages._
+import uk.gov.hmrc.api.pages.*
 
 object TestOrganisationSteps {
 
