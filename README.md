@@ -26,7 +26,7 @@ Run tests as follows:
 
 ## Scalafmt
 
-Check all project files are formatted as expected as follows:
+Check all project files are formatted as expected with:
 
 ```bash
 sbt scalafmtCheckAll scalafmtCheck

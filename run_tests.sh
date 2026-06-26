@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-BROWSER=$1
-ENVIRONMENT=$2
+ENVIRONMENT=$1
 
-  sbt clean -Dbrowser="${BROWSER:=chrome}" -Denvironment="${ENVIRONMENT:=local}" -Dsecurity.assessment=true "testOnly uk.gov.hmrc.api.Specs.* -- -n ApiAcceptanceTests" testReport
+sbt clean -Denvironment="${ENVIRONMENT:=local}" -Dsecurity.assessment=true "testOnly uk.gov.hmrc.api.Specs.* -- -n ApiAcceptanceTests"
