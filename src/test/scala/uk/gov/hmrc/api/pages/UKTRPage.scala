@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.api.pages
 
+import play.api.libs.ws.writeableOf_String
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody._
