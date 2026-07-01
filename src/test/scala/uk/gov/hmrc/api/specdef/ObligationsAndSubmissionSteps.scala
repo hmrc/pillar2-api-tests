@@ -27,7 +27,9 @@ object ObligationsAndSubmissionSteps {
 
     StateStoragePage.setResponseCode(responseCode)
 
-    ApiLogger.log.info(s"API call made to '$requestType' for Pillar ID '$pillarID'. Response code '$responseCode' stored.")
+    ApiLogger.log.info(
+      s"API call made to '$requestType' for Pillar ID '$pillarID'. Response code '$responseCode' stored."
+    )
     responseCode
   }
 }

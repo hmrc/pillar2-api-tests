@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.api.pages
 
+import play.api.libs.ws.writeableOf_String
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.{BTN, GIR, ORN, UKTR}
 import uk.gov.hmrc.api.utils.ApiLogger
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 
@@ -111,7 +112,7 @@ object UKTRPage {
           .put(URI.create(requestApiUrl).toURL)
           .withBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo))
           .withProxy
-      case "Delete GIR"                 =>
+      case "Delete GIR"                =>
         state.setRequestBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo).replace("\n", " "))
         httpClient
           .delete(URI.create(requestApiUrl).toURL)

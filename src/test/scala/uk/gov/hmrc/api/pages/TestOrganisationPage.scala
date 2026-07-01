@@ -16,19 +16,19 @@
 
 package uk.gov.hmrc.api.pages
 
-import play.api.libs.json._
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.*
+import play.api.libs.ws.writeableOf_JsValue
 import uk.gov.hmrc.api.Specs.BaseSpec
 import uk.gov.hmrc.api.client.TestClient
 import uk.gov.hmrc.api.conf.TestEnvironment
 import uk.gov.hmrc.api.requestBody.TestOrganisation
 import uk.gov.hmrc.api.utils.ApiLogger
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, HttpResponse}
 
 import java.net.URI
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{Await, ExecutionContext}
 import scala.util.Try
 
@@ -133,7 +133,9 @@ object TestOrganisationPage extends BaseSpec {
     val responseCode = response.status
     val responseBody = response.body
     state.setResponseBody(response.body)
-    ApiLogger.log.info(s"Endpoint: $submissionApiUrl + $endPoint\nDelete Response Code: $responseCode\nDelete Response Body: $responseBody")
+    ApiLogger.log.info(
+      s"Endpoint: $submissionApiUrl + $endPoint\nDelete Response Code: $responseCode\nDelete Response Body: $responseBody"
+    )
     responseCode
   }
 

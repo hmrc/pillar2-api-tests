@@ -16,15 +16,18 @@
 
 package uk.gov.hmrc.api.pages
 
-import cats.data.Validated.{Invalid, Valid}
-import io.circe.parser
-import io.circe.schema.Schema
+import com.networknt.schema.{InputFormat, JsonSchema, JsonSchemaFactory, SpecVersion}
 import uk.gov.hmrc.api.utils.ApiLogger
 
 import java.io.File
 import scala.io.Source
+import scala.jdk.CollectionConverters.*
+import scala.util.Using
 
 object CommonPage {
+
+  private val schemaFactory: JsonSchemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7)
+
   def validateJsonSchema(path: String, body: String, validationType: String): Unit = {
     val schemaFile = new File(path)
 
@@ -34,25 +37,16 @@ object CommonPage {
 
     ApiLogger.log.info(s"Reading schema from: $path")
 
-    val schemaContent: String = Source.fromFile(schemaFile).getLines().mkString
-    val parsedSchema          = parser
-      .parse(schemaContent)
-      .getOrElse(
-        throw new RuntimeException(s"Invalid $validationType schema JSON in $path")
-      )
-    val parsedJson            = parser
-      .parse(body)
-      .getOrElse(
-        throw new RuntimeException(s"Invalid $validationType JSON")
-      )
+    val schemaContent: String = Using.resource(Source.fromFile(schemaFile))(_.mkString)
+    val schema: JsonSchema    = schemaFactory.getSchema(schemaContent)
 
-    val schema = Schema.load(parsedSchema)
-    schema.validate(parsedJson) match {
-      case Valid(_)        =>
+    schema.validate(body, InputFormat.JSON).asScala.toList match {
+      case Nil    =>
         ApiLogger.log.info(s"Validation successful: JSON $validationType matches schema at $path")
-      case Invalid(errors) =>
-        val errorMessages = errors.toList.map(_.getMessage).mkString(", ")
-        throw new AssertionError(s"JSON schema validation failed: $errorMessages")
+      case errors =>
+        val errorMessages = errors.map(_.getMessage).mkString(", ")
+        throw new AssertionError(s"JSON schema validation failed ($validationType): $errorMessages")
     }
   }
+
 }
