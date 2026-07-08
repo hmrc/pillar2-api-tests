@@ -47,13 +47,13 @@ object CommonSteps extends Matchers {
   def validateJsonSchemaFor(endPoint: String, validationType: String, schemaFileName: String): Unit = {
     val basePath       = s"src/test/resources/jsonSchema/$validationType/"
     val bodyToValidate =
-      if (validationType == "Requests") StateStoragePage.getRequestBody else StateStoragePage.getResponseBody
+      if validationType == "Requests" then StateStoragePage.getRequestBody else StateStoragePage.getResponseBody
 
     val primaryPath = s"$basePath$endPoint/$schemaFileName.json"
 
     val fallbackPath = s"$basePath$schemaFileName.json"
 
-    val schemaPath = if (new File(primaryPath).exists()) {
+    val schemaPath = if new File(primaryPath).exists() then {
       ApiLogger.log.info(s"Using schema: $primaryPath")
       primaryPath
     } else {

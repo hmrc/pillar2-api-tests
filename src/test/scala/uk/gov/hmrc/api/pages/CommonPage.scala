@@ -31,7 +31,7 @@ object CommonPage {
   def validateJsonSchema(path: String, body: String, validationType: String): Unit = {
     val schemaFile = new File(path)
 
-    if (!schemaFile.exists()) {
+    if !schemaFile.exists() then {
       throw new RuntimeException(s"Schema file not found at: $path")
     }
 

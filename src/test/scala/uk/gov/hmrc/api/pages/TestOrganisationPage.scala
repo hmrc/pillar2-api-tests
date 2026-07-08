@@ -42,7 +42,7 @@ object TestOrganisationPage extends BaseSpec {
   def createTestOrganisation(domesticFlag: String, orgName: String, endPoint: String, pillarID: String): Int = {
     val bearerToken                = state.getBearerToken
     implicit val hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
-    val setDomesticFlag            = if (domesticFlag == "Domestic") "true" else "false"
+    val setDomesticFlag            = if domesticFlag == "Domestic" then "true" else "false"
 
     val requestBody: JsValue = Json.parse(
       TestOrganisation.testOrganisationBody(setDomesticFlag, orgName).replace("\n", " ")
@@ -87,7 +87,7 @@ object TestOrganisationPage extends BaseSpec {
   def updateTestOrganisation(domesticFlag: String, orgName: String, endPoint: String, pillarID: String): Int = {
     val bearerToken                = state.getBearerToken
     implicit val hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
-    val setDomesticFlag            = if (domesticFlag == "Domestic") "true" else "false"
+    val setDomesticFlag            = if domesticFlag == "Domestic" then "true" else "false"
 
     val requestBody: JsValue = Json.parse(
       TestOrganisation.testOrganisationBody(setDomesticFlag, orgName).replace("\n", " ")

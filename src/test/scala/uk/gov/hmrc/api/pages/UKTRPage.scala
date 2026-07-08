@@ -62,7 +62,7 @@ object UKTRPage {
     pillarID: String,
     statusCode: String
   ): Int = {
-    val bearerToken = if (statusCode == "401") "InvalidBearerToken" else state.getBearerToken
+    val bearerToken = if statusCode == "401" then "InvalidBearerToken" else state.getBearerToken
 
     val requestApiUrl: String = requestApi match {
       case "External stub"             => externalStubUrl + endpoint
