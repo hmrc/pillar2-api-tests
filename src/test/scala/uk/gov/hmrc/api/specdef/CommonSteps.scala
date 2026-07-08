@@ -27,7 +27,7 @@ object CommonSteps extends Matchers {
   def assertErrorResponse(expectedStatusCode: Int, expectedErrorCode: String, expectedErrorMessage: String): Unit = {
     assertStatusCode(expectedStatusCode)
 
-    val actualErrorCode    = StateStoragePage.getResponseErrorCodeVal
+    val actualErrorCode = StateStoragePage.getResponseErrorCodeVal
     withClue("because the business logic error code was incorrect") {
       actualErrorCode should be(expectedErrorCode)
     }

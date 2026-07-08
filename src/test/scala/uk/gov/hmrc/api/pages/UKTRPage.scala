@@ -32,17 +32,17 @@ import scala.concurrent.duration.DurationInt
 
 object UKTRPage {
 
-  private val submissionApiUrl: String     = TestEnvironment.url("pillar2-submission-api")
-  private val submissionApiBtnUrl: String  = TestEnvironment.url("pillar2-submission-api-btn")
-  private val externalStubUrl: String      = TestEnvironment.url("pillar2-external-test-stub")
-  private val stubUrl: String              = TestEnvironment.url("pillar2-stub")
-  private val backendUrl: String           = TestEnvironment.url("pillar2-backend")
-  private val defaultAccountingPeriodTo    = "2024-30-14"
-  private val httpClient: HttpClientV2     = TestClient.get
-  private val state: StateStoragePage.type = StateStoragePage
+  private val submissionApiUrl:    String = TestEnvironment.url("pillar2-submission-api")
+  private val submissionApiBtnUrl: String = TestEnvironment.url("pillar2-submission-api-btn")
+  private val externalStubUrl:     String = TestEnvironment.url("pillar2-external-test-stub")
+  private val stubUrl:             String = TestEnvironment.url("pillar2-stub")
+  private val backendUrl:          String = TestEnvironment.url("pillar2-backend")
+  private val defaultAccountingPeriodTo = "2024-30-14"
+  private val httpClient: HttpClientV2          = TestClient.get
+  private val state:      StateStoragePage.type = StateStoragePage
 
   def sendPLRUKTRRequest(): Int = {
-    val bearerToken                = state.getBearerToken
+    val bearerToken = state.getBearerToken
     implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
       .withExtraHeaders("Content-Type" -> "application/json")
 
@@ -58,8 +58,8 @@ object UKTRPage {
 
   def sendUKTRRequest(
     requestApi: String,
-    endpoint: String,
-    pillarID: String,
+    endpoint:   String,
+    pillarID:   String,
     statusCode: String
   ): Int = {
     val bearerToken = if statusCode == "401" then "InvalidBearerToken" else state.getBearerToken
@@ -94,49 +94,49 @@ object UKTRPage {
           .post(URI.create(requestApiUrl).toURL)
           .withBody(UKTR.requestSubmitUktrNilReturnBody(accountingPeriodTo))
           .withProxy
-      case "Submission Api BTN"        =>
+      case "Submission Api BTN" =>
         state.setRequestBody(BTN.requestSubmissionApiBTNBody(accountingPeriodTo).replace("\n", " "))
         httpClient
           .post(URI.create(requestApiUrl).toURL)
           .withBody(BTN.requestSubmissionApiBTNBody(accountingPeriodTo))
           .withProxy
-      case "Submission Api GIR"        =>
+      case "Submission Api GIR" =>
         state.setRequestBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo).replace("\n", " "))
         httpClient
           .post(URI.create(requestApiUrl).toURL)
           .withBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo))
           .withProxy
-      case "Amend GIR"                 =>
+      case "Amend GIR" =>
         state.setRequestBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo).replace("\n", " "))
         httpClient
           .put(URI.create(requestApiUrl).toURL)
           .withBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo))
           .withProxy
-      case "Delete GIR"                =>
+      case "Delete GIR" =>
         state.setRequestBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo).replace("\n", " "))
         httpClient
           .delete(URI.create(requestApiUrl).toURL)
           .withBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo))
           .withProxy
-      case "Amend UKTR"                =>
+      case "Amend UKTR" =>
         state.setRequestBody(UKTR.requestBody(accountingPeriodTo).replace("\n", " "))
         httpClient
           .put(URI.create(requestApiUrl).toURL)
           .withBody(UKTR.requestBody(accountingPeriodTo))
           .withProxy
-      case "Submission Api ORN"        =>
+      case "Submission Api ORN" =>
         state.setRequestBody(ORN.requestBody().replace("\n", " "))
         httpClient
           .post(URI.create(requestApiUrl).toURL)
           .withBody(ORN.requestBody())
           .withProxy
-      case "Submission Api Amend ORN"  =>
+      case "Submission Api Amend ORN" =>
         state.setRequestBody(ORN.requestBody().replace("\n", " "))
         httpClient
           .put(URI.create(requestApiUrl).toURL)
           .withBody(ORN.requestBodyAmendORN())
           .withProxy
-      case _                           =>
+      case _ =>
         state.setRequestBody(UKTR.requestBody(accountingPeriodTo).replace("\n", " "))
         httpClient.post(URI.create(requestApiUrl).toURL).withProxy.withBody(UKTR.requestBody(accountingPeriodTo))
     }
@@ -150,7 +150,7 @@ object UKTRPage {
   }
 
   def sendPLRUKTRErrorCodeRequest(pillarID: String, errorCode: String): Int = {
-    val bearerToken                = state.getBearerToken
+    val bearerToken = state.getBearerToken
     implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 

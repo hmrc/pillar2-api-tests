@@ -37,11 +37,11 @@ object CommonPage {
 
     ApiLogger.log.info(s"Reading schema from: $path")
 
-    val schemaContent: String = Using.resource(Source.fromFile(schemaFile))(_.mkString)
-    val schema: JsonSchema    = schemaFactory.getSchema(schemaContent)
+    val schemaContent: String     = Using.resource(Source.fromFile(schemaFile))(_.mkString)
+    val schema:        JsonSchema = schemaFactory.getSchema(schemaContent)
 
     schema.validate(body, InputFormat.JSON).asScala.toList match {
-      case Nil    =>
+      case Nil =>
         ApiLogger.log.info(s"Validation successful: JSON $validationType matches schema at $path")
       case errors =>
         val errorMessages = errors.map(_.getMessage).mkString(", ")
