@@ -27,22 +27,22 @@ import java.nio.charset.StandardCharsets
 
 object AuthPage {
   val authSessionsUrl: String = TestEnvironment.url("auth-login-api")
-  val trimToken               = ""
+  val trimToken = ""
 
   def getBearerLocal(affinityGroup: String, value: String, statusCode: String): String = {
 
-    val body    = if (affinityGroup != "Agent") value match {
-      case "with enrolment"    =>
-        putBodyWithEnrolment(affinityGroup)
-      case "without enrolment" =>
-        putBodyWithOutEnrolment(affinityGroup)
-      case "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" | "XEPLR0123456422" | "XEPLR0123456500" |
-          "XEPLR1066196422" | "XEPLR0123456503" | "XMPLR0000000012" | "XEPLR0000000400" | "XEPLR0000000500" |
-          "XEPLR8888888888" | "XEPLR0000000422" | "XEPLR1066196400" | "XEPLR5555551126" | "XEPLR0500000000" |
-          "XEPLR2000000000" | "XEPLR0000422003" =>
-        putBodyWithPlrid(affinityGroup, value)
-      case _                   => throw new IllegalArgumentException(s"Unexpected value: $value")
-    }
+    val body = if affinityGroup != "Agent" then
+      value match {
+        case "with enrolment" =>
+          putBodyWithEnrolment(affinityGroup)
+        case "without enrolment" =>
+          putBodyWithOutEnrolment(affinityGroup)
+        case "XEPLR5555555555" | "XEPLR0123456400" | "XEPLR0123456404" | "XEPLR0123456422" | "XEPLR0123456500" | "XEPLR1066196422" |
+            "XEPLR0123456503" | "XMPLR0000000012" | "XEPLR0000000400" | "XEPLR0000000500" | "XEPLR8888888888" | "XEPLR0000000422" |
+            "XEPLR1066196400" | "XEPLR5555551126" | "XEPLR0500000000" | "XEPLR2000000000" | "XEPLR0000422003" =>
+          putBodyWithPlrid(affinityGroup, value)
+        case _ => throw new IllegalArgumentException(s"Unexpected value: $value")
+      }
     else {
       putAgentBodyWithPlrid(affinityGroup, value)
     }

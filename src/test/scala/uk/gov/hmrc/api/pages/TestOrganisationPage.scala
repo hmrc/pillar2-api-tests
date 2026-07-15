@@ -34,15 +34,15 @@ import scala.util.Try
 
 object TestOrganisationPage extends BaseSpec {
 
-  private val httpClient: HttpClientV2      = TestClient.get
-  private val state: StateStoragePage.type  = StateStoragePage
-  private val submissionApiUrl: String      = TestEnvironment.url("pillar2-submission-api")
-  private implicit val ec: ExecutionContext = ExecutionContext.global
+  private val httpClient:       HttpClientV2          = TestClient.get
+  private val state:            StateStoragePage.type = StateStoragePage
+  private val submissionApiUrl: String                = TestEnvironment.url("pillar2-submission-api")
+  private implicit val ec:      ExecutionContext      = ExecutionContext.global
 
   def createTestOrganisation(domesticFlag: String, orgName: String, endPoint: String, pillarID: String): Int = {
-    val bearerToken                = state.getBearerToken
+    val bearerToken = state.getBearerToken
     implicit val hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
-    val setDomesticFlag            = if (domesticFlag == "Domestic") "true" else "false"
+    val setDomesticFlag = if domesticFlag == "Domestic" then "true" else "false"
 
     val requestBody: JsValue = Json.parse(
       TestOrganisation.testOrganisationBody(setDomesticFlag, orgName).replace("\n", " ")
@@ -66,9 +66,9 @@ object TestOrganisationPage extends BaseSpec {
   }
 
   def getTestOrganisationDetails(endPoint: String, pillarID: String): Int = {
-    val bearerToken                = state.getBearerToken
+    val bearerToken = state.getBearerToken
     implicit val hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
-    val fullUrl                    = s"$submissionApiUrl$endPoint"
+    val fullUrl = s"$submissionApiUrl$endPoint"
     ApiLogger.log.info(s"GET from: $fullUrl")
 
     val response = Await.result(
@@ -85,15 +85,15 @@ object TestOrganisationPage extends BaseSpec {
   }
 
   def updateTestOrganisation(domesticFlag: String, orgName: String, endPoint: String, pillarID: String): Int = {
-    val bearerToken                = state.getBearerToken
+    val bearerToken = state.getBearerToken
     implicit val hc: HeaderCarrier = createHeaders(bearerToken, pillarID)
-    val setDomesticFlag            = if (domesticFlag == "Domestic") "true" else "false"
+    val setDomesticFlag = if domesticFlag == "Domestic" then "true" else "false"
 
     val requestBody: JsValue = Json.parse(
       TestOrganisation.testOrganisationBody(setDomesticFlag, orgName).replace("\n", " ")
     )
     state.setRequestBody(Json.stringify(requestBody))
-    val fullUrl              = s"$submissionApiUrl$endPoint"
+    val fullUrl = s"$submissionApiUrl$endPoint"
     ApiLogger.log.info(s"PUT to: $fullUrl")
 
     val response = Await.result(
@@ -125,7 +125,7 @@ object TestOrganisationPage extends BaseSpec {
       .apply(authorization = Option(Authorization(bearerToken)))
       .withExtraHeaders("X-Pillar2-Id" -> pillarID, "Content-Type" -> "application/json")
 
-    val request      =
+    val request =
       httpClient
         .delete(URI.create(submissionApiUrl + endPoint).toURL)
         .withProxy

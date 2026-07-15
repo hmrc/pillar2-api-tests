@@ -18,10 +18,10 @@ package uk.gov.hmrc.api.pages
 
 object StateStoragePage {
 
-  private var responseBody: Option[String]         = None
-  private var requestBody: Option[String]          = None
-  private var responseCode: Option[Int]            = None
-  private var bearerToken: Option[String]          = None
+  private var responseBody:         Option[String] = None
+  private var requestBody:          Option[String] = None
+  private var responseCode:         Option[Int]    = None
+  private var bearerToken:          Option[String] = None
   private var responseErrorCodeVal: Option[String] = None
   private var responseErrorMessage: Option[String] = None
 

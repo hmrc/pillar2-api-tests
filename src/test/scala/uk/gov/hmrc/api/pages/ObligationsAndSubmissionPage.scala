@@ -30,10 +30,10 @@ import scala.concurrent.duration.*
 
 object ObligationsAndSubmissionPage {
 
-  private val httpClient: HttpClientV2     = TestClient.get
-  private val state: StateStoragePage.type = StateStoragePage
-  private val backendUrl: String           = TestEnvironment.url("pillar2-backend")
-  private val submissionApiUrl: String     = TestEnvironment.url("pillar2-submission-api")
+  private val httpClient:       HttpClientV2          = TestClient.get
+  private val state:            StateStoragePage.type = StateStoragePage
+  private val backendUrl:       String                = TestEnvironment.url("pillar2-backend")
+  private val submissionApiUrl: String                = TestEnvironment.url("pillar2-submission-api")
 
   def sendGetRequest(requestType: String, parameters: String, pillarID: String): Int = {
     val bearerToken = state.getBearerToken
