@@ -51,7 +51,7 @@ class ObligationsAndSubmissionHistorySpec extends BaseSpec {
       val expectedResponseValues: Map[String, String] = Map(
         "pillar2Id"                                -> "XMPLR0000000012",
         "organisation.orgDetails.organisationName" -> "Test Organisation Ltd",
-        "organisation.orgDetails.registrationDate" -> "2024-01-01"
+        "organisation.orgDetails.registrationDate" -> "2026-01-01"
       )
 
       thenIVerifyTheResponseContainsTheFollowingValues(expectedResponseValues)
@@ -60,9 +60,9 @@ class ObligationsAndSubmissionHistorySpec extends BaseSpec {
       validateJsonSchemaFor("TestOrganisation", "Response", "OrganisationSuccess")
 
       When(
-        "I make get API call to URL Obligations and Submission Api backend and 2024-01-30/2024-12-31 and XMPLR0000000012"
+        "I make get API call to URL Obligations and Submission Api backend and 2026-01-30/2026-12-31 and XMPLR0000000012"
       )
-      getObligationsAndStoreResult("Obligations and Submission Api backend", "2024-01-30/2024-12-31", "XMPLR0000000012")
+      getObligationsAndStoreResult("Obligations and Submission Api backend", "2026-01-30/2026-12-31", "XMPLR0000000012")
 
       And("I verify the response code is 200")
       assertStatusCode(200)
@@ -94,15 +94,15 @@ class ObligationsAndSubmissionHistorySpec extends BaseSpec {
       val expectedResponseValues: Map[String, String] = Map(
         "pillar2Id"                                -> "XMPLR0000000012",
         "organisation.orgDetails.organisationName" -> "Test Organisation Ltd",
-        "organisation.orgDetails.registrationDate" -> "2024-01-01"
+        "organisation.orgDetails.registrationDate" -> "2026-01-01"
       )
 
       thenIVerifyTheResponseContainsTheFollowingValues(expectedResponseValues)
 
       When(
-        "I make get API call to URL Obligations and Submission Api backend and 2024-01-29/2024-12-35 and XMPLR0000000012"
+        "I make get API call to URL Obligations and Submission Api backend and 2026-01-29/2026-12-35 and XMPLR0000000012"
       )
-      getObligationsAndStoreResult("Obligations and Submission Api backend", "2024-01-29/2024-12-35", "XMPLR0000000012")
+      getObligationsAndStoreResult("Obligations and Submission Api backend", "2026-01-29/2026-12-35", "XMPLR0000000012")
 
       And("I verify the response code is 500")
       assertStatusCode(500)
@@ -134,16 +134,16 @@ class ObligationsAndSubmissionHistorySpec extends BaseSpec {
       val expectedResponseValues: Map[String, String] = Map(
         "pillar2Id"                                -> "XMPLR0000000012",
         "organisation.orgDetails.organisationName" -> "Test Organisation Ltd",
-        "organisation.orgDetails.registrationDate" -> "2024-01-01"
+        "organisation.orgDetails.registrationDate" -> "2026-01-01"
       )
       thenIVerifyTheResponseContainsTheFollowingValues(expectedResponseValues)
 
       When(
-        "I make get API call to URL Obligations and Submission Api and fromDate=2024-01-01&toDate=2024-12-31 and XMPLR0000000012"
+        "I make get API call to URL Obligations and Submission Api and fromDate=2026-01-01&toDate=2026-12-31 and XMPLR0000000012"
       )
       getObligationsAndStoreResult(
         "Obligations and Submission Api",
-        "fromDate=2024-01-01&toDate=2024-12-31",
+        "fromDate=2026-01-01&toDate=2026-12-31",
         "XMPLR0000000012"
       )
 
@@ -173,16 +173,16 @@ class ObligationsAndSubmissionHistorySpec extends BaseSpec {
       val expectedResponseValues: Map[String, String] = Map(
         "pillar2Id"                                -> "XMPLR0000000012",
         "organisation.orgDetails.organisationName" -> "Test Organisation Ltd",
-        "organisation.orgDetails.registrationDate" -> "2024-01-01"
+        "organisation.orgDetails.registrationDate" -> "2026-01-01"
       )
       thenIVerifyTheResponseContainsTheFollowingValues(expectedResponseValues)
 
       When(
-        "I make get API call to URL Obligations and Submission Api and fromDate=2024-01-01&toDate=2024-12-32 and XMPLR0000000012"
+        "I make get API call to URL Obligations and Submission Api and fromDate=2026-01-01&toDate=2026-12-32 and XMPLR0000000012"
       )
       getObligationsAndStoreResult(
         "Obligations and Submission Api",
-        "fromDate=2024-01-01&toDate=2024-12-32",
+        "fromDate=2026-01-01&toDate=2026-12-32",
         " XMPLR0000000012"
       )
 

@@ -38,11 +38,11 @@ class ORNsubmissionSpec extends BaseSpec {
       assertStatusCode(201)
 
       And(
-        "I make get API call to URL Get ORN and accountingPeriodFrom=2024-01-01&accountingPeriodTo=2024-12-31 and XEPLR5555551126"
+        "I make get API call to URL Get ORN and accountingPeriodFrom=2026-01-01&accountingPeriodTo=2026-12-31 and XEPLR5555551126"
       )
       getObligationsAndStoreResult(
         "Get ORN",
-        "accountingPeriodFrom=2024-01-01&accountingPeriodTo=2024-12-31",
+        "accountingPeriodFrom=2026-01-01&accountingPeriodTo=2026-12-31",
         "XEPLR5555551126"
       )
 
@@ -69,11 +69,11 @@ class ORNsubmissionSpec extends BaseSpec {
       validateJsonSchemaFor("ORN", "Response", "SubmitAmendORN")
 
       And(
-        "I make get API call to URL Get ORN and accountingPeriodFrom=2024-01-01&accountingPeriodTo=2024-12-31 and XEPLR5555551126"
+        "I make get API call to URL Get ORN and accountingPeriodFrom=2026-01-01&accountingPeriodTo=2026-12-31 and XEPLR5555551126"
       )
       getObligationsAndStoreResult(
         "Get ORN",
-        "accountingPeriodFrom=2024-01-01&accountingPeriodTo=2024-12-31",
+        "accountingPeriodFrom=2026-01-01&accountingPeriodTo=2026-12-31",
         "XEPLR5555551126"
       )
 
@@ -103,11 +103,11 @@ class ORNsubmissionSpec extends BaseSpec {
       assertStatusCode(200)
 
       And(
-        "I make get API call to URL Get ORN and accountingPeriodFrom=2024-01-01&accountingPeriodTo=2024-12-31 and XEPLR5555551126"
+        "I make get API call to URL Get ORN and accountingPeriodFrom=2026-01-01&accountingPeriodTo=2026-12-31 and XEPLR5555551126"
       )
       getObligationsAndStoreResult(
         "Get ORN",
-        "accountingPeriodFrom=2024-01-01&accountingPeriodTo=2024-12-31",
+        "accountingPeriodFrom=2026-01-01&accountingPeriodTo=2026-12-31",
         "XEPLR5555551126"
       )
 
@@ -132,11 +132,11 @@ class ORNsubmissionSpec extends BaseSpec {
       assertStatusCode(201)
 
       And(
-        "I make get API call to URL Get ORN and accountingPeriodFrom=2024-01-01&accountingPeriodTo=2024-12-31 and XEPLR5555551126"
+        "I make get API call to URL Get ORN and accountingPeriodFrom=2026-01-01&accountingPeriodTo=2026-12-31 and XEPLR5555551126"
       )
       getObligationsAndStoreResult(
         "Get ORN",
-        "accountingPeriodFrom=2024-01-01&accountingPeriodTo=2024-12-31",
+        "accountingPeriodFrom=2026-01-01&accountingPeriodTo=2026-12-31",
         "XEPLR5555551126"
       )
 

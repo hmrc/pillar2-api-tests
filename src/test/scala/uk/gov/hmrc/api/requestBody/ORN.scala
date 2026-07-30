@@ -20,9 +20,9 @@ object ORN {
   def requestBody(): String =
     s"""
        |{
-       |  "accountingPeriodFrom": "2024-01-01",
-       |  "accountingPeriodTo": "2024-12-31",
-       |  "filedDateGIR": "2025-01-10",
+       |  "accountingPeriodFrom": "2026-01-01",
+       |  "accountingPeriodTo": "2026-12-31",
+       |  "filedDateGIR": "2026-01-10",
        |  "countryGIR": "US",
        |  "reportingEntityName": "Newco PLC",
        |  "TIN": "US12345678",
@@ -33,9 +33,9 @@ object ORN {
   def requestBodyAmendORN(): String =
     s"""
        |{
-       |  "accountingPeriodFrom": "2024-01-01",
-       |  "accountingPeriodTo": "2024-12-31",
-       |  "filedDateGIR": "2025-01-10",
+       |  "accountingPeriodFrom": "2026-01-01",
+       |  "accountingPeriodTo": "2026-12-31",
+       |  "filedDateGIR": "2026-01-10",
        |  "countryGIR": "US",
        |  "reportingEntityName": "Newco PLC Ltd",
        |  "TIN": "US12345678",

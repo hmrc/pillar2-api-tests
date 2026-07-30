@@ -48,7 +48,7 @@ class TestOrganisationSpec extends BaseSpec {
       val expectedResponseData: Map[String, String] = Map(
         "pillar2Id"                                -> "XMPLR0000000012",
         "organisation.orgDetails.organisationName" -> "Test Organisation Ltd",
-        "organisation.orgDetails.registrationDate" -> "2024-01-01"
+        "organisation.orgDetails.registrationDate" -> "2026-01-01"
       )
       thenIVerifyTheResponseContainsTheFollowingValues(expectedResponseData)
 
@@ -84,7 +84,7 @@ class TestOrganisationSpec extends BaseSpec {
       val expectedResponse: Map[String, String] = Map(
         "organisation.orgDetails.organisationName" -> "Test Organisation Ltd",
         "pillar2Id"                                -> "XMPLR0000000012",
-        "organisation.orgDetails.registrationDate" -> "2024-01-01"
+        "organisation.orgDetails.registrationDate" -> "2026-01-01"
       )
       thenIVerifyTheResponseContainsTheFollowingValues(expectedResponse)
 
@@ -104,7 +104,7 @@ class TestOrganisationSpec extends BaseSpec {
       val expectednewResponse: Map[String, String] = Map(
         "organisation.orgDetails.organisationName" -> "New Organisation Ltd",
         "pillar2Id"                                -> "XMPLR0000000012",
-        "organisation.orgDetails.registrationDate" -> "2024-01-01"
+        "organisation.orgDetails.registrationDate" -> "2026-01-01"
       )
       thenIVerifyTheResponseContainsTheFollowingValues(expectednewResponse)
 

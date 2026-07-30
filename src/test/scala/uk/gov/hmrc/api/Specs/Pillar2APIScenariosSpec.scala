@@ -20,6 +20,8 @@ import uk.gov.hmrc.api.Specs.tags.ApiAcceptanceTests
 import uk.gov.hmrc.api.specdef.AuthSteps.generateBearerToken
 import uk.gov.hmrc.api.specdef.CommonSteps.assertStatusCode
 import uk.gov.hmrc.api.specdef.UKTRSteps.givenIMakeAPICallTo
+import uk.gov.hmrc.api.specdef.TestOrganisationSteps.{thenIVerifyTheResponseContainsTheFollowingValues, whenIMakeAPICallToCreate, whenIMakeAPICallToDeleteOrganisationUsing}
+
 
 class Pillar2APIScenariosSpec extends BaseSpec {
 
@@ -50,12 +52,21 @@ class Pillar2APIScenariosSpec extends BaseSpec {
     Scenario("Verify the successful response for the backend request", ApiAcceptanceTests) {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 201")
       generateBearerToken("Organisation", "XMPLR0000000012", "201")
+      
+      And(
+        "I make API call to create <DomesticFlag> Test Organisation Ltd using setup/organisation with XMPLR0000000012"
+      )
+      whenIMakeAPICallToCreate("Domestic", "Test Organisation Ltd", "setup/organisation", "XMPLR0000000012")
 
       And("I make API call to Backend and submit-uk-tax-return and XMPLR0000000012 and 201")
       givenIMakeAPICallTo("Backend", "submit-uk-tax-return", "XMPLR0000000012", "201")
 
       Then("I verify the response code is 201")
       assertStatusCode(201)
+
+      And("I make API call to delete organisation using setup/organisation with XMPLR0000000012")
+      whenIMakeAPICallToDeleteOrganisationUsing("setup/organisation", "XMPLR0000000012")
+
     }
   }
 }

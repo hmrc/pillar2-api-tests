@@ -30,6 +30,9 @@ class BTNScenariosSpec extends BaseSpec {
       Given("I have generated a bearer token for an Organisation and XMPLR0000000012 and 201")
       generateBearerToken("Organisation", "XMPLR0000000012", "201")
 
+      When("I make API call to delete organisation using setup/organisation with XMPLR0000000012")
+      whenIMakeAPICallToDeleteOrganisationUsing("setup/organisation", "XMPLR0000000012")
+
       And(
         "I make API call to create <DomesticFlag> Test Organisation Ltd using setup/organisation with XMPLR0000000012"
       )
@@ -45,7 +48,7 @@ class BTNScenariosSpec extends BaseSpec {
       val expectedResponseValues: Map[String, String] = Map(
         "pillar2Id"                                -> "XMPLR0000000012",
         "organisation.orgDetails.organisationName" -> "Test Organisation Ltd",
-        "organisation.orgDetails.registrationDate" -> "2024-01-01"
+        "organisation.orgDetails.registrationDate" -> "2026-01-01"
       )
       thenIVerifyTheResponseContainsTheFollowingValues(expectedResponseValues)
 
@@ -86,7 +89,7 @@ class BTNScenariosSpec extends BaseSpec {
       val expectedResponseValues: Map[String, String] = Map(
         "pillar2Id"                                -> "XEPLR0123456500",
         "organisation.orgDetails.organisationName" -> "Test Organisation Ltd",
-        "organisation.orgDetails.registrationDate" -> "2024-01-01"
+        "organisation.orgDetails.registrationDate" -> "2026-01-01"
       )
       thenIVerifyTheResponseContainsTheFollowingValues(expectedResponseValues)
 
@@ -123,7 +126,7 @@ class BTNScenariosSpec extends BaseSpec {
       val expectedResponseValues: Map[String, String] = Map(
         "pillar2Id"                                -> "XEPLR0000000400",
         "organisation.orgDetails.organisationName" -> "Test Organisation Ltd",
-        "organisation.orgDetails.registrationDate" -> "2024-01-01"
+        "organisation.orgDetails.registrationDate" -> "2026-01-01"
       )
       thenIVerifyTheResponseContainsTheFollowingValues(expectedResponseValues)
 
@@ -159,7 +162,7 @@ class BTNScenariosSpec extends BaseSpec {
       val expectedResponseValues: Map[String, String] = Map(
         "pillar2Id"                                -> "XEPLR0000000400",
         "organisation.orgDetails.organisationName" -> "Test Organisation Ltd",
-        "organisation.orgDetails.registrationDate" -> "2024-01-01"
+        "organisation.orgDetails.registrationDate" -> "2026-01-01"
       )
       thenIVerifyTheResponseContainsTheFollowingValues(expectedResponseValues)
 
