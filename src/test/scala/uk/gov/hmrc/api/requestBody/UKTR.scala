@@ -20,27 +20,27 @@ object UKTR {
   def requestBody(accountingPeriodTo: String): String =
     s"""
       |{
-      |  "accountingPeriodFrom": "2024-01-01",
+      |  "accountingPeriodFrom": "2026-01-01",
       |  "accountingPeriodTo": "$accountingPeriodTo",
       |  "obligationMTT": false,
-      |  "electionUKGAAP": true,
+      |  "electionUKGAAP": false,
       |  "liabilities": {
       |    "electionDTTSingleMember": false,
       |    "electionUTPRSingleMember": false,
-      |    "numberSubGroupDTT": 4,
-      |    "numberSubGroupUTPR": 5,
-      |    "totalLiability": 9999999999999.99,
-      |    "totalLiabilityDTT": 9999999999999.99,
-      |    "totalLiabilityIIR": 9999999999999.00,
-      |    "totalLiabilityUTPR": 9999999999999.99,
+      |    "numberSubGroupDTT": 1,
+      |    "numberSubGroupUTPR": 1,
+      |    "totalLiability": 5000,
+      |    "totalLiabilityDTT": 5000,
+      |    "totalLiabilityIIR": 0,
+      |    "totalLiabilityUTPR": 0,
       |    "liableEntities": [
       |      {
       |        "ukChargeableEntityName": "Newco PLC",
       |        "idType": "CRN",
       |        "idValue": "12345678",
-      |        "amountOwedDTT": 9999999999999.99,
-      |        "amountOwedIIR": 9999999999999.99,
-      |        "amountOwedUTPR": 9999999999999.99
+      |        "amountOwedDTT": 5000,
+      |        "amountOwedIIR": 0,
+      |        "amountOwedUTPR": 0
       |      }
       |    ]
       |  }
@@ -50,9 +50,9 @@ object UKTR {
   val requestErrorCodeGeneratorBody: String =
     """
       |{
-      |  "accountingPeriodFrom": "2024-08-14",
-      |  "accountingPeriodTo": "2024-12-14",
-      |  "obligationMTT": true,
+      |  "accountingPeriodFrom": "2026-08-14",
+      |  "accountingPeriodTo": "2026-12-14",
+      |  "obligationMTT": false,
       |  "electionUKGAAP": "true",
       |  "liabilities": {
       |    "electionDTTSingleMember": false,
@@ -82,10 +82,10 @@ object UKTR {
   def requestSubmitUktrNilReturnBody(accountingPeriodTo: String): String =
     s"""
       |{
-      |  "accountingPeriodFrom": "2024-08-14",
+      |  "accountingPeriodFrom": "2026-01-01",
       |  "accountingPeriodTo": "$accountingPeriodTo",
-      |  "obligationMTT": true,
-      |  "electionUKGAAP": true,
+      |  "obligationMTT": false,
+      |  "electionUKGAAP": false,
       |  "liabilities": {
       |    "returnType": "NIL_RETURN"
       |  }

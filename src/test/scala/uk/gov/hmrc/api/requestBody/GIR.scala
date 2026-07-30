@@ -20,7 +20,7 @@ object GIR {
   def requestSubmissionApiGIRBody(accountingPeriodFrom: String, accountingPeriodTo: String): String =
     s"""
        |{
-       |  "accountingPeriodFrom": "2024-01-01",
+       |  "accountingPeriodFrom": "2026-01-01",
        |  "accountingPeriodTo": "$accountingPeriodTo"
        |}
        |""".stripMargin

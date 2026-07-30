@@ -33,11 +33,11 @@ class AccountActivitySpec extends BaseSpec {
       generateBearerToken("Organisation", "XEPLR2000000000", "200")
 
       When(
-        "I make get API call to URL Account Activity Api and 2024-01-30/2024-12-31 and XEPLR2000000000"
+        "I make get API call to URL Account Activity Api and 2026-01-30/2026-12-31 and XEPLR2000000000"
       )
       getObligationsAndStoreResult(
         "Account Activity",
-        "fromDate=2024-01-01&toDate=2025-12-30",
+        "fromDate=2026-01-01&toDate=2026-12-30",
         "XEPLR2000000000"
       )
 
@@ -53,11 +53,11 @@ class AccountActivitySpec extends BaseSpec {
       generateBearerToken("Organisation", "XEPLR2000000000", "201")
 
       When(
-        "I make get API call to URL Account Activity Api and 2024-01-30/2024-12-35 and XEPLR2000000000"
+        "I make get API call to URL Account Activity Api and 2026-01-30/2026-12-35 and XEPLR2000000000"
       )
       getObligationsAndStoreResult(
         "Account Activity",
-        "fromDate=2024-01-01&toDate=2025-12-35",
+        "fromDate=2026-01-01&toDate=2026-12-35",
         "XEPLR2000000000"
       )
 
@@ -73,11 +73,11 @@ class AccountActivitySpec extends BaseSpec {
       generateBearerToken("Organisation", "XEPLR0000422003", "201")
 
       When(
-        "I make get API call to URL Account Activity Api and 2024-01-30/2024-12-30 and XEPLR0000422003"
+        "I make get API call to URL Account Activity Api and 2026-01-30/2026-12-30 and XEPLR0000422003"
       )
       getObligationsAndStoreResult(
         "Account Activity",
-        "fromDate=2024-01-01&toDate=2025-12-30",
+        "fromDate=2026-01-01&toDate=2026-12-30",
         "XEPLR0000422003"
       )
 
@@ -93,11 +93,11 @@ class AccountActivitySpec extends BaseSpec {
       generateBearerToken("Organisation", "XEPLR0000000500", "201")
 
       When(
-        "I make get API call to URL Account Activity Api and 2024-01-30/2024-12-31 and XEPLR0000000500"
+        "I make get API call to URL Account Activity Api and 2026-01-30/2026-12-31 and XEPLR0000000500"
       )
       getObligationsAndStoreResult(
         "Account Activity",
-        "fromDate=2024-01-01&toDate=2025-12-30",
+        "fromDate=2026-01-01&toDate=2026-12-30",
         "XEPLR0000000500"
       )
 

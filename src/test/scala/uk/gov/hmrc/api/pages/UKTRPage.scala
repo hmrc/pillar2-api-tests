@@ -37,7 +37,7 @@ object UKTRPage {
   private val externalStubUrl:     String = TestEnvironment.url("pillar2-external-test-stub")
   private val stubUrl:             String = TestEnvironment.url("pillar2-stub")
   private val backendUrl:          String = TestEnvironment.url("pillar2-backend")
-  private val defaultAccountingPeriodTo = "2024-30-14"
+  private val defaultAccountingPeriodTo = "2026-30-14"
   private val httpClient: HttpClientV2          = TestClient.get
   private val state:      StateStoragePage.type = StateStoragePage
 
@@ -80,8 +80,8 @@ object UKTRPage {
     }
 
     val accountingPeriodTo = statusCode match {
-      case "400" => "2024-30-14"
-      case _     => "2024-12-31"
+      case "400" => "2026-30-14"
+      case _     => "2026-12-31"
     }
 
     implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(bearerToken)))
@@ -101,22 +101,22 @@ object UKTRPage {
           .withBody(BTN.requestSubmissionApiBTNBody(accountingPeriodTo))
           .withProxy
       case "Submission Api GIR" =>
-        state.setRequestBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo).replace("\n", " "))
+        state.setRequestBody(GIR.requestSubmissionApiGIRBody("2026-01-01", accountingPeriodTo).replace("\n", " "))
         httpClient
           .post(URI.create(requestApiUrl).toURL)
-          .withBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo))
+          .withBody(GIR.requestSubmissionApiGIRBody("2026-01-01", accountingPeriodTo))
           .withProxy
       case "Amend GIR" =>
-        state.setRequestBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo).replace("\n", " "))
+        state.setRequestBody(GIR.requestSubmissionApiGIRBody("2026-01-01", accountingPeriodTo).replace("\n", " "))
         httpClient
           .put(URI.create(requestApiUrl).toURL)
-          .withBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo))
+          .withBody(GIR.requestSubmissionApiGIRBody("2026-01-01", accountingPeriodTo))
           .withProxy
       case "Delete GIR" =>
-        state.setRequestBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo).replace("\n", " "))
+        state.setRequestBody(GIR.requestSubmissionApiGIRBody("2026-01-01", accountingPeriodTo).replace("\n", " "))
         httpClient
           .delete(URI.create(requestApiUrl).toURL)
-          .withBody(GIR.requestSubmissionApiGIRBody("2024-01-01", accountingPeriodTo))
+          .withBody(GIR.requestSubmissionApiGIRBody("2026-01-01", accountingPeriodTo))
           .withProxy
       case "Amend UKTR" =>
         state.setRequestBody(UKTR.requestBody(accountingPeriodTo).replace("\n", " "))
